@@ -235,8 +235,14 @@
 ### LINE通知機能
 - 一定期間習慣の実行が無いorログインがなく、キャラクターが瀕死の状態にある場合にユーザーへ通知
 
+### エサやり機能
+- タスクが完了するとエサが手に入り、キャラクターにあげることができる。エサをあげるとキャラクターのキズナゲージがアップする。
+
 ### 画面遷移図
 [画面遷移図](https://www.figma.com/design/MeKhTOLLKuv5VQkk4ul30S/%E3%83%A2%E3%83%81%E3%83%9A%E3%83%83%E3%83%88%EF%BC%88%E4%BB%AE%EF%BC%89?node-id=0-1&t=LJBbdZ1YmdqshAMn-1)
+
+### ER図
+[![Image from Gyazo](https://i.gyazo.com/acc0ea9c04100ed1198b4e06917ac423.png)](https://gyazo.com/acc0ea9c04100ed1198b4e06917ac423)
 
 ## 使用する技術スタック
 - フロントエンド：TailwindCSS / Hotwire / Stimulus　/ CSSスプライト(キャラアニメーション)
