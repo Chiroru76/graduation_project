@@ -1,5 +1,3 @@
-version:
-
 services:
   web:
     build:
@@ -43,6 +41,7 @@ services:
   worker: # Sidekiq
     build:
       context: .
+      dockerfile: Dockerfile.dev
     command: bash -lc "bundle exec sidekiq -C config/sidekiq.yml" #ログインシェルで、Bundler 管理下の Sidekiq を、指定の設定で起動
     environment:
       RAILS_ENV: development
