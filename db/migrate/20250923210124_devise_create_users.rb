@@ -14,6 +14,10 @@ class DeviseCreateUsers < ActiveRecord::Migration[8.0]
       ## Rememberable
       t.datetime :remember_created_at
 
+      ## 追加
+      t.string :name, null: false, limit: 50
+      t.integer :food_count, null: false, default: 0
+
       ## Trackable
       # t.integer  :sign_in_count, default: 0, null: false
       # t.datetime :current_sign_in_at
