@@ -26,10 +26,7 @@
     <% if user_signed_in? %>
       <ul>
         <li>
-          <%= button_to "ログアウト",
-      destroy_user_session_path,
-      method: :delete,
-      form: { style: "display:inline" } %>
+          <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
         </li>
       <ul>
     <% else %>
