@@ -66,3 +66,6 @@ end
 gem "jsbundling-rails", "~> 1.3"
 
 gem 'devise'
+
+gem "rails-i18n"     # Rails全体の日本語化
+gem "devise-i18n"    # Devise画面・メールの日本語化
