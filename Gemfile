@@ -54,7 +54,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
-  gem 'foreman'
+  gem "foreman"
 end
 
 group :test do
@@ -65,7 +65,7 @@ end
 
 gem "jsbundling-rails", "~> 1.3"
 
-gem 'devise'
+gem "devise"
 
 gem "rails-i18n"     # Rails全体の日本語化
 gem "devise-i18n"    # Devise画面・メールの日本語化
