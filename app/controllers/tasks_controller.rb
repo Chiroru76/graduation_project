@@ -40,7 +40,7 @@ class TasksController < ApplicationController
   def task_prams
     prams.require(:task).permit(:title, :kind, :status, :due_on, :repeat_rule,
                                 :reward_exp, :reward_food_count, :completed_at,
-                                :difficulty, :target_value, :target_unit, :target_period)
+                                :difficulty, :target_value, :target_unit, :target_period, :tag)
   end
 
 
