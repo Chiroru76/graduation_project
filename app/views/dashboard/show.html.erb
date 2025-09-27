@@ -1,6 +1,6 @@
 <!-- app/views/dashboard/show.html.erb -->
 
-<div class="container mx-auto p-6 space-y-6">
+<div class="mx-auto max-w-screen-xl p-6 space-y-6">
   <h2 class="text-2xl font-bold">ダッシュボード</h2>
   <hr>
   <!-- キャラ育成エリア -->
@@ -11,13 +11,10 @@
 
   <!-- タスク一覧 -->
   <section class="space-y-3">
-    <div class="flex items-center justify-between">
-    <p>------------------------------------------</p>
-      <h2 class="text-xl font-semibold">タスク</h2>
+    <div class="w-ful ">
+      <h3 class="text-lg font-bold mb-2">タスク一覧</h3>
       <%= render "tasks/todolist", tasks: @tasks %>
     </div>
-    <%= link_to "新しいTODO", new_task_path%>
-    <p>------------------------------------------</p>
   </section>
 
   <!-- タブ（将来：グラフ / 図鑑 / 設定 / プロフィール など） -->
@@ -31,3 +28,4 @@
       <li><a href="#">プロフィール</a></li>
     </ul>
   </nav>
+</div>
