@@ -1,41 +1,62 @@
 <!-- app/views/tasks/_form.html.erb -->
-<%= form_with model: task, local: true do |f| %>
+<%= form_with model: task, local: true, class: "space-y-8" do |f| %>
 
   <!-- タイトル（モデル連動） -->
-  <div class="form__group">
-    <%= f.label :title, "タイトル", class: "form__label" %>
-    <%= f.text_field :title, class: "form__input", placeholder: "毎日 5時半に起きる" %>
+  <div>
+    <%= f.label :title, "タイトル", class:"block text-sm font-bold mb-1" %>
+    <%= f.text_field :title, 
+        class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
+              placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-200",
+        placeholder: "毎日 5時半に起きる" %>
   </div>
 
   <!-- レベル（難易度：モデル連動） -->
-  <div class="form__group">
-    <%= f.label :difficulty, "レベル", class: "form__label" %>
+  <div>
+    <%= f.label :difficulty, "レベル", class: "block text-sm font-medium mb-1" %>
     <%= f.select :difficulty,
       [['1（やさしい）', 'easy'],
        ['2（ふつう）',   'normal'],
        ['3（難しい）',   'hard']],
       { include_blank: false },
-      class: "form__select" %>
+      class: "block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-base
+              focus:outline-none focus:ring-2 focus:ring-blue-500" %>
   </div>
 
   <!-- タグ（未実装のダミー。将来はタグ機能に接続） -->
-  <div class="form__group">
-    <%= f.label :tag, "タグ", class: "form__label" %>
-    <div class="form__row">
-      <%= f.text_field :tag, class: "form__input", placeholder: "タグを追加" %>
-    </div>
-  </div>
-
-  <!-- 繰り返し（後で repeat_rule(JSON) に接続） -->
-  <div class="form__group">
-    <%= f.label :due_on, "期限", class: "form__label" %>
-    <%= f.date_field :due_on, class: "form__input" %>
+  <div>
+    <%= f.label :tag, "タグ", class: "block text-sm font-medium mb-1" %>
+    <%= f.text_field :tag,
+      class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
+              placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
+      placeholder: "タグを追加" %>
   </div>
 
 
-  <div class="form__actions">
-    <%= f.submit "保存", class: "btn btn--primary" %>
-    <!-- new 画面では削除は通常表示しない。編集で表示予定 -->
-    <button type="button" class="btn btn--danger" disabled>削除</button>
+  <!-- 期限 -->
+  <div>
+    <%= f.label :due_on, "期限", class: "block text-sm font-medium mb-1" %>
+    <%= f.date_field :due_on,
+      class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
+              focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+  </div>
+
+
+  <!-- アクション -->
+  <div class="flex items-center gap-3">
+    <%= f.submit "保存",
+        class: "inline-flex items-center justify-center rounded-full px-10 py-3
+                font-bold text-white shadow-sm
+                bg-lime-400 hover:bg-lime-500/90
+                transition focus:outline-none focus:ring-lime-800" %>
+
+    <button type="button" disabled
+        class="inline-flex items-center justify-center rounded-full px-10 py-3
+                font-bold text-white shadow-sm
+                bg-rose-600 hover:bg-rose-400/90
+                ring-2 ring-rose-300
+                transition focus:outline-none focus:ring-rose-800
+                disabled:opacity-50 disabled:cursor-not-allowed">
+      削除
+    </button>
   </div>
 <% end %>
