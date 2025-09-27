@@ -1,0 +1,30 @@
+<div class="modal">
+  <div class="modal__panel">
+    <div class="modal__header">
+      <h2>TODOの作成</h2>
+      <a href="<%= root_path %>" class="modal__close" aria-label="閉じる">×</a>
+    </div>
+
+    <%= render "form", task: @task %>
+  </div>
+</div>
+
+<style>
+  /* 超シンプルな素朴CSS（後でCSS設計に載せ替えOK） */
+  .modal {display:flex; align-items:center; justify-content:center; padding:24px;}
+  .modal__panel {width:min(560px, 92vw); background:#f6f6f6; border-radius:16px; padding:24px; box-shadow:0 6px 18px rgba(0,0,0,.08);}
+  .modal__header {display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;}
+  .modal__close {text-decoration:none; font-size:20px; color:#555;}
+  .form__group {margin:16px 0;}
+  .form__label {display:block; font-weight:700; margin-bottom:6px;}
+  .form__input, .form__select, .form__textarea {
+    width:100%; padding:14px 12px; border:1px solid #ddd; border-radius:12px; background:#fff;
+  }
+  .form__hint {font-size:12px; color:#888; margin-top:6px;}
+  .form__row {display:flex; gap:12px;}
+  .form__row > * {flex:1;}
+  .form__actions {display:flex; justify-content:center; gap:16px; margin-top:24px;}
+  .btn {padding:12px 24px; border-radius:24px; border:none; cursor:pointer;}
+  .btn--primary {background:#a6d98b;}
+  .btn--danger {background:#f2a19f;}
+</style>

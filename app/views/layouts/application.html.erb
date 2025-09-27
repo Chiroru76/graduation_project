@@ -23,6 +23,19 @@
   </head>
 
     <header>
+      <% flash.each do |key, message| %>
+        <div class="flash <%= key %>">
+          <% if message.is_a?(Array) %>
+            <ul>
+              <% message.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <%= message %>
+          <% end %>
+        </div>
+      <% end %>
     <% if user_signed_in? %>
       <ul>
         <li>
