@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @tasks = current_user.tasks.order(created_at: :desc)
@@ -35,7 +35,7 @@ class TasksController < ApplicationController
   private
 
   def set_task
-    @task = current_user.tasks.find(prams[ :id ])
+    @task = current_user.tasks.find(params[:id])
   end
 
   def task_params
@@ -43,6 +43,4 @@ class TasksController < ApplicationController
                                 :reward_exp, :reward_food_count, :completed_at,
                                 :difficulty, :target_value, :target_unit, :target_period, :tag)
   end
-
-
 end

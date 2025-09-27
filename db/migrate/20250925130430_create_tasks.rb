@@ -4,7 +4,7 @@ class CreateTasks < ActiveRecord::Migration[8.0]
       t.references :user, null: false, foreign_key: true
       t.string :title, null: false
       t.integer :kind, null: false, default: 0   # enum(todo,habit)
-      t.integer :status, null: false, default: 0 #enum(open,done,archived)
+      t.integer :status, null: false, default: 0 # enum(open,done,archived)
       t.date :due_on
       t.jsonb :repeat_rule, default: {}
       t.integer :reward_exp, null: false, default: 0
