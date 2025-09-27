@@ -11,9 +11,9 @@
   <div class="form__group">
     <%= f.label :difficulty, "レベル", class: "form__label" %>
     <%= f.select :difficulty,
-      [[ '1（やさしい）', 0 ],
-       [ '2（ふつう）',   1 ],
-       [ '3（難しい）',   2 ]],
+      [['1（やさしい）', 'easy'],
+       ['2（ふつう）',   'normal'],
+       ['3（難しい）',   'hard']],
       { include_blank: false },
       class: "form__select" %>
   </div>

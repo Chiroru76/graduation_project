@@ -14,10 +14,11 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = current_user.tasks.new(task_prams)
+    @task = current_user.tasks.new(task_params)
     if @task.save
         redirect_to dashboard_show_path, notice: "タスクを作成しました"
     else
+        flash.now[:alert] = @task.errors.full_messages.join(", ")
         render :new, status: :unprocessable_entity
     end
   end
@@ -37,8 +38,8 @@ class TasksController < ApplicationController
     @task = current_user.tasks.find(prams[ :id ])
   end
 
-  def task_prams
-    prams.require(:task).permit(:title, :kind, :status, :due_on, :repeat_rule,
+  def task_params
+    params.require(:task).permit(:title, :kind, :status, :due_on, :repeat_rule,
                                 :reward_exp, :reward_food_count, :completed_at,
                                 :difficulty, :target_value, :target_unit, :target_period, :tag)
   end

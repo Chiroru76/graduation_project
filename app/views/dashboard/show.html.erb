@@ -1,8 +1,27 @@
 <!-- app/views/dashboard/show.html.erb -->
+
 <div class="container mx-auto p-6 space-y-6">
-  <h1 class="text-2xl font-bold">ダッシュボード</h1>
+  <h2 class="text-2xl font-bold">ダッシュボード</h2>
+  <hr>
+  <!-- キャラ育成エリア -->
+  <div style="width:400px; height:200px; border:2px solid black;
+            display:flex; align-items:center; justify-content:center;">
+    <h1>キャラ育成エリア</h1>
+  </div>
+
+  <!-- タスク一覧 -->
+  <section class="space-y-3">
+    <div class="flex items-center justify-between">
+    <p>------------------------------------------</p>
+      <h2 class="text-xl font-semibold">タスク</h2>
+      <%= render "tasks/todolist", tasks: @tasks %>
+    </div>
+    <%= link_to "新しいTODO", new_task_path%>
+    <p>------------------------------------------</p>
+  </section>
 
   <!-- タブ（将来：グラフ / 図鑑 / 設定 / プロフィール など） -->
+  <hr>
   <nav style="margin: 16px 0;">
     <ul style="display: flex; gap: 12px; list-style: none; padding: 0; margin: 0;">
       <li><a href="#">ホーム</a></li>
@@ -12,10 +31,3 @@
       <li><a href="#">プロフィール</a></li>
     </ul>
   </nav>
-
-  <!-- キャラ育成エリア -->
-  <h1>キャラ育成エリア</h1>
-
-  <!-- タスク一覧 -->
-  <h1>タスク一覧</h1>
-</div>

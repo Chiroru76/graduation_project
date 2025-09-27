@@ -8,7 +8,7 @@ class Task < ApplicationRecord
   enum :target_period, { daily: 0, weekly: 1, monthly: 2 }
 
   validates :title, presence: true, length: { maximum: 255 }
-  validates :difficulty, presence: true,
+  validates :difficulty, presence: true
   validates :reward_exp, numericality: { greater_than_or_equal_to: 0 }
   validates :reward_food_count, numericality: { greater_than_or_equal_to: 0 }
 end
