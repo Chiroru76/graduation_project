@@ -10,7 +10,7 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task = current_user.tasks.new(kind: params[:kind]）
+    @task = current_user.tasks.new(kind: params[:kind])
   end
 
   def create
