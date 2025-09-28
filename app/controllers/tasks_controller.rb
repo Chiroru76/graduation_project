@@ -33,7 +33,6 @@ class TasksController < ApplicationController
         flash.now[:alert] = @task.errors.full_messages
         render :edit, status: :unprocessable_entity
     end
-    end
   end
 
   def destroy
