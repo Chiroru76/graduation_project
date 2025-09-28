@@ -10,13 +10,21 @@ class TasksController < ApplicationController
   end
 
   def new
-    @task = current_user.tasks.new(kind: params[:kind])
+    # クエリパラメータ kind を読んで、"todo" か "habit" だけを許可
+    kind = params[:kind].to_s.presence_in(%w[todo habit]) || "todo"
+    @task = current_user.tasks.new(kind: params[:kind]|| :todo)
   end
 
   def create
     @task = current_user.tasks.new(task_params)
     if @task.save
-        redirect_to dashboard_show_path, notice: "TODOを作成しました"
+        message =
+        if @task.todo?
+            "TODOを作成しました"
+        elsif @task.habit?
+            "習慣を作成ました"
+        end
+        redirect_to dashboard_show_path, notice: message
     else
         flash.now[:alert] = @task.errors.full_messages
         render :new, status: :unprocessable_entity
