@@ -46,21 +46,29 @@
 
   <!-- 繰り返し(habit専用) -->
   <% if task.habit? %>
-  <div>
-    <%= f.label :repeat_rule, "繰り返し" %>
-    <!-- 曜日チェックボックスで作成予定 -->
-<div class="space-y-2">
-  <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-medium text-gray-700" %>
-  <div class="flex gap-3">
-    <% %w[mon tue wed thu fri sat sun].each do |day| %>
-      <label class="inline-flex items-center">
-        <%= check_box_tag "task[repeat_rule][]", day, false, class: "rounded text-lime-500" %>
-        <span class="ml-1"><%= day.capitalize %></span>
-      </label>
-    <% end %>
-  </div>
-</div>
-  </div>
+    <!-- 曜日チェックボックス-->
+    <div data-controller="repeat-rule">
+      <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-medium text-gray-700" %>
+      
+      <div class="flex gap-3 mt-2">
+        <% %w[月 火 水 木 金 土 日].each do |day| %>
+          <label class="inline-flex items-center">
+            <%= check_box_tag "task[repeat_rule][]",
+                              day,
+                              @task.repeat_rule&.include?(day),  #編集画面で既存の選択を復元
+                              class: "rounded text-lime-500",
+                              data: { "repeat-rule-target": "checkbox",
+                                      action: "repeat-rule#toggle" } %>
+            <span class="ml-1"><%= day %></span>
+          </label>
+        <% end %>
+      </div>
+      <!-- 選択結果の表示 -->
+      <p class="mt-2 text-sm text-gray-500" data-repeat-rule-target="output">未選択</p>
+
+      <!-- hidden に選択結果をJSONで入れる -->
+      <%= f.hidden_field :repeat_rule, data: { repeat_target: "hidden" } %>
+    </div>
 
   <% end %>
 
