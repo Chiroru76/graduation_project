@@ -16,9 +16,9 @@ class TasksController < ApplicationController
   def create
     @task = current_user.tasks.new(task_params)
     if @task.save
-        redirect_to dashboard_show_path, notice: "タスクを作成しました"
+        redirect_to dashboard_show_path, notice: "TODOを作成しました"
     else
-        flash.now[:alert] = @task.errors.full_messages.join(", ")
+        flash.now[:alert] = @task.errors.full_messages
         render :new, status: :unprocessable_entity
     end
   end
@@ -27,6 +27,13 @@ class TasksController < ApplicationController
   end
 
   def update
+    if @task.update(task_params)
+        redirect_to dashboard_show_path, notice: "TODOを更新しました"
+    else
+        flash.now[:alert] = @task.errors.full_messages
+        render :edit, status: :unprocessable_entity
+    end
+    end
   end
 
   def destroy
