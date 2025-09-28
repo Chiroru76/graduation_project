@@ -50,10 +50,9 @@
                 transition focus:outline-none focus:ring-lime-800" %>
 
     <% if task.persisted? %>
-      <%= button_to "削除", dashboard_show_path,
-          method: :delete,
-          data: { confirm: "本当に削除しますか？" },
-          class: "bg-red-400 text-white font-bold px-6 py-2 rounded-full hover:bg-red-500" %>
+      <%= link_to "削除", task_path(@task),
+          data: {  turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+          class: "bg-red-400 text-white font-bold px-10 py-3 rounded-full hover:bg-red-500" %>
     <% end %>
   </div>
 <% end %>

@@ -41,6 +41,7 @@ class TasksController < ApplicationController
     else
         flash.now[:alert] = "TODOを削除できませんでした"
         render :edit, status: :unprocessable_entity
+    end
   end
 
   private
