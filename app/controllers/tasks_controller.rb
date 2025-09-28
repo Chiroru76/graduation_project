@@ -36,6 +36,11 @@ class TasksController < ApplicationController
   end
 
   def destroy
+    if @task.destroy
+        redirect_to dashboard_show_path, notice: "TODOを削除しました"
+    else
+        flash.now[:alert] = "TODOを削除できませんでした"
+        render :edit, status: :unprocessable_entity
   end
 
   private
