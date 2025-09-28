@@ -49,10 +49,17 @@
   <div>
     <%= f.label :repeat_rule, "繰り返し" %>
     <!-- 曜日チェックボックスで作成予定 -->
-    <%= f.select :repeat_rule,
-        [["毎日", :daily], ["毎週", :weekly], ["毎月", :monthly]],
-        { include_blank: "選択してください" }
-        %>
+<div class="space-y-2">
+  <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-medium text-gray-700" %>
+  <div class="flex gap-3">
+    <% %w[mon tue wed thu fri sat sun].each do |day| %>
+      <label class="inline-flex items-center">
+        <%= check_box_tag "task[repeat_rule][]", day, false, class: "rounded text-lime-500" %>
+        <span class="ml-1"><%= day.capitalize %></span>
+      </label>
+    <% end %>
+  </div>
+</div>
   </div>
 
   <% end %>

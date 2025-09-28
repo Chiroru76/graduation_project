@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import RepeatRuleController from "./repeat_rule_controller"
+application.register("repeat-rule", RepeatRuleController)
