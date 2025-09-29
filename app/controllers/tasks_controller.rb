@@ -12,7 +12,7 @@ class TasksController < ApplicationController
   def new
     # クエリパラメータ kind を読んで、"todo" か "habit" だけを許可
     kind = params[:kind].to_s.presence_in(%w[todo habit]) || "todo"
-    @task = current_user.tasks.new(kind: params[:kind]|| :todo)
+    @task = current_user.tasks.new(kind: kind)
   end
 
   def create
