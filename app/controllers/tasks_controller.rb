@@ -58,9 +58,14 @@ class TasksController < ApplicationController
     @task = current_user.tasks.find(params[:id])
   end
 
-  def task_params
-    params.require(:task).permit(:title, :kind, :status, :due_on, :repeat_rule,
-                                :reward_exp, :reward_food_count, :completed_at,
-                                :difficulty, :target_value, :target_unit, :target_period, :tag)
+def task_params
+  params.require(:task).permit(
+    :title, :kind, :status, :due_on,
+    :reward_exp, :reward_food_count, :completed_at,
+    :difficulty, :target_value, :target_unit, :target_period, :tag,
+    repeat_rule: { days: [] }
+  ).tap do |p|  # ← StrongParams の結果を p に渡して後処理する
+    p[:repeat_rule] ||= {}   # ← repeat_rule が nil のときは {} にしておく
   end
+end
 end

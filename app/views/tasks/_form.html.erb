@@ -53,9 +53,9 @@
       <div class="flex gap-3 mt-2">
         <% %w[月 火 水 木 金 土 日].each do |day| %>
           <label class="inline-flex items-center">
-            <%= check_box_tag 'task[repeat_rule][days][]',
+            <%= check_box_tag "task[repeat_rule][days][]",
                               day,
-                              @task.repeat_rule&.include?(day),  #編集画面で既存の選択を復元
+                              Array(@task.repeat_rule&.dig("days")).include?(day),  #編集画面で既存の選択を復元
                               class: "rounded text-lime-500",
                               data: { "repeat-rule-target": "checkbox",
                                       action: "change->repeat-rule#toggle" } %>
@@ -71,9 +71,9 @@
 
   <!-- 目標(habit専用) -->
   <% if task.habit? %>
-    <%= f.label :repeat_rule, "目標" %>
+    <%= f.label :target_value, "目標" %>
     <!-- 中央に3列の選択肢（値 / 単位 / 期間）が並ぶモーダルを作成予定 -->
-    <%= f.text_field :repeat_rule,
+    <%= f.text_field :target_value,
       class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
               placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
       placeholder: "目標" %>
