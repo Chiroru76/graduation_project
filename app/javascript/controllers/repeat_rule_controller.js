@@ -17,9 +17,6 @@ export default class extends Controller {
       .filter((cb) => cb.checked)
       .map((cb) => cb.value);
 
-    // hidden に JSON をセット
-    this.hiddenTarget.value = JSON.stringify({ days: days })
-
     this.outputTarget.textContent =
       selected.length > 0 ? `選択中: ${selected.join(", ")}` : "未選択";
   }
