@@ -1,7 +1,13 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
   <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6">
     <div class="flex items-center justify-between border-b pb-3 mb-4">
-      <h2 class="text-xl font-bold text-gray-800">TODOの作成</h2>
+      <h2 class="text-xl font-bold text-gray-800">
+        <% if @task.todo? %>
+            TODOの作成
+        <% elsif @task.habit? %>
+            習慣の作成
+        <% end %>
+      </h2>
       <%= link_to "×", root_path,
         class: "text-gray-400 hover:text-gray-600 text-2xl leading-none",
         "aria-label": "閉じる" %>

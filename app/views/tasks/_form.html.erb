@@ -1,5 +1,7 @@
 <!-- app/views/tasks/_form.html.erb -->
 <%= form_with model: task, local: true, class: "space-y-8" do |f| %>
+  <%= f.hidden_field :kind %>
+
 
   <!-- タイトル（モデル連動） -->
   <div>
@@ -32,13 +34,48 @@
   </div>
 
 
-  <!-- 期限 -->
-  <div>
-    <%= f.label :due_on, "期限", class: "block text-sm font-medium mb-1" %>
-    <%= f.date_field :due_on,
-      class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
-              focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-  </div>
+  <!-- 期限(TODO専用) -->
+  <% if task.todo? %>
+    <div>
+      <%= f.label :due_on, "期限", class: "block text-sm font-medium mb-1" %>
+      <%= f.date_field :due_on,
+        class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
+                focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+    </div>
+  <% end %>
+
+  <!-- 繰り返し(habit専用) -->
+  <% if task.habit? %>
+    <!-- 曜日チェックボックス-->
+    <div data-controller="repeat-rule">
+      <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-medium text-gray-700" %>
+      
+      <div class="flex gap-3 mt-2">
+        <% %w[月 火 水 木 金 土 日].each do |day| %>
+          <label class="inline-flex items-center">
+            <%= check_box_tag "task[repeat_rule][days][]",
+                              day,
+                              Array(@task.repeat_rule&.dig("days")).include?(day),  #編集画面で既存の選択を復元
+                              class: "rounded text-lime-500",
+                              data: { "repeat-rule-target": "checkbox",
+                                      action: "change->repeat-rule#toggle" } %>
+            <span class="ml-1"><%= day %></span>
+          </label>
+        <% end %>
+      </div>
+      <!-- 選択結果の表示 -->
+      <p class="mt-2 text-sm text-gray-500" data-repeat-rule-target="output">未選択</p>
+    </div>
+
+  <% end %>
+
+  <!-- 目標(habit専用) -->
+  <% if task.habit? %>
+    <%= f.label :target_value, "目標" %>
+    <!-- 目標入力モーダル -->
+    <%= render "tasks/goal_modal", f: f, task: task %>
+  <% end %>
+    
 
 
   <!-- アクション -->
