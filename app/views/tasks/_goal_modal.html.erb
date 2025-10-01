@@ -1,0 +1,66 @@
+<div data-controller="goal-modal" class="space-y-2">
+  <div class="text-sm text-gray-600">
+    現在の目標：
+    <span data-goal-modal-target="summary">
+      <% if task.target_value && task.target_unit && task.target_period %>
+        <%= task.target_value %>
+        <%= t("enums.task.target_unit.#{task.target_unit}") %> /
+        <%= t("enums.task.target_period.#{task.target_period}") %>
+      <% else %>未設定<% end %>
+    </span>
+  </div>
+
+  <!--  モーダルを開くボタン -->
+  <button type="button"
+          class="rounded-full bg-gray-100 px-4 py-2 text-sm hover:bg-gray-200"
+          data-action="goal-modal#open">
+    目標を編集
+  </button>
+  <!--  最初は hidden で非表示。open() が呼ばれると hidden が外れて全画面にオーバーレイ -->
+  <div class="hidden fixed inset-0 z-50 flex items-center justify-center" data-goal-modal-target="backdrop">
+     <!--  モーダル背景の黒いオーバーレイ。クリックするとモーダルが閉じる -->
+    <div class="absolute inset-0 bg-black/40" data-action="click->goal-modal#close"></div>
+    <!--  パネル部分。stimulusでフォーカスを当てる対象 -->
+    <div class="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+         data-goal-modal-target="panel">
+
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold">目標の編集</h3>
+        <button type="button" class="text-2xl leading-none text-gray-400 hover:text-gray-600"
+                aria-label="閉じる" data-action="goal-modal#close">×</button>
+      </div>
+      <!--  入力フォーム（3列グリッド）値が変わると refresh() でサマリーを更新 -->
+      <div class="grid grid-cols-3 gap-3">
+        <div>
+          <%= f.label :target_value, "値", class: "block text-sm mb-1" %>
+          <%= f.number_field :target_value, step: 1.0, min: 0,
+                class: "block w-full rounded-lg border border-gray-300 px-3 py-2",
+                data: { "goal-modal-target": "value", action: "input->goal-modal#refresh" } %>
+        </div>
+
+        <div>
+          <%= f.label :target_unit, "単位", class: "block text-sm mb-1" %>
+          <%= f.select :target_unit,
+                Task.target_units.keys.map { |u| [t("enums.task.target_unit.#{u}"), u] }, { include_blank: "選択してください" },
+                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 bg-white",
+                data: { "goal-modal-target": "unit", action: "change->goal-modal#refresh" } %>
+        </div>
+
+        <div>
+          <%= f.label :target_period, "期間", class: "block text-sm mb-1" %>
+          <%= f.select :target_period,
+                Task.target_periods.keys.map { |p| [t("enums.task.target_period.#{p}"), p] }, { include_blank: "選択してください" },
+                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 bg-white",
+                data: { "goal-modal-target": "period", action: "change->goal-modal#refresh" } %>
+        </div>
+      </div>
+
+      <div class="mt-5 flex justify-end gap-3">
+        <button type="button" class="px-4 py-2 rounded bg-gray-100 hover:bg-gray-200"
+                data-action="goal-modal#close">キャンセル</button>
+        <button type="button" class="px-4 py-2 rounded bg-lime-500 text-white"
+                data-action="goal-modal#close">決定</button>
+      </div>
+    </div>
+  </div>
+</div>

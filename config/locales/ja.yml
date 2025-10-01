@@ -1,4 +1,14 @@
 ja:
+  enums:
+    task:
+      target_unit:
+        times: "回"
+        km: "km"
+        minutes: "分"
+      target_period:
+        daily: "1日"
+        weekly: "1週間"
+        monthly: "1ヶ月"
   activerecord:
     errors:
       messages:

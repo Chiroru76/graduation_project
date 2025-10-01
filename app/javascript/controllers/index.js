@@ -4,6 +4,9 @@
 
 import { application } from "./application"
 
+import GoalModalController from "./goal_modal_controller"
+application.register("goal-modal", GoalModalController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

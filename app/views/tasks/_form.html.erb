@@ -72,11 +72,8 @@
   <!-- 目標(habit専用) -->
   <% if task.habit? %>
     <%= f.label :target_value, "目標" %>
-    <!-- 中央に3列の選択肢（値 / 単位 / 期間）が並ぶモーダルを作成予定 -->
-    <%= f.text_field :target_value,
-      class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
-              placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
-      placeholder: "目標" %>
+    <!-- 目標入力モーダル -->
+    <%= render "tasks/goal_modal", f: f, task: task %>
   <% end %>
     
 
