@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_01_230107) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_02_211411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -70,6 +70,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_230107) do
     t.integer "food_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "character_id"
+    t.index ["character_id"], name: "index_users_on_character_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -77,4 +79,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_230107) do
   add_foreign_key "characters", "character_kinds"
   add_foreign_key "characters", "users"
   add_foreign_key "tasks", "users"
+  add_foreign_key "users", "characters"
 end
