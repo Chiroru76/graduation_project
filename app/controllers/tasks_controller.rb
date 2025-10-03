@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_task, only: [ :show, :edit, :update, :destroy, :complete ]
 
   def index
     @tasks = current_user.tasks.order(created_at: :desc)
@@ -51,6 +51,14 @@ class TasksController < ApplicationController
         render :edit, status: :unprocessable_entity
     end
   end
+
+  def complete
+    if @task.update(status: :done, completed_at: Time.current) 
+        redirect_to dashboard_show_path, notice: "TODOを完了しました"
+    else
+        flash.now[:alert] = @task.errors.full_messages
+        render :edit, status: :unprocessable_entity
+    end
 
   private
 
