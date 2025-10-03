@@ -16,6 +16,9 @@ class Task < ApplicationRecord
   # 難易度に応じて経験値を自動設定
   before_validation :assign_reward_exp_by_difficulty
 
+  # statusが変化した時に実行
+  after_update : :give_exp_to_character, if: :saved_change_to_status?
+
   validates :title, presence: true, length: { maximum: 255 }
   validates :difficulty, presence: true
   validates :reward_exp, numericality: { greater_than_or_equal_to: 0 }
@@ -29,5 +32,12 @@ class Task < ApplicationRecord
     if will_save_change_to_difficulty? || reward_exp.blank?
       self.reward_exp = REWARD_EXP_BY_DIFFICULTY.fetch(difficulty.to_s, 0)
     end
+  end
+
+  def give_exp_to_character
+    return unless done?
+
+    # 経験値を加算
+    character.increment!(:exp, reward_exp)
   end
 end
