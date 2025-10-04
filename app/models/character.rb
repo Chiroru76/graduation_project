@@ -13,7 +13,7 @@ class Character < ApplicationRecord
   def self.threshold_exp_for_next_level(level)
     return 0 if level < 1
     # レベルが上がるごとに値が1.2倍される
-    (100 * (1.2 ** (level - 1))).to_i
+    (1..level).sum { |n| (100 * 1.2**(n - 1)).to_i }
   end
   # 現在のレベルに到達するのに必要だった累計経験値
   def exp_floor
@@ -41,7 +41,7 @@ class Character < ApplicationRecord
   end
 
   # 経験値加算の処理の入り口
-  def gain_exp(amount)
+  def gain_exp!(amount)
     return if amount <= 0
     with_lock do
       self.exp += amount

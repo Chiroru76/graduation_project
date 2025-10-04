@@ -11,8 +11,7 @@
     <h1>キャラクター</h1>
     <% if current_user.active_character %>
       <div class="ml-auto w-1/2">
-        <p>経験値</p>
-        <%= render "characters/exp_bar", character: current_user.active_character %>
+        <%= render "characters/status", character: current_user.active_character %>
       </div>
     <% end %>
   </div>
