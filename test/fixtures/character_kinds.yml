@@ -1,16 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-egg:
-  name: "Eggy"
-  stage: 0
-  thumbnail_url: "/images/egg.png"
-
-monster_child:
-  name: "Monster"
+one:
+  name: Monster
   stage: 1
-  thumbnail_url: "/images/monster_child.png"
+  thumbnail_url: /images/monster_child.png
 
-monster_adult:
-  name: "Monster"
+two:
+  name: Monster
   stage: 2
-  thumbnail_url: "/images/monster_adult.png"
+  thumbnail_url: /images/monster_adult.png
