@@ -6,6 +6,6 @@ class User < ApplicationRecord
   has_many :tasks, dependent: :destroy
   # 所有しているキャラクター一覧をuser.charactersで参照できる
   has_many :characters
-  #現在育成中のキャラクターをuser.active_characterで参照できる
+  # 現在育成中のキャラクターをuser.active_characterで参照できる
   belongs_to :active_character, class_name: "Character", foreign_key: "character_id", optional: true
 end

@@ -7,6 +7,6 @@ class CreateCharacterKinds < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    add_index :character_kinds, [:name, :stage], unique: true
+    add_index :character_kinds, [ :name, :stage ], unique: true
   end
 end
