@@ -39,4 +39,21 @@ class Character < ApplicationRecord
   def exp_progress_percentage
     ((current_level_exp.to_f/(exp_ceiling - exp_floor)) * 100).round
   end
+
+  # 経験値加算の処理の入り口
+  def gain_exp(amount)
+    return if amount <= 0
+    with_lock do
+      self.exp += amount
+      check_level_up
+      save!
+    end
+  end
+
+  # レベルアップ判定と処理
+  def check_level_up
+    while exp >= exp_ceiling
+      self.level += 1
+    end
+  end
 end
