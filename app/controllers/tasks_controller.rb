@@ -53,11 +53,12 @@ class TasksController < ApplicationController
   end
 
   def complete
-    if @task.update(status: :done, completed_at: Time.current)
+    if @task.open?
+        @task.update(status: :done, completed_at: Time.current)
         redirect_to dashboard_show_path, notice: "TODOを完了しました"
     else
-        flash.now[:alert] = @task.errors.full_messages
-        render :edit, status: :unprocessable_entity
+        @task.update(status: :open, completed_at: nil)
+        redirect_to dashboard_show_path, notice: "TODOを未完了に戻しました"
     end
   end
 
