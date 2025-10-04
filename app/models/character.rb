@@ -17,12 +17,12 @@ class Character < ApplicationRecord
   end
   # 現在のレベルに到達するのに必要だった累計経験値
   def exp_floor
-    self.class.threshold_for(level - 1)
+    self.class.threshold_exp_for_next_level(level - 1)
   end
 
   # 次のレベルに上がるために必要な累計経験値
   def exp_ceiling
-    self.class.thereshold_for(level)
+    self.class.threshold_exp_for_next_level(level)
   end
 
   # 現在のレベルでどれだけ経験値を獲得しているか
