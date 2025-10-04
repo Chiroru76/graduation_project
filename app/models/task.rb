@@ -37,7 +37,7 @@ class Task < ApplicationRecord
   def give_exp_to_active_character
     character = user.active_character
     return unless character.present?
-    # 経験値を加算
-    character.increment!(:exp, reward_exp)
+    # 経験値を加算(Characterモデルのgain_expメソッドを呼び出し)
+    character.gain_exp!(reward_exp)
   end
 end
