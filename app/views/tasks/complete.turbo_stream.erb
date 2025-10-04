@@ -2,6 +2,6 @@
   <%= render "tasks/task_item", t: @task %>
 <% end %>
 
-<%= turbo_stream.replace "exp_bar" do %>
-  <%= render "characters/exp_bar", character: current_user.active_character %>
+<%= turbo_stream.replace "character_status" do %>
+  <%= render "characters/status", character: current_user.active_character %>
 <% end %>
