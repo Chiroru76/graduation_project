@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Monster
+  stage: 1
+  thumbnail_url: /images/monster_child.png
+
+two:
+  name: Monster
+  stage: 2
+  thumbnail_url: /images/monster_adult.png

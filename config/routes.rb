@@ -4,7 +4,11 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
-  resources :tasks
+  resources :tasks do
+    member do
+      patch :complete
+    end
+  end
 
   get "dashboard/show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

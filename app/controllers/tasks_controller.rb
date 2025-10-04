@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: [ :show, :edit, :update, :destroy ]
+  before_action :set_task, only: [ :show, :edit, :update, :destroy, :complete ]
 
   def index
     @tasks = current_user.tasks.order(created_at: :desc)
@@ -52,20 +52,29 @@ class TasksController < ApplicationController
     end
   end
 
+  def complete
+    if @task.update(status: :done, completed_at: Time.current)
+        redirect_to dashboard_show_path, notice: "TODOを完了しました"
+    else
+        flash.now[:alert] = @task.errors.full_messages
+        render :edit, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_task
     @task = current_user.tasks.find(params[:id])
   end
 
-def task_params
-  params.require(:task).permit(
-    :title, :kind, :status, :due_on,
-    :reward_exp, :reward_food_count, :completed_at,
-    :difficulty, :target_value, :target_unit, :target_period, :tag,
-    repeat_rule: { days: [] }
-  ).tap do |p|  # ← StrongParams の結果を p に渡して後処理する
-    p[:repeat_rule] ||= {}   # ← repeat_rule が nil のときは {} にしておく
+  def task_params
+    params.require(:task).permit(
+      :title, :kind, :status, :due_on,
+      :reward_exp, :reward_food_count, :completed_at,
+      :difficulty, :target_value, :target_unit, :target_period, :tag,
+      repeat_rule: { days: [] }
+    ).tap do |p|  # ← StrongParams の結果を p に渡して後処理する
+      p[:repeat_rule] ||= {}   # ← repeat_rule が nil のときは {} にしておく
+    end
   end
-end
 end

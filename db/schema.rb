@@ -10,9 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_26_220030) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_02_211411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "character_kinds", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "stage", default: 0, null: false
+    t.string "thumbnail_url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "stage"], name: "index_character_kinds_on_name_and_stage", unique: true
+  end
+
+  create_table "characters", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "character_kind_id", null: false
+    t.integer "level", default: 1, null: false
+    t.integer "exp", default: 0, null: false
+    t.integer "bond_hp", default: 0, null: false
+    t.integer "bond_hp_max", default: 100, null: false
+    t.integer "state", default: 0, null: false
+    t.integer "stage", default: 0, null: false
+    t.datetime "last_activity_at"
+    t.datetime "dead_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["character_kind_id"], name: "index_characters_on_character_kind_id"
+    t.index ["user_id"], name: "index_characters_on_user_id"
+  end
 
   create_table "tasks", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -44,9 +70,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_26_220030) do
     t.integer "food_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "character_id"
+    t.index ["character_id"], name: "index_users_on_character_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "characters", "character_kinds"
+  add_foreign_key "characters", "users"
   add_foreign_key "tasks", "users"
+  add_foreign_key "users", "characters"
 end
