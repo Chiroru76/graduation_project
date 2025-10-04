@@ -9,7 +9,7 @@ class Character < ApplicationRecord
   validates :exp, :bond_hp, :bond_hp_max, numericality: { greater_than_or_equal_to: 0 }
   validates :bond_hp, numericality: { less_than_or_equal_to: :bond_hp_max }
 
-    #レベルアップに必要な経験値の計算式
+  # レベルアップに必要な経験値の計算式
   def self.threshold_exp_for_next_level(level)
     return 0 if level < 1
     # レベルが上がるごとに値が1.2倍される
@@ -39,5 +39,4 @@ class Character < ApplicationRecord
   def exp_progress_percentage
     ((current_level_exp.to_f/(exp_ceiling - exp_floor)) * 100).round
   end
-
 end
