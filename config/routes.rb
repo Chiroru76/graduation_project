@@ -4,8 +4,8 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
-  resources :tasks
-    menber do
+  resources :tasks do
+    member do
       patch :complete
     end
   end

@@ -53,12 +53,13 @@ class TasksController < ApplicationController
   end
 
   def complete
-    if @task.update(status: :done, completed_at: Time.current) 
+    if @task.update(status: :done, completed_at: Time.current)
         redirect_to dashboard_show_path, notice: "TODOを完了しました"
     else
         flash.now[:alert] = @task.errors.full_messages
         render :edit, status: :unprocessable_entity
     end
+  end
 
   private
 
@@ -66,14 +67,14 @@ class TasksController < ApplicationController
     @task = current_user.tasks.find(params[:id])
   end
 
-def task_params
-  params.require(:task).permit(
-    :title, :kind, :status, :due_on,
-    :reward_exp, :reward_food_count, :completed_at,
-    :difficulty, :target_value, :target_unit, :target_period, :tag,
-    repeat_rule: { days: [] }
-  ).tap do |p|  # ← StrongParams の結果を p に渡して後処理する
-    p[:repeat_rule] ||= {}   # ← repeat_rule が nil のときは {} にしておく
+  def task_params
+    params.require(:task).permit(
+      :title, :kind, :status, :due_on,
+      :reward_exp, :reward_food_count, :completed_at,
+      :difficulty, :target_value, :target_unit, :target_period, :tag,
+      repeat_rule: { days: [] }
+    ).tap do |p|  # ← StrongParams の結果を p に渡して後処理する
+      p[:repeat_rule] ||= {}   # ← repeat_rule が nil のときは {} にしておく
+    end
   end
-end
 end
