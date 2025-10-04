@@ -55,10 +55,15 @@ class TasksController < ApplicationController
   def complete
     if @task.open?
         @task.update(status: :done, completed_at: Time.current)
-        redirect_to dashboard_show_path, notice: "TODOを完了しました"
+        notice = "TODOを完了しました"
     else
         @task.update(status: :open, completed_at: nil)
-        redirect_to dashboard_show_path, notice: "TODOを未完了に戻しました"
+        notice = "TODOを未完了に戻しました"
+    end
+
+    respond_to do |format|
+        format.html { redirect_to dashboard_show_path, notice: notice }
+        format.turbo_stream
     end
   end
 

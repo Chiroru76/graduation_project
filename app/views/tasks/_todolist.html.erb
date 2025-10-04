@@ -1,6 +1,8 @@
 <ul class="space-y-3">
   <% tasks.each do |t| %>
-    <%= render "tasks/task_item", t: t %>
+    <li id="<%= dom_id(t) %>">
+      <%= render "tasks/task_item", t: t %>
+    </li>
   <% end %>
 
   <!-- 新しいTODO or 習慣の追加）-->

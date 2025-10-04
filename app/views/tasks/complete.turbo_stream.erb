@@ -1,0 +1,7 @@
+<%= turbo_stream.replace dom_id(@task) do %>
+  <%= render "tasks/task_item", t: @task %>
+<% end %>
+
+<%= turbo_stream.replace "exp_bar" do %>
+  <%= render "characters/exp_bar", character: current_user.active_character %>
+<% end %>
