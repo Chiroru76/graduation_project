@@ -8,7 +8,10 @@
   <!-- キャラ育成エリア -->
   <div style="width:700px; height:300px; border:2px solid black;
             display:flex; align-items:center; justify-content:center;">
-    <h1>キャラクター</h1>
+    <%= image_tag "characters/green_robo.webp", alt: "キャラクター",
+        width: 256, height: 256,
+        class: "block mx-auto" %>
+    <!-- キャラクターのステータス -->
     <% if current_user.active_character %>
       <div class="ml-auto w-1/2">
         <%= render "characters/status", character: current_user.active_character %>
