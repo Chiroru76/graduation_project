@@ -10,16 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_02_211411) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_05_122129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "character_kinds", force: :cascade do |t|
     t.string "name", null: false
     t.integer "stage", default: 0, null: false
-    t.string "thumbnail_url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "asset_key", null: false
+    t.index ["asset_key", "stage"], name: "index_character_kinds_on_asset_key_and_stage", unique: true
     t.index ["name", "stage"], name: "index_character_kinds_on_name_and_stage", unique: true
   end
 
