@@ -11,6 +11,4 @@ class CharacterAppearance < ApplicationRecord
     ext = asset_kind # "webp" or "png"
     "characters/#{character_kind.asset_key}/#{character_kind.asset_key}_#{pose}.#{ext}"
   end
-
-
 end
