@@ -7,5 +7,10 @@ class CharacterAppearance < ApplicationRecord
   validates :pose, presence: true, uniqueness: { scope: :character_kind_id }
   validates :asset_kind, presence: true
 
+  def asset_path
+    ext = asset_kind # "webp" or "png"
+    "characters/#{character_kind.asset_key}/#{character_kind.asset_key}_#{pose}.#{ext}"
+  end
+
 
 end
