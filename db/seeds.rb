@@ -7,3 +7,10 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+kind = CharacterKind.find_or_create_by!(asset_key: "green_robo") do |k|
+  k.name = "Green Robo"
+end
+
+CharacterAppearance.find_or_create_by!(character_kind: kind, pose: :idle) do |a|
+  a.asset_kind = :webp
+end
