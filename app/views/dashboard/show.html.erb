@@ -5,7 +5,6 @@
 <div class="mx-auto max-w-screen-xl p-6 space-y-6">
   <h2 class="text-2xl font-bold">ダッシュボード</h2>
   <hr>
-  <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256 %>
   <!-- キャラ育成エリア -->
   <div class="relative inline-block w-[600px] h-auto">
     <!-- 背景 -->
@@ -14,10 +13,7 @@
     <!-- キャラ + ステータス -->
     <div class="absolute bottom-0 left-0 flex items-center justify-between px-12">
       <!-- キャラクター画像-->
-      <%= image_tag "characters/green_robo.webp",
-          alt: "キャラクター",
-          width: 256, height: 256,
-          class: "block" %>
+      <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
 
       <!-- ステータス -->
       <% if current_user.active_character %>
