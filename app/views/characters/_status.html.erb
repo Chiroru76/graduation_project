@@ -1,10 +1,12 @@
 <div id="character_status" class="w-full">
+  <!-- キャラクター名表示 -->
+  <div class="text-lm text-black">ミドリ人</div>
 
   <!-- レベル表示 -->
   <div class="text-lm text-gray-500">Lv. <%= character.level %></div>
 
   <!-- 経験値ゲージ -->
-  <p>経験値</p>
+  <p class="text-lm text-gray-500">経験値</p>
   <div class="w-full bg-gray-200 rounded-full h-4">
     <div class="bg-green-500 h-4 rounded-full "
          style="width: <%= character.exp_progress_percentage %>%;">

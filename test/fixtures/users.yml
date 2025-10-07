@@ -8,6 +8,7 @@ one:
   name: "Taro"
   email: "one@example.com"
   encrypted_password: <%= Devise::Encryptor.digest(User, "password") %>
+  character_id: <%= ActiveRecord::FixtureSet.identify(:one) %>  # characters.yml の :one を指す
 
 # column: value
 #
