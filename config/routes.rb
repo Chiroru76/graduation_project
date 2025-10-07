@@ -4,12 +4,14 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
+
   resources :tasks do
     member do
       patch :complete
     end
   end
-
+  # 新規登録後のたまご入手画面
+  get "welcome/egg", to => "welcome#egg", as: :welcome_egg
   get "dashboard/show"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
