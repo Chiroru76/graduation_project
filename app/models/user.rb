@@ -8,4 +8,13 @@ class User < ApplicationRecord
   has_many :characters
   # 現在育成中のキャラクターをuser.active_characterで参照できる
   belongs_to :active_character, class_name: "Character", foreign_key: "character_id", optional: true
+  # ユーザー作成後にキャラクター作成メソッドを呼ぶ
+  after_create_commit :create_initial_character
+
+  private
+  def create_initial_character
+    egg_kind = CharacterKind.find_by!(asset_key: "egg", stage: 0)
+    ch = characters.create!(character_kind: egg_kind, state: :alive, stage: :egg)
+    update!(active_character: ch)
+  end
 end
