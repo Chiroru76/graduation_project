@@ -14,3 +14,14 @@ end
 CharacterAppearance.find_or_create_by!(character_kind: kind, pose: :idle) do |a|
   a.asset_kind = :webp
 end
+
+# マスターデータ（たまご）を追加
+egg_kind = CharacterKind.find_or_create_by!(asset_key: "egg", stage: 0) do |k|
+  k.name = "Egg"
+end
+
+# たまごの見た目を追加
+egg = CharacterKind.find_by!(asset_key: "egg", stage: 0)
+CharacterAppearance.find_or_create_by!(character_kind: egg, pose: :idle) do |a|
+  a.asset_kind = :webp
+end
