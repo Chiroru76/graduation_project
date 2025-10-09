@@ -4,13 +4,15 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
+
   resources :tasks do
     member do
       patch :complete
     end
   end
-
-  get "dashboard/show"
+  # 新規登録後のたまご入手画面
+  get "welcome/egg", to: "welcome#egg", as: :welcome_egg
+  get "dashboard", to: "dashboard#show", as: :dashboard_show
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -23,5 +25,4 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root "dashboard#show"
 end
