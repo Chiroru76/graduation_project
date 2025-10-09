@@ -52,7 +52,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # he path used after sign up.
   def after_sign_up_path_for(resource)
-
     session[:just_singed_up] = true
     welcome_egg_path
   end
