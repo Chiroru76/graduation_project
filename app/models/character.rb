@@ -54,6 +54,17 @@ class Character < ApplicationRecord
   def check_level_up
     while exp >= exp_ceiling
       self.level += 1
+
+      # 初めてのレベルアップ時にstage: :egg → stage: :childのキャラに変化
+      if level == 2 && character_kind.egg?
+        # CharacterKindからstage: :childであるキャラを探してランダムで選択
+        child_kinds = CharacterKind.where(stage: :child)
+        child_kind = child_kinds.sample
+        self.character_kind = child_kind if child_kind
+      end
     end
   end
+
+  # 初めてのレベルアアップ時に卵からキャラクターが誕生
+  def 
 end
