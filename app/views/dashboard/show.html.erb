@@ -13,7 +13,11 @@
     <!-- キャラ + ステータス -->
     <div class="absolute bottom-0 left-0 flex items-center justify-between px-12">
       <!-- キャラクター画像-->
-      <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
+      <% if @appearance.present? %>
+        <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
+      <% else %>
+        <div class="text-gray-500">キャラクターがいません</div>
+      <% end %>
 
       <!-- ステータス -->
       <% if current_user.active_character %>
