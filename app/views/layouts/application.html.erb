@@ -22,40 +22,11 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
 
-    <header>
-      <% flash.each do |key, message| %>
-        <div class="flash <%= key %>">
-          <% if message.is_a?(Array) %>
-            <ul>
-              <% message.each do |msg| %>
-                <li><%= msg %></li>
-              <% end %>
-            </ul>
-          <% else %>
-            <%= message %>
-          <% end %>
-        </div>
-      <% end %>
-    <% if user_signed_in? %>
-      <ul>
-        <li>
-          <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete } %>
-        </li>
-      <ul>
-    <% else %>
-      <ul>
-        <li>
-          <%= link_to "新規登録", new_user_registration_path %>
-        </li>
-        <li>
-          <%= link_to "ログイン", new_user_session_path %>
-        </li>
-      <ul>
-    <% end %>
-  </header>
+  <%= render "layouts/header" %>
+  <%= render "layouts/flash" %>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex items-center justify-center">
+    <main class="container mx-auto mt-4 px-5 flex items-center justify-center">
       <%= yield %>
     </main>
   </body>

@@ -70,7 +70,7 @@ class TasksController < ApplicationController
     respond_to do |format|
         format.html { redirect_to dashboard_show_path, notice: notice }
         # ビューにローカル変数hatchedを渡す
-        format.turbo_stream { render locals: { hatched: evolved } }
+        format.turbo_stream { render locals: { hatched: hatched } }
     end
   end
 
