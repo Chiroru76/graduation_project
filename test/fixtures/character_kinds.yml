@@ -2,10 +2,10 @@
 
 one:
   name: Green Robo
-  stage: 1
+  stage: egg
   asset_key: green_robo
 
 two:
   name: Green Robo
-  stage: 2
+  stage: child
   asset_key: green_robo
