@@ -61,9 +61,16 @@ class TasksController < ApplicationController
         notice = "TODOを未完了に戻しました"
     end
 
+    # キャラクター誕生判定（条件：レベル1→2にレベルアップ）
+    character = current_user.active_character
+    evolved = character.saved_change_to_level? && character.level_previously_was == 1 && character.level == 2
+    character.reload
+    @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
+
     respond_to do |format|
         format.html { redirect_to dashboard_show_path, notice: notice }
-        format.turbo_stream
+        # ビューにローカル変数evolvedを渡す
+        format.turbo_stream { render locals: { evolved: evolved } }
     end
   end
 

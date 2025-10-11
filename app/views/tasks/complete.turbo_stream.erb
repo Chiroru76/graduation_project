@@ -5,3 +5,9 @@
 <%= turbo_stream.replace "character_status" do %>
   <%= render "characters/status", character: current_user.active_character %>
 <% end %>
+
+<% if evolved %>
+  <%= turbo_stream.replace "character_image" do %>
+    <%= render "characters/image", appearance: @appearance %>
+  <% end %>
+<% end %>
