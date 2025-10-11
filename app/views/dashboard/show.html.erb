@@ -26,7 +26,7 @@
 
       <!-- ステータス -->
       <% if current_user.active_character %>
-        <div class="w-1/3 bg-white/70 p-4 rounded-lg shadow">
+        <div class="w-1/3 bg-white p-4 rounded-lg shadow">
           <%= render "characters/status", character: current_user.active_character %>
         </div>
       <% end %>
