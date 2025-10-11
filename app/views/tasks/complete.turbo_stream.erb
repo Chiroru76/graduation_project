@@ -5,3 +5,15 @@
 <%= turbo_stream.replace "character_status" do %>
   <%= render "characters/status", character: current_user.active_character %>
 <% end %>
+
+<% if hatched %>
+  <%= turbo_stream.replace "character_image" do %>
+    <%= render "characters/image", appearance: @appearance %>
+  <% end %>
+<% end %>
+
+<% if hatched %>
+  <%= turbo_stream.append "modal_area" do %>
+    <%= render "modals/egg_hatched", character: current_user.active_character %>
+  <% end %>
+<% end %>

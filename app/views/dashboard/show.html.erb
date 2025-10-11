@@ -5,19 +5,28 @@
 <div class="mx-auto max-w-screen-xl p-6 space-y-6">
   <h2 class="text-2xl font-bold">ダッシュボード</h2>
   <hr>
+
+  <!-- モーダル表示エリア -->
+  <div id="modal_area"></div>
   <!-- キャラ育成エリア -->
-  <div class="relative inline-block w-[600px] h-auto">
+  <div id="character_" class="relative inline-block w-[600px] h-auto">
     <!-- 背景 -->
     <%= image_tag "background.png", alt: "背景", class: "block w-full h-auto" %>
 
     <!-- キャラ + ステータス -->
     <div class="absolute bottom-0 left-0 flex items-center justify-between px-12">
       <!-- キャラクター画像-->
-      <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
+      <div id="character_image">
+        <% if @appearance.present? %>
+          <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
+        <% else %>
+          <div class="text-gray-500">キャラクターがいません</div>
+        <% end %>
+      </div>
 
       <!-- ステータス -->
       <% if current_user.active_character %>
-        <div class="w-1/3 bg-white/70 p-4 rounded-lg shadow">
+        <div class="w-1/3 bg-white p-4 rounded-lg shadow">
           <%= render "characters/status", character: current_user.active_character %>
         </div>
       <% end %>

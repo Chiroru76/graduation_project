@@ -14,7 +14,7 @@ class User < ApplicationRecord
   private
   def create_initial_character
     egg_kind = CharacterKind.find_by!(asset_key: "egg", stage: 0)
-    ch = characters.create!(character_kind: egg_kind, state: :alive, stage: :egg)
+    ch = characters.create!(character_kind: egg_kind, state: :alive)
     update!(active_character: ch)
   end
 end

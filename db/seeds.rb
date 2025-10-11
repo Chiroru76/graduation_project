@@ -7,21 +7,32 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-kind = CharacterKind.find_or_create_by!(asset_key: "green_robo") do |k|
-  k.name = "Green Robo"
-end
 
-CharacterAppearance.find_or_create_by!(character_kind: kind, pose: :idle) do |a|
-  a.asset_kind = :webp
-end
 
-# マスターデータ（たまご）を追加
-egg_kind = CharacterKind.find_or_create_by!(asset_key: "egg", stage: 0) do |k|
-  k.name = "Egg"
-end
+character_kinds = [
+  { asset_key: "egg", stage: 0, name: "Egg", appearances: [ :idle ] },
+  { asset_key: "green_robo", stage: 1, name: "Green Robo", appearances: [ :idle ] },
+  { asset_key: "green_monster", stage: 1, name: "Green Monster", appearances: [ :idle ] }
+]
 
-# たまごの見た目を追加
-egg = CharacterKind.find_by!(asset_key: "egg", stage: 0)
-CharacterAppearance.find_or_create_by!(character_kind: egg, pose: :idle) do |a|
-  a.asset_kind = :webp
+character_kinds.each do |data|
+  # --- CharacterKind（マスターデータ）の登録 ---
+  kind = CharacterKind.find_or_create_by!(
+    asset_key: data[:asset_key],
+    stage: data[:stage]
+  ) do |k|
+    k.name = data[:name]
+  end
+
+  # --- CharacterAppearance 登録 ---
+  data[:appearances].each do |pose|
+    CharacterAppearance.find_or_create_by!(
+      character_kind: kind,
+      pose: pose
+    ) do |a|
+      a.asset_kind = :webp
+    end
+  end
+
+  puts "✅ #{kind.name} 登録完了 (#{data[:appearances].join(', ')})"
 end

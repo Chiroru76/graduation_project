@@ -1,9 +1,9 @@
 <div id="character_status" class="w-full">
   <!-- キャラクター名表示 -->
-  <div class="text-lm text-black">ミドリ人</div>
+  <div class="text-lg text-black"><%= character.character_kind.name %></div>
 
   <!-- レベル表示 -->
-  <div class="text-lm text-gray-500">Lv. <%= character.level %></div>
+  <div class="text-lm text-right font-bold text-gray-500">Lv. <%= character.level %></div>
 
   <!-- 経験値ゲージ -->
   <p class="text-lm text-gray-500">経験値</p>
@@ -14,6 +14,9 @@
   </div>
   <!-- 次のレベルまでの経験値 -->
   <p class="mt-2 text-sm text-gray-600 text-right">
-    次のレベルまであと <%= character.exp_needed %> EXP
+    次のレベルまであと   
+    <span class="inline-block w-[6ch] tabular-nums text-right align-baseline">
+      <%= character.exp_needed %>
+    </span> EXP
   </p>
 </div>

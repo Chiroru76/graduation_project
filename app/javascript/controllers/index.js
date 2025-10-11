@@ -10,5 +10,8 @@ application.register("goal-modal", GoalModalController)
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import ModalController from "./modal_controller"
+application.register("modal", ModalController)
+
 import RepeatRuleController from "./repeat_rule_controller"
 application.register("repeat-rule", RepeatRuleController)

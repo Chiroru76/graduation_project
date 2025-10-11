@@ -1,0 +1,26 @@
+<div class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 backdrop-blur-sm" data-controller="modal">
+
+  <!-- カードコンテナ -->
+  <div class="relative z-10 mt-6 mb-6 backdrop-blur-xl bg-gradient-to-b from-white/80 to-amber-50/80 border border-white/30 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-10 max-w-md w-full text-center transform transition-all">
+    <h2 class="text-3xl font-extrabold text-gray-800 mb-3 tracking-wide drop-shadow-md">
+      キャラクターが誕生しました！
+    </h2>
+    <p class="text-gray-600 mb-8 text-lg">おめでとう！</p>
+
+    <div class="mb-6 flex flex-col items-center justify-center space-y-2">
+      <% appearance = CharacterAppearance.find_by(character_kind: character.character_kind) %>
+      <%= image_tag appearance.asset_path,
+                    alt: "キャラクター",
+                    width: 256, height: 256,
+                    class: "drop-shadow-2xl select-none transition-transform duration-500 hover:scale-105" %>
+      <div class="text-2xl font-bold text-black tracking-wide">
+        <%= character.character_kind.name %>
+      </div>
+    </div>
+
+    <div class="mt-2 text-right">
+      <button class="rounded-lg bg-amber-500 px-4 py-2 text-white"
+              data-action="modal#close">OK</button>
+    </div>
+  </div>
+</div>

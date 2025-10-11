@@ -3,7 +3,6 @@ class Character < ApplicationRecord
   belongs_to :character_kind
 
   enum :state, { alive: 0, dead: 1 }
-  enum :stage, { egg: 0, child: 1, adult: 2 }
 
   validates :level, numericality: { greater_than_or_equal_to: 1 }
   validates :exp, :bond_hp, :bond_hp_max, numericality: { greater_than_or_equal_to: 0 }
@@ -54,6 +53,12 @@ class Character < ApplicationRecord
   def check_level_up
     while exp >= exp_ceiling
       self.level += 1
+
+      # 初めてのレベルアップ時にstage: :egg → stage: :childのキャラに変化
+      if level == 2 && character_kind.egg?
+        # CharacterKindからstage: :childであるキャラを探してランダムで選択
+        self.character_kind = CharacterKind.where(stage: :child).sample
+      end
     end
   end
 end
