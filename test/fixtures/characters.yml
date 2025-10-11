@@ -8,7 +8,7 @@ one:
   bond_hp: 1
   bond_hp_max: 1
   state: 1
-  stage: 1
+  character_kind: egg
   last_activity_at: 2025-10-02 06:27:14
   dead_at: 2025-10-02 06:27:14
 
@@ -20,6 +20,6 @@ two:
   bond_hp: 1
   bond_hp_max: 1
   state: 1
-  stage: 1
+  character_kind: child
   last_activity_at: 2025-10-02 06:27:14
   dead_at: 2025-10-02 06:27:14
