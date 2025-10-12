@@ -20,13 +20,14 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <script src="https://kit.fontawesome.com/66398c5714.js" crossorigin="anonymous"></script>
   </head>
 
   <%= render "layouts/header" %>
   <%= render "layouts/flash" %>
 
   <body>
-    <main class="container mx-auto mt-4 px-5 flex items-center justify-center">
+    <main class="container mx-auto mt-0 px-5 flex items-center justify-center">
       <%= yield %>
     </main>
   </body>
