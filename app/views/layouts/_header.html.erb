@@ -3,6 +3,31 @@
   <!-- 左: ロゴ -->
   <div class="text-3xl font-extrabold tracking-widest">LOGO</div>
 
+    <nav style="margin: 2px 0;">
+      <ul class="flex items-center gap-x-3">
+        <li class="flex flex-col items-center mx-4">
+          <i class="fa-regular fa-house fa-2x mb-1"></i>
+          <%= link_to "ホーム", dashboard_show_path, class: "text-base font-bold" %>
+        </li>
+        <li class="flex flex-col items-center mx-4">
+          <i class="fa-solid fa-chart-simple fa-2x mb-1"></i>
+          <%= link_to "グラフ", dashboard_show_path, class: "text-base font-bold" %>
+        </li>
+        <li class="flex flex-col items-center mx-4">
+          <i class="fa-regular fa-address-book fa-2x mb-1"></i>
+          <%= link_to "図鑑", dashboard_show_path, class: "text-base font-bold" %>
+        </li>
+        <li class="flex flex-col items-center mx-4">
+          <i class="fa-solid fa-gear fa-2x mb-1"></i>
+          <%= link_to "設定", dashboard_show_path, class: "text-base font-bold" %>
+        </li>
+          <li class="flex flex-col items-center mx-4">
+          <i class="fa-regular fa-circle-user fa-2x mb-1"></i>
+          <%= link_to "プロフィール", dashboard_show_path, class: "text-base font-bold" %>
+        </li>
+      </ul>
+    </nav>
+
   <% if user_signed_in? %>
     <nav>
       <ul class="flex items-center space-x-8">
