@@ -12,7 +12,9 @@
 character_kinds = [
   { asset_key: "egg", stage: 0, name: "Egg", appearances: [ :idle ] },
   { asset_key: "green_robo", stage: 1, name: "Green Robo", appearances: [ :idle ] },
-  { asset_key: "green_monster", stage: 1, name: "Green Monster", appearances: [ :idle ] }
+  { asset_key: "green_monster", stage: 1, name: "Green Monster", appearances: [ :idle ] },
+  { asset_key: "hurozapple", stage: 1, name: "フロザップル", appearances: [ :idle ] },
+  { asset_key: "hurozapple", stage: 2, name: "フロザップル", appearances: [ :idle ] }
 ]
 
 character_kinds.each do |data|
