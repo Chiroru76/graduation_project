@@ -53,6 +53,11 @@ class TasksController < ApplicationController
   end
 
   def complete
+    # 1) 更新前スナップショット
+    character = current_user.active_character
+    before_level = character.level
+    before_stage = character.character_kind.stage # "egg" | "child" | "adult"
+
     if @task.open?
         @task.update(status: :done, completed_at: Time.current)
         notice = "TODOを完了しました"
@@ -61,16 +66,22 @@ class TasksController < ApplicationController
         notice = "TODOを未完了に戻しました"
     end
 
-    # キャラクター誕生判定（条件：レベル1→2にレベルアップ）
-    character = current_user.active_character
-    hatched = character.saved_change_to_level? && character.level_previously_was == 1 && character.level == 2
-    character.reload
-    @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
+  # 2) 更新後を読みにいく
+  character.reload
+  after_level = character.level
+  after_stage = character.character_kind.stage
+
+  # 3) 判定 （進化 or 孵化）
+  hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
+  evolved = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+
+  @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
+
 
     respond_to do |format|
         format.html { redirect_to dashboard_show_path, notice: notice }
-        # ビューにローカル変数hatchedを渡す
-        format.turbo_stream { render locals: { hatched: hatched } }
+        # 4) フラグをビューに渡す
+        format.turbo_stream { render locals: { hatched: hatched, evolved: evolved } }
     end
   end
 

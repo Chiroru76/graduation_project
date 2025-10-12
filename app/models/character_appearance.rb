@@ -9,6 +9,6 @@ class CharacterAppearance < ApplicationRecord
 
   def asset_path
     ext = asset_kind # "webp" or "png"
-    "characters/#{character_kind.asset_key}/#{character_kind.asset_key}_#{pose}.#{ext}"
+    "characters/#{character_kind.asset_key}/#{character_kind.asset_key}_#{character_kind.stage}_#{pose}.#{ext}"
   end
 end
