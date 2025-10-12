@@ -53,8 +53,7 @@ class TasksController < ApplicationController
   end
 
   def complete
-
-  # 1) 更新前スナップショット
+    # 1) 更新前スナップショット
     character = current_user.active_character
     before_level = character.level
     before_stage = character.character_kind.stage # "egg" | "child" | "adult"
