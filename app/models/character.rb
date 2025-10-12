@@ -1,3 +1,28 @@
+  # create_table "characters", force: :cascade do |t|
+  #   t.bigint "user_id", null: false
+  #   t.bigint "character_kind_id", null: false
+  #   t.integer "level", default: 1, null: false
+  #   t.integer "exp", default: 0, null: false
+  #   t.integer "bond_hp", default: 0, null: false
+  #   t.integer "bond_hp_max", default: 100, null: false
+  #   t.integer "state", default: 0, null: false
+  #   t.datetime "last_activity_at"
+  #   t.datetime "dead_at"
+  #   t.datetime "created_at", null: false
+  #   t.datetime "updated_at", null: false
+  #   t.index ["character_kind_id"], name: "index_characters_on_character_kind_id"
+  #   t.index ["user_id"], name: "index_characters_on_user_id"
+  # end
+
+  # create_table "character_kinds", force: :cascade do |t|
+  #   t.string "name", null: false
+  #   t.integer "stage", default: 0, null: false
+  #   t.datetime "created_at", null: false
+  #   t.datetime "updated_at", null: false
+  #   t.string "asset_key", null: false
+  #   t.index ["asset_key", "stage"], name: "index_character_kinds_on_asset_key_and_stage", unique: true
+  #   t.index ["name", "stage"], name: "index_character_kinds_on_name_and_stage", unique: true
+  # end
 class Character < ApplicationRecord
   belongs_to :user
   belongs_to :character_kind
@@ -60,5 +85,14 @@ class Character < ApplicationRecord
         self.character_kind = CharacterKind.where(stage: :child).sample
       end
     end
+    evolve_to_adult!
+  end
+
+  def evolve_to_adult!
+    puts "[DEBUG] evolve_to_adult! called: level=#{level}, kind=#{character_kind.stage}"
+    return unless level >= 10 && character_kind.child?
+    adult_kind = CharacterKind.find_by(asset_key: character_kind.asset_key, stage: :adult)
+    update!(character_kind: adult_kind)
+    puts "[DEBUG] evolved to adult: character_kind_id=#{adult_kind&.id}"
   end
 end
