@@ -10,6 +10,10 @@ Rails.application.routes.draw do
       patch :complete
     end
   end
+
+  resource :characters, only: [] do
+    post "feed", to: "characters#feed"
+  end
   # 新規登録後のたまご入手画面
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg
   get "dashboard", to: "dashboard#show", as: :dashboard_show
