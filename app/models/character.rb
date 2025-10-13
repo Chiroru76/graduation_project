@@ -64,6 +64,28 @@ class Character < ApplicationRecord
     ((current_level_exp.to_f/(exp_ceiling - exp_floor)) * 100).round
   end
 
+  # えさやりメソッド
+  def feed!(user)
+    return if bond_hp >= bond_hp_max
+    return if user.food_count <= 0
+    # 1回のえさやりで増加するきずなHP
+    gain = 10
+    # エサの消費・きずなHP増加をトランザクションでまとめて実行
+    transaction do
+      user.decrement!(:food_count, 1)
+      increment!(:bond_hp, gain)
+      if bond_hp > bond_hp_max
+        update!(bond_hp: bond_hp_max)
+      end
+    end
+    true
+  end
+
+  # きずなゲージの進捗率（％）
+  def bond_hp_ratio
+    ((bond_hp.to_f / bond_hp_max.to_f) * 100).round
+  end
+
   # 経験値加算の処理の入り口
   def gain_exp!(amount)
     return if amount <= 0

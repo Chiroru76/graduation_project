@@ -17,7 +17,7 @@ class Task < ApplicationRecord
   before_validation :assign_reward_exp_by_difficulty
 
   # statusがdoneに変化した時に実行
-  after_update :give_exp_to_active_character, if: -> { saved_change_to_status? && done? }
+  after_update :give_exp_to_active_character, :give_food_to_user, if: -> { saved_change_to_status? && done? }
 
   validates :title, presence: true, length: { maximum: 255 }
   validates :difficulty, presence: true
@@ -39,5 +39,9 @@ class Task < ApplicationRecord
     return unless character.present?
     # 経験値を加算(Characterモデルのgain_expメソッドを呼び出し)
     character.gain_exp!(reward_exp)
+  end
+
+  def give_food_to_user
+    user.increment!(:food_count, reward_food_count)
   end
 end
