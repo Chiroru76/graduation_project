@@ -6,17 +6,30 @@
   <div class="text-lm text-right font-bold text-gray-500">Lv. <%= character.level %></div>
 
   <!-- 経験値ゲージ -->
-  <p class="text-lm text-gray-500">経験値</p>
-  <div class="w-full bg-gray-200 rounded-full h-4">
-    <div class="bg-green-500 h-4 rounded-full "
-         style="width: <%= character.exp_progress_percentage %>%;">
+  <div class="mb-2">
+    <div class="mb-1">
+      <span class="block text-sm text-gray-500">経験値</span>
+      <span class="block text-[11px] text-gray-400 text-right">
+        次のレベルまであと <%= character.exp_needed %> EXP
+      </span>
+    </div>
+    <div class="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden">
+      <div class="bg-green-500 h-3 rounded-full"
+           style="width:<%= character.exp_progress_percentage %>%"></div>
     </div>
   </div>
-  <!-- 次のレベルまでの経験値 -->
-  <p class="mt-2 text-sm text-gray-600 text-right">
-    次のレベルまであと   
-    <span class="inline-block w-[6ch] tabular-nums text-right align-baseline">
-      <%= character.exp_needed %>
-    </span> EXP
-  </p>
+
+<!-- キズナゲージ -->
+  <div>
+    <div class="flex items-center justify-between mb-1">
+      <span class="text-sm text-gray-500">きずな</span>
+      <span class="text-[11px] text-gray-400">
+        現在 <span class="tabular-nums"><%= character.bond_hp %></span>
+      </span>
+    </div>
+    <div class="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden">
+      <div class="bg-orange-500 h-3 rounded-full"
+           style="width:<%= character.bond_hp_ratio %>%"></div>
+    </div>
+  </div>
 </div>
