@@ -80,8 +80,8 @@ class TasksController < ApplicationController
 
     respond_to do |format|
         format.html { redirect_to dashboard_show_path, notice: notice }
-        # 4) フラグをビューに渡す
-        format.turbo_stream { render locals: { hatched: hatched, evolved: evolved } }
+        # 4) ビューにフラグを渡す
+        format.turbo_stream { render locals: { hatched: hatched, evolved: evolved, food_count: current_user.food_count } }
     end
   end
 
