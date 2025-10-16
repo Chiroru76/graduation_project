@@ -1,0 +1,7 @@
+character_bond_decay_daily: #ジョブの識別名
+  class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper" #実行される Ruby クラス名
+  queue: "default" # Sidekiqのキュー名
+  args:
+    job_class: "CharacterBondHpDecayJob" # 実行するジョブクラス名
+  cron: "0 0 * * *"        # 毎日 00:00
+  timezone: "Asia/Tokyo"   # JSTで回す
