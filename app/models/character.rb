@@ -117,4 +117,8 @@ class Character < ApplicationRecord
     adult_kind = CharacterKind.find_by(asset_key: character_kind.asset_key, stage: :adult)
     update!(character_kind: adult_kind)
   end
+
+  def die!
+    update!(state: :dead, dead_at: Time.current)
+  end
 end
