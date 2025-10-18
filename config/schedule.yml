@@ -1,4 +1,4 @@
-character_bond_decay_daily: #ジョブの識別名
+character_bond_hp_decay_daily: #ジョブの識別名
   class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper" #実行される Ruby クラス名
   queue: "default" # Sidekiqのキュー名
   args:
