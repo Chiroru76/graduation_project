@@ -70,3 +70,6 @@ gem "devise"
 gem "rails-i18n"     # Rails全体の日本語化
 gem "devise-i18n"    # Devise画面・メールの日本語化
 gem "tailwindcss-rails"
+
+gem "sidekiq" # 非同期処理を行うためのバックグラウンドジョブフレームワーク
+gem "sidekiq-cron" # cron形式でSidekiqのジョブを定期実行するためのgem

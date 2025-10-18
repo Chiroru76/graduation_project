@@ -1,0 +1,4 @@
+# 将来的にジョブが増えたら concurrency と queues を拡張
+:concurrency: 1
+:queues:
+  - default

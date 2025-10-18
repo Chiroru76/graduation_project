@@ -4,27 +4,42 @@
   <div id="modal_area"></div>
   <!-- キャラ育成エリア -->
   <div id="character_" class="relative inline-block w-[500px] h-auto">
-    <!-- 背景 -->
-    <%= image_tag "background.png", alt: "背景", class: "block w-full h-auto" %>
+    <% if current_user.active_character.dead? %>
+      <!-- 死亡時専用ビュー -->
+      <div class="bg-black w-full h-full flex flex-col items-center justify-center rounded-2xl p-8 text-center">
+        <%= image_tag "death.png", alt: "十字架", width: 200, height: 200, class: "mx-auto mb-4" %>
+        <p class="text-white text-xl font-bold">
+          <%= current_user.active_character.character_kind.name %> は死亡しました。
+        </p>
+      </div>
+    <% else %>
+      <!-- 通常時専用ビュー -->
+      <%= image_tag "background.png", alt: "背景", class: "block w-full h-auto" %>
+  
+      <!-- キャラ + ステータス -->
+      <div class="absolute bottom-0 left-0 flex items-center px-12 w-full">
+        <!-- キャラクター画像-->
+        <% if current_user.active_character.dead? %>
+          <div class="text-gray-500">キャラクターは死亡しています。</div>
+          <%= image_tag "death.png", alt: "十字架", width: 256, height: 256, class: "block" %>
+        <% else %> 
+          <div id="character_image" class="mr-auto">
+            <% if @appearance.present? %>
+              <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
+            <% else %>
+              <div class="text-gray-500">キャラクターがいません</div>
+            <% end %>
+          </div>
+        <% end %>
 
-    <!-- キャラ + ステータス -->
-    <div class="absolute bottom-0 left-0 flex items-center px-12 w-full">
-      <!-- キャラクター画像-->
-      <div id="character_image" class="mr-auto">
-        <% if @appearance.present? %>
-          <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
-        <% else %>
-          <div class="text-gray-500">キャラクターがいません</div>
+        <!-- ステータス -->
+        <% if current_user.active_character %>
+          <div class="w-1/2 bg-white p-4 rounded-lg shadow">
+            <%= render "characters/status", character: current_user.active_character %>
+          </div>
         <% end %>
       </div>
-
-      <!-- ステータス -->
-      <% if current_user.active_character %>
-        <div class="w-1/2 bg-white p-4 rounded-lg shadow">
-          <%= render "characters/status", character: current_user.active_character %>
-        </div>
-      <% end %>
-    </div>
+    <% end %>
   </div>
   <div class="mt-0 flex justify-end items-center space-x-2">
     <%= button_to "エサをあげる",
