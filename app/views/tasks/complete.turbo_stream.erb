@@ -6,6 +6,10 @@
   <%= render "characters/status", character: current_user.active_character %>
 <% end %>
 
+<%= turbo_stream.replace "food_controls" do %>
+  <%= render "characters/food_controls", food_count: food_count %>
+<% end %>
+
 <% if hatched %>
   <%= turbo_stream.replace "character_image" do %>
     <%= render "characters/image", appearance: @appearance %>
