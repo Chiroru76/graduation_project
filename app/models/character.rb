@@ -67,13 +67,13 @@ class Character < ApplicationRecord
   # えさやりメソッド
   def feed!(user)
     return if bond_hp >= bond_hp_max
-    return if user.food_count <= 0
+    return if user.food_count <= 5
     # 1回のえさやりで増加するきずなHP
     gain = 10
     # エサの消費・きずなHP増加をトランザクションでまとめて実行
     transaction do
       self.last_activity_at = Time.current # キャラクターの最終活動日を更新
-      user.decrement!(:food_count, 1)
+      user.decrement!(:food_count, 5)
       increment!(:bond_hp, gain)
       if bond_hp > bond_hp_max
         update!(bond_hp: bond_hp_max)

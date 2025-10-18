@@ -17,7 +17,7 @@ class CharacterBondHpDecayJob < ApplicationJob
         total_decay += INACTIVE_DECAY_AMOUNT
       end
 
-      new_bond_hp = [character.bond_hp - total_decay, 0].max
+      new_bond_hp = [ character.bond_hp - total_decay, 0 ].max
       character.update!(bond_hp: new_bond_hp)
 
       # bond_hpが0になった場合の死亡処理
