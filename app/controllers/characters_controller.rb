@@ -4,9 +4,9 @@ class CharactersController < ApplicationController
   def index
     @characters = current_user.characters
                               .joins(:character_kind)
-                              .where.not(character_kinds: { stage: "egg" }) #卵は除く
-                              .select('DISTINCT ON (character_kinds.id) characters.*')
-                              .order('character_kinds.id, characters.created_at DESC')
+                              .where.not(character_kinds: { stage: "egg" }) # 卵は除く
+                              .select("DISTINCT ON (character_kinds.id) characters.*")
+                              .order("character_kinds.id, characters.created_at DESC")
                               .includes(:character_kind)
   end
 
