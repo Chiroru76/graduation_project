@@ -21,7 +21,7 @@ Rails.application.routes.draw do
     post "reset", to: "characters#reset"
   end
 
-  resources :characters, only: [ :index ]
+  resources :characters, only: [ :index, :show ]
 
   # 新規登録後のたまご入手画面
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg

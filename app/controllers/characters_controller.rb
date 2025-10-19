@@ -10,6 +10,15 @@ class CharactersController < ApplicationController
                               .includes(:character_kind)
   end
 
+  def show
+    @character  = current_user.characters.find(params[:id])
+    @appearance = CharacterAppearance.find_by(character_kind: @character.character_kind, pose: :idle)
+
+    # Turbo Frame向けのHTML（<turbo-frame id="character_modal"> ...）を返す
+    render partial: "characters/detail_modal",
+           locals: { character: @character, appearance: @appearance }
+  end
+
   def feed
     @character = current_user.active_character
     if @character.feed!(current_user)
