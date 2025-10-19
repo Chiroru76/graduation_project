@@ -11,6 +11,8 @@
         <p class="text-white text-xl font-bold">
           <%= current_user.active_character.character_kind.name %> は死亡しました。
         </p>
+
+        <%= button_to "リセットする", reset_characters_path, method: :post, class: "mt-3 rounded-lg bg-pink-600 px-4 py-2 text-white hover:bg-pink-700" %>
       </div>
     <% else %>
       <!-- 通常時専用ビュー -->
@@ -19,18 +21,13 @@
       <!-- キャラ + ステータス -->
       <div class="absolute bottom-0 left-0 flex items-center px-12 w-full">
         <!-- キャラクター画像-->
-        <% if current_user.active_character.dead? %>
-          <div class="text-gray-500">キャラクターは死亡しています。</div>
-          <%= image_tag "death.png", alt: "十字架", width: 256, height: 256, class: "block" %>
-        <% else %> 
-          <div id="character_image" class="mr-auto">
-            <% if @appearance.present? %>
-              <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
-            <% else %>
-              <div class="text-gray-500">キャラクターがいません</div>
-            <% end %>
-          </div>
-        <% end %>
+        <div id="character_image" class="mr-auto">
+          <% if @appearance.present? %>
+            <%= image_tag @appearance.asset_path, alt: "キャラクター", width: 256, height: 256, class: "block" %>
+          <% else %>
+            <div class="text-gray-500">キャラクターがいません</div>
+          <% end %>
+        </div>
 
         <!-- ステータス -->
         <% if current_user.active_character %>
