@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :tasks, dependent: :destroy
   # 所有しているキャラクター一覧をuser.charactersで参照できる
-  has_many :characters
+  has_many :characters, dependent: :destroy
   # 現在育成中のキャラクターをuser.active_characterで参照できる
   belongs_to :active_character, class_name: "Character", foreign_key: "character_id", optional: true
   # ユーザー作成後にキャラクター作成メソッドを呼ぶ
