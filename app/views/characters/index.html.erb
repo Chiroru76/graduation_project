@@ -1,0 +1,15 @@
+<div class="grid grid-cols-3 gap-6">
+  <% @characters.each do |character| %>
+    <% appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle) %>
+    <div class="bg-white p-4 rounded-lg shadow text-center">
+      <% if appearance.present? %>
+        <%= image_tag appearance.asset_path, alt: character.character_kind.name, width: 150, height: 150, class: "mx-auto mb-2" %>
+      <% else %>
+        <div class="text-gray-400">画像なし</div>
+      <% end %>
+
+      <p class="font-bold"><%= character.character_kind.name %></p>
+      <p class="text-sm text-gray-500">Lv. <%= character.level %></p>
+    </div>
+  <% end %>
+</div>

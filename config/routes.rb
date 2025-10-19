@@ -20,6 +20,9 @@ Rails.application.routes.draw do
     post "feed", to: "characters#feed"
     post "reset", to: "characters#reset"
   end
+
+  resources :characters, only: [ :index ]
+
   # 新規登録後のたまご入手画面
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg
   get "dashboard", to: "dashboard#show", as: :dashboard_show

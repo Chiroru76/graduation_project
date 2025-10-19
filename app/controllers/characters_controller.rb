@@ -1,6 +1,15 @@
 class CharactersController < ApplicationController
   before_action :authenticate_user!
 
+  def index
+    @characters = current_user.characters
+                              .joins(:character_kind)
+                              .where.not(character_kinds: { stage: "egg" }) # 卵は除く
+                              .select("DISTINCT ON (character_kinds.id) characters.*")
+                              .order("character_kinds.id, characters.created_at DESC")
+                              .includes(:character_kind)
+  end
+
   def feed
     @character = current_user.active_character
     if @character.feed!(current_user)
