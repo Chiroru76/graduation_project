@@ -1,0 +1,63 @@
+<turbo-frame id="character_modal">
+  <div class="fixed inset-0 z-50" id="character-detail-modal">
+    <!-- 背景（クリックで閉じる） -->
+    <div class="absolute inset-0 bg-black/50"
+         onclick="document.getElementById('character_modal').innerHTML='';"></div>
+
+    <!-- モーダル本体 -->
+    <div class="absolute inset-0 mx-auto my-8 h-[90%] w-[640px] max-w-[92vw]
+                overflow-auto rounded-2xl bg-white p-6 shadow-2xl">
+      <div class="flex justify-end">
+        <button class="text-2xl"
+                onclick="document.getElementById('character_modal').innerHTML='';">✕</button>
+      </div>
+
+      <div class="text-center">
+        <% if appearance.present? %>
+          <%= image_tag appearance.asset_path,
+                        alt: character.character_kind.name,
+                        class: "mx-auto mb-4 w-56 h-56 object-contain" %>
+        <% end %>
+
+        <div class="text-2xl font-bold"><%= character.character_kind.name %></div>
+        <div class="text-gray-500 font-semibold">Lv. <%= character.level %></div>
+
+        <!-- 経験値ゲージ -->
+        <div class="mt-3">
+          <div class="text-sm text-gray-500">経験値</div>
+          <div class="w-64 mx-auto bg-gray-200/80 rounded-full h-3 overflow-hidden">
+            <div class="h-3 rounded-full bg-green-500"
+                 style="width:<%= character.respond_to?(:exp_progress_percentage) ? character.exp_progress_percentage : 0 %>%"></div>
+          </div>
+        </div>
+
+        <!-- 明細 -->
+        <div class="mt-6 space-y-2 text-left max-w-md mx-auto">
+          <div class="flex justify-between">
+            <span class="text-gray-600">最後の活動</span>
+            <span><%= character.last_activity_at&.strftime("%-m月%-d日 %H:%M") || "—" %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-600">誕生日</span>
+            <span><%= character.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+          </div>
+                    <!-- 死亡日時（死んでいる場合のみ） -->
+          <% if character.dead_at.present? %>
+            <div class="flex justify-between text-red-600 font-semibold">
+              <span>死亡日時</span>
+              <span><%= l(character.dead_at) %></span>
+            </div>
+          <% end %>
+        </div>
+
+
+        <div class="mt-6 flex justify-center gap-3">
+          <button class="rounded-lg px-4 py-2 bg-gray-200 hover:bg-gray-300"
+                  onclick="document.getElementById('character_modal').innerHTML='';">
+            閉じる
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</turbo-frame>
