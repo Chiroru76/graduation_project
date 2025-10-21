@@ -33,6 +33,5 @@ class CreateTaskEvents < ActiveRecord::Migration[8.0]
     add_index :task_events, [:user_id, :occurred_at]
     add_index :task_events, [:user_id, :kind, :occurred_at]
     add_index :task_events, :awarded_character_id
-    end
   end
 end
