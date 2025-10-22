@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_21_130347) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_212150) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -86,6 +86,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_21_130347) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tag"
+    t.integer "tracking_mode"
+    t.index ["kind", "tracking_mode"], name: "index_tasks_on_kind_and_tracking_mode"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 

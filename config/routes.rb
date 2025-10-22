@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :tasks do
     member do
       patch :complete
+      post :log_amount
     end
   end
 
