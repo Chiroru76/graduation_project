@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_22_212150) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_213701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,7 +52,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_212150) do
   create_table "task_events", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "task_id", null: false
-    t.integer "kind", null: false
+    t.integer "task_kind", null: false
     t.integer "action", null: false
     t.integer "delta", default: 0, null: false
     t.decimal "amount", precision: 10, scale: 2, default: "0.0", null: false
@@ -64,8 +64,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_212150) do
     t.datetime "updated_at", null: false
     t.index ["awarded_character_id"], name: "index_task_events_on_awarded_character_id"
     t.index ["task_id"], name: "index_task_events_on_task_id"
-    t.index ["user_id", "kind", "occurred_at"], name: "index_task_events_on_user_id_and_kind_and_occurred_at"
     t.index ["user_id", "occurred_at"], name: "index_task_events_on_user_id_and_occurred_at"
+    t.index ["user_id", "task_kind", "occurred_at"], name: "index_task_events_on_user_id_and_task_kind_and_occurred_at"
     t.index ["user_id"], name: "index_task_events_on_user_id"
   end
 
