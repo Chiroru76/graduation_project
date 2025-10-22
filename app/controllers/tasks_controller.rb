@@ -18,16 +18,14 @@ class TasksController < ApplicationController
   def create
     @task = current_user.tasks.new(task_params)
     if @task.save
-        message =
-        if @task.todo?
-            "TODOを作成しました"
-        elsif @task.habit?
-            "習慣を作成ました"
-        end
-        redirect_to dashboard_show_path, notice: message
+      # 作成イベントを明示で残す
+      @task.log_created!(by_user: current_user)
+
+      notice = @task.todo? ? "TODOを作成しました" : "習慣を作成しました"
+      redirect_to dashboard_show_path, notice: notice
     else
-        flash.now[:alert] = @task.errors.full_messages
-        render :new, status: :unprocessable_entity
+      flash.now[:alert] = @task.errors.full_messages.join("\n")
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -36,21 +34,24 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-        redirect_to dashboard_show_path, notice: "TODOを更新しました"
+      notice = @task.todo? ? "TODOを更新しました" : "習慣を更新しました"
+      redirect_to dashboard_show_path, notice: notice
     else
-        flash.now[:alert] = @task.errors.full_messages
-        render :edit, status: :unprocessable_entity
+      flash.now[:alert] = @task.errors.full_messages.join("\n")
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     if @task.destroy
-        redirect_to dashboard_show_path, notice: "TODOを削除しました"
+      notice = @task.todo? ? "TODOを削除しました" : "習慣を削除しました"
+      redirect_to dashboard_show_path, notice: notice
     else
-        flash.now[:alert] = "TODOを削除できませんでした"
-        render :edit, status: :unprocessable_entity
+      flash.now[:alert] = "削除できませんでした"
+      render :edit, status: :unprocessable_entity
     end
   end
+
 
   def complete
     # 1) 更新前スナップショット
@@ -59,11 +60,18 @@ class TasksController < ApplicationController
     before_stage = character.character_kind.stage # "egg" | "child" | "adult"
 
     if @task.open?
-        @task.update(status: :done, completed_at: Time.current)
-        notice = "TODOを完了しました"
+      # habit のときだけ数量/単位を使う（todoは 0/ nil）
+      amount, unit = completion_amount_and_unit_for(@task)
+
+      @task.complete!(
+        by_user: current_user,
+        amount: amount,
+        unit: unit
+      )
+      notice = @task.todo? ? "TODOを完了しました" : "習慣を完了しました"
     else
-        @task.update(status: :open, completed_at: nil)
-        notice = "TODOを未完了に戻しました"
+      @task.reopen!(by_user: current_user)
+      notice = @task.todo? ? "TODOを未完了に戻しました" : "習慣を未完了に戻しました"
     end
 
   # 2) 更新後を読みにいく
@@ -99,6 +107,17 @@ class TasksController < ApplicationController
       repeat_rule: { days: [] }
     ).tap do |p|  # ← StrongParams の結果を p に渡して後処理する
       p[:repeat_rule] ||= {}   # ← repeat_rule が nil のときは {} にしておく
+    end
+  end
+
+  # habit のみ完了処理時の“数量”と“単位”を整理して返す
+  def completion_amount_and_unit_for(task)
+    if task.habit?
+      amount = params[:amount].presence || 0
+      unit   = params[:unit].presence
+      [amount.to_d, unit]
+    else
+      [0.to_d, nil]
     end
   end
 end
