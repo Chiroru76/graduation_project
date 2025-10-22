@@ -6,6 +6,7 @@ class Task < ApplicationRecord
   enum :difficulty, { easy: 0, normal: 1, hard: 2 }, default: :easy
   enum :target_unit, { times: 0, km: 1, minutes: 2 }
   enum :target_period, { daily: 0, weekly: 1, monthly: 2 }
+  enum :tracking_mode, { checkbox: 0, log: 1 }
 
   has_many :task_events, dependent: :destroy
 
@@ -25,12 +26,14 @@ class Task < ApplicationRecord
   validates :difficulty, presence: true
   validates :reward_exp, numericality: { greater_than_or_equal_to: 0 }
   validates :reward_food_count, numericality: { greater_than_or_equal_to: 0 }
+  validates :tracking_mode, presence: true, if: :habit?
+
 
   # 作成イベントを明示で残すメソッド
   def log_created!(by_user:)
     task_events.create!(
       user: by_user,
-      kind: self[:kind],           # スナップショットとして整数値を固定
+      task_kind: self[:kind],           # スナップショットとして整数値を固定
       action: :created,
       delta: 0,
       amount: 0,
@@ -54,7 +57,7 @@ class Task < ApplicationRecord
 
       task_events.create!(
         user: by_user,
-        kind: self[:kind],
+        task_kind: self[:kind],
         action: :completed,
         delta: 1,
         amount: amount.to_d, # habitなら数量、todoは0でOK
@@ -85,7 +88,7 @@ class Task < ApplicationRecord
 
       task_events.create!(
         user: by_user,
-        kind: self[:kind],
+        task_kind: self[:kind],
         action: :reopened,
         delta: -1,
         amount: 0,
