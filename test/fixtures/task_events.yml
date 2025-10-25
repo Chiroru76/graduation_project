@@ -4,8 +4,24 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+created_todo:
+  user: one
+  task: one
+  kind: 0           # todo
+  action: 0         # created
+  delta: 0
+  amount: 0
+  unit:
+  xp_amount: 0
+  occurred_at: 2025-01-01 00:00:00
+
+completed_todo:
+  user: one
+  task: one
+  kind: 0           # todo
+  action: 1         # completed
+  delta: 1
+  amount: 0
+  unit:
+  xp_amount: 10
+  occurred_at: 2025-01-02 00:00:00
