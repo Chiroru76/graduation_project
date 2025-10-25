@@ -19,9 +19,6 @@ class Task < ApplicationRecord
   # 難易度に応じて経験値を自動設定
   before_validation :assign_reward_exp_by_difficulty
 
-  # statusがdoneに変化した時に実行
-  after_update :give_exp_to_active_character, :give_food_to_user, if: -> { saved_change_to_status? && done? }
-
   validates :title, presence: true, length: { maximum: 255 }
   validates :difficulty, presence: true
   validates :reward_exp, numericality: { greater_than_or_equal_to: 0 }
@@ -44,6 +41,7 @@ class Task < ApplicationRecord
 
   # ---- 完了処理（状態変更 + イベント + 必要ならXP付与）----
   def complete!(by_user:, amount: 0, unit: nil, award_exp: true)
+    raise "Only for checkbox habits or todos" if habit? && !checkbox?
     return self if done? # 二重押下対策（MVP：雑に弾く）
 
     ApplicationRecord.transaction do
@@ -52,7 +50,6 @@ class Task < ApplicationRecord
       awarded = by_user.active_character
       xp = reward_exp.to_i
 
-      # MVPでは「XP付与はここでやる」or「あとで集計して付与」に切替可能
       awarded&.gain_exp!(xp) if award_exp && xp.positive?
 
       task_events.create!(
@@ -60,7 +57,7 @@ class Task < ApplicationRecord
         task_kind: self[:kind],
         action: :completed,
         delta: 1,
-        amount: amount.to_d, # habitなら数量、todoは0でOK
+        amount: 0,
         unit: unit,
         xp_amount: xp,
         awarded_character: awarded,
@@ -68,6 +65,29 @@ class Task < ApplicationRecord
       )
     end
 
+    self
+  end
+
+  # 数量ログ入力
+  def log!(by_user:, amount:, unit:)
+    raise "Only for habit log mode" unless habit? && log?
+
+    require "bigdecimal"
+    qty = BigDecimal(amount.to_s) rescue 0
+    unit = unit.presence || self.target_unit
+
+    ApplicationRecord.transaction do
+      awarded = by_user.active_character
+      xp = reward_exp.to_i
+      awarded&.gain_exp!(xp) if xp.positive?
+
+      task_events.create!(
+        user: by_user, task: self, task_kind: :habit, action: :logged,
+        delta: 1, amount: qty, unit: unit,
+        xp_amount: xp, awarded_character: awarded,
+        occurred_at: Time.current
+      )
+    end
     self
   end
 
@@ -81,7 +101,7 @@ class Task < ApplicationRecord
       awarded = by_user.active_character
       xp_cancel = -reward_exp.to_i
 
-      # MVPでは簡単に“相殺”だけ。減算ロジックが無ければスキップ可
+
       if revert_exp && xp_cancel.negative? && awarded&.respond_to?(:decrease_exp!)
         awarded.decrease_exp!(xp_cancel.abs)
       end
@@ -111,12 +131,6 @@ class Task < ApplicationRecord
     end
   end
 
-  def give_exp_to_active_character
-    character = user.active_character
-    return unless character.present?
-    # 経験値を加算(Characterモデルのgain_expメソッドを呼び出し)
-    character.gain_exp!(reward_exp)
-  end
 
   def give_food_to_user
     user.increment!(:food_count, reward_food_count)
