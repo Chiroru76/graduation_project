@@ -1,15 +1,40 @@
 ja:
+  activerecord:
+    attributes:
+      task:
+        target_unit:
+          times: "回"
+          km: "キロ"
+          minutes: "分"
+          hours: "時間"
+          steps: "歩"
+          pages: "ページ"
+          kcal: "kcal"
+          words: "語"
+          sets: "セット"
+          kg: "kg"
+        target_period:
+          daily: "日"
+          weekly: "週"
+          monthly: "月"
   enums:
     task:
       target_unit:
         times: "回"
-        km: "km"
+        km: "キロ"
         minutes: "分"
+        hours: "時間"
+        steps: "歩"
+        pages: "ページ"
+        kcal: "kcal"
+        words: "語"
+        sets: "セット"
+        kg: "kg"
       target_period:
-        daily: "1日"
-        weekly: "1週間"
-        monthly: "1ヶ月"
-  activerecord:
+        daily: "日"
+        weekly: "週"
+        monthly: "月"
+
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'

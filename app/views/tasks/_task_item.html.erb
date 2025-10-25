@@ -10,10 +10,17 @@
 
        <!-- 中央：タグ -->
       <% if t.respond_to?(:tag) && t.tag.present? %>
-        <span class="mx-4 hidden whitespace-nowrap rounded-lg bg-pink-50 px-3 py-1 text-xs font-bold tracking-wider text-pink-500 md:inline-block">
+        <span class="mx-4 hidden whitespace-nowrap rounded-lg bg-blue-100 px-3 py-1 text-xs font-bold tracking-wider text-pink-500 md:inline-block">
           <%= t.tag %>
         </span>
       <% end %>
+       <!-- 中央：目標 -->
+      <% if t.target_value.present? %>
+        <span class="mx-4 hidden whitespace-nowrap rounded-lg bg-black-100 px-3 py-1 text-xs font-bold tracking-wider md:inline-block">
+          <%= "目標：#{t.target_value}#{I18n.t("activerecord.attributes.task.target_unit.#{t.target_unit}")}/#{I18n.t("activerecord.attributes.task.target_period.#{t.target_period}")}" %>
+        </span>
+      <% end %>
+
   <% end %>
   <!-- 右：操作（checkbox or log） -->
   <div class="shrink-0">
@@ -31,13 +38,13 @@
       <% elsif t.habit? && t.log? %>
         <details class="relative inline-block" onclick="event.stopPropagation();">
           <summary class="list-none grid h-9 w-9 place-items-center rounded-lg ring-1 ring-gray-300 hover:bg-gray-50 cursor-pointer"
-                   aria-label="数量を記録">⌨︎</summary>
+                   aria-label="数量を記録"><i class="fa-solid fa-pencil"></i></summary>
           <div class="absolute right-0 z-10 mt-2 w-64 rounded-xl border bg-white p-3 shadow">
             <%= form_with url: log_amount_task_path(t), method: :post,
                           html: { onsubmit: "event.stopPropagation();" },
                           data: { turbo: true }, class: "space-y-2" do %>
               <div class="flex items-center gap-2">
-                <label class="w-10 text-xs text-gray-500">suuti </label>
+                <label class="w-10 text-xs text-gray-500">数値</label>
                 <%= number_field_tag :amount, nil, step: "0.1", min: "0",
                       class: "w-24 rounded border px-2 py-1" %>
               </div>
@@ -46,7 +53,7 @@
                 <%= text_field_tag :unit, t.target_unit, class: "w-20 rounded border px-2 py-1" %>
               </div>
               <button type="submit"
-                      class="w-full rounded bg-blue-600 px-3 py-1 text-white hover:bg-blue-700">
+                      class="w-full rounded bg-orange-400 px-3 py-1 text-white hover:bg-orange-500">
                 記録
               </button>
             <% end %>
