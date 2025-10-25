@@ -21,3 +21,7 @@
     <%= render "modals/character_evolved", character: current_user.active_character %>
   <% end %>
 <% end %>
+
+<% if @task.todo? && @task.done? %>
+  <%= turbo_stream.remove dom_id(@task) %>
+<% end %>
