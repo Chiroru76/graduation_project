@@ -98,11 +98,11 @@ class Character < ApplicationRecord
     end
   end
 
-   # 経験値減算の処理
+  # 経験値減算の処理
   def decrease_exp!(amount)
     return if amount <= 0
     with_lock do
-      self.exp = [exp - amount, 0].max  # 経験値がマイナスにならないように制限
+      self.exp = [ exp - amount, 0 ].max  # 経験値がマイナスにならないように制限
       self.last_activity_at = Time.current
       save!
     end

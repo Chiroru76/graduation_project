@@ -50,7 +50,7 @@
               </div>
               <div class="flex items-center gap-2">
                 <label class="w-10 text-xs text-gray-500">単位</label>
-                <%= text_field_tag :unit, t.target_unit, class: "w-20 rounded border px-2 py-1" %>
+                <%= text_field_tag :unit, I18n.t("activerecord.attributes.task.target_unit.#{t.target_unit}"), class: "w-20 rounded border px-2 py-1" %>
               </div>
               <button type="submit"
                       class="w-full rounded bg-orange-400 px-3 py-1 text-white hover:bg-orange-500">

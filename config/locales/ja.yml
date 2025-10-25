@@ -4,7 +4,7 @@ ja:
       task:
         target_unit:
           times: "回"
-          km: "キロ"
+          km: "km"
           minutes: "分"
           hours: "時間"
           steps: "歩"
@@ -21,7 +21,7 @@ ja:
     task:
       target_unit:
         times: "回"
-        km: "キロ"
+        km: "km"
         minutes: "分"
         hours: "時間"
         steps: "歩"

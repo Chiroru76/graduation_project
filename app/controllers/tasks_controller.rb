@@ -76,11 +76,11 @@ class TasksController < ApplicationController
     character&.reload
     after_level = character&.level
     after_stage = character&.character_kind&.stage
-  
+
     # 3) 判定 （進化 or 孵化）
     hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
     evolved = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
-  
+
     @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
 
 
@@ -90,7 +90,7 @@ class TasksController < ApplicationController
     end
   end
 
-    # ✅ 数量ログ型: 1回のログにつき reward_exp を固定付与して履歴を残す
+  # ✅ 数量ログ型: 1回のログにつき reward_exp を固定付与して履歴を残す
   def log_amount
     @task = current_user.tasks.find(params[:id]) unless defined?(@task)
     return head :unprocessable_entity unless @task.habit? && @task.log?

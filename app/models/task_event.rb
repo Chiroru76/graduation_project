@@ -9,5 +9,4 @@ class TaskEvent < ApplicationRecord
   validates :task_kind, :action, :delta, :occurred_at, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: 0 }
   validates :xp_amount, numericality: true
-
 end

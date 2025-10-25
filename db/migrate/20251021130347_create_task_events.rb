@@ -7,7 +7,7 @@ class CreateTaskEvents < ActiveRecord::Migration[8.0]
       # Task.kind のスナップショット
       t.integer :kind,   null: false
 
-      # created/completed/reopened/logged 
+      # created/completed/reopened/logged
       t.integer :action, null: false
 
       # “件数”の純増（完了:+1 / 取り消し:-1 / ログ:+1）
@@ -30,8 +30,8 @@ class CreateTaskEvents < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :task_events, [:user_id, :occurred_at]
-    add_index :task_events, [:user_id, :kind, :occurred_at]
+    add_index :task_events, [ :user_id, :occurred_at ]
+    add_index :task_events, [ :user_id, :kind, :occurred_at ]
     add_index :task_events, :awarded_character_id
   end
 end
