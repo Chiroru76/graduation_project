@@ -7,7 +7,7 @@
 created_todo:
   user: one
   task: one
-  kind: 0           # todo
+  task_kind: 0           # todo
   action: 0         # created
   delta: 0
   amount: 0
@@ -18,7 +18,7 @@ created_todo:
 completed_todo:
   user: one
   task: one
-  kind: 0           # todo
+  task_kind: 0           # todo
   action: 1         # completed
   delta: 1
   amount: 0
