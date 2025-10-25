@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_22_213701) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,6 +49,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
     t.index ["user_id"], name: "index_characters_on_user_id"
   end
 
+  create_table "task_events", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "task_id", null: false
+    t.integer "task_kind", null: false
+    t.integer "action", null: false
+    t.integer "delta", default: 0, null: false
+    t.decimal "amount", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "unit", limit: 20
+    t.integer "xp_amount", default: 0, null: false
+    t.bigint "awarded_character_id"
+    t.datetime "occurred_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["awarded_character_id"], name: "index_task_events_on_awarded_character_id"
+    t.index ["task_id"], name: "index_task_events_on_task_id"
+    t.index ["user_id", "occurred_at"], name: "index_task_events_on_user_id_and_occurred_at"
+    t.index ["user_id", "task_kind", "occurred_at"], name: "index_task_events_on_user_id_and_task_kind_and_occurred_at"
+    t.index ["user_id"], name: "index_task_events_on_user_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "title", null: false
@@ -66,6 +86,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tag"
+    t.integer "tracking_mode"
+    t.index ["kind", "tracking_mode"], name: "index_tasks_on_kind_and_tracking_mode"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -88,6 +110,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
   add_foreign_key "character_appearances", "character_kinds"
   add_foreign_key "characters", "character_kinds"
   add_foreign_key "characters", "users"
+  add_foreign_key "task_events", "characters", column: "awarded_character_id", on_delete: :nullify
+  add_foreign_key "task_events", "tasks", on_delete: :cascade
+  add_foreign_key "task_events", "users", on_delete: :cascade
   add_foreign_key "tasks", "users"
   add_foreign_key "users", "characters"
 end

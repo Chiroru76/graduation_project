@@ -14,7 +14,7 @@
 
   <!-- レベル（難易度：モデル連動） -->
   <div>
-    <%= f.label :difficulty, "レベル", class: "block text-sm font-medium mb-1" %>
+    <%= f.label :difficulty, "レベル", class: "block text-sm font-bold mb-1" %>
     <%= f.select :difficulty,
       [['1（やさしい）', 'easy'],
        ['2（ふつう）',   'normal'],
@@ -26,7 +26,7 @@
 
   <!-- タグ（未実装のダミー。将来はタグ機能に接続） -->
   <div>
-    <%= f.label :tag, "タグ", class: "block text-sm font-medium mb-1" %>
+    <%= f.label :tag, "タグ", class: "block text-sm font-bold mb-1" %>
     <%= f.text_field :tag,
       class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
               placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
@@ -37,18 +37,19 @@
   <!-- 期限(TODO専用) -->
   <% if task.todo? %>
     <div>
-      <%= f.label :due_on, "期限", class: "block text-sm font-medium mb-1" %>
+      <%= f.label :due_on, "期限", class: "block text-sm font-bold mb-1" %>
       <%= f.date_field :due_on,
         class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
                 focus:outline-none focus:ring-2 focus:ring-blue-500" %>
     </div>
   <% end %>
 
-  <!-- 繰り返し(habit専用) -->
+  <!-- habit専用 -->
   <% if task.habit? %>
+    <!-- 繰り返し -->
     <!-- 曜日チェックボックス-->
     <div data-controller="repeat-rule">
-      <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-medium text-gray-700" %>
+      <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-bold mb-1" %>
       
       <div class="flex gap-3 mt-2">
         <% %w[月 火 水 木 金 土 日].each do |day| %>
@@ -67,15 +68,33 @@
       <p class="mt-2 text-sm text-gray-500" data-repeat-rule-target="output">未選択</p>
     </div>
 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- 左：目標 -->
+      <div>
+        <%= f.label :target_value, "目標", class: "block text-sm font-bold mb-1" %>
+        <%= render "tasks/goal_modal", f: f, task: task %>
+      </div>
+  
+      <!-- 右：実施記録方法 -->
+      <div>
+        <fieldset class="space-y-2">
+          <%= f.label :tracking_mode, "実施記録方法", class: "block text-sm font-bold mb-1" %>
+  
+          <div class="mt-2 flex items-center space-x-4">
+            <label class="flex items-center">
+              <%= f.radio_button :tracking_mode, :checkbox, checked: (@task.checkbox? || @task.tracking_mode.nil?) %>
+              <span class="ml-1">チェックボックス</span>
+            </label>
+  
+            <label class="flex items-center">
+              <%= f.radio_button :tracking_mode, :log, checked: @task.log? %>
+              <span class="ml-1">入力</span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+    </div>
   <% end %>
-
-  <!-- 目標(habit専用) -->
-  <% if task.habit? %>
-    <%= f.label :target_value, "目標" %>
-    <!-- 目標入力モーダル -->
-    <%= render "tasks/goal_modal", f: f, task: task %>
-  <% end %>
-    
 
 
   <!-- アクション -->

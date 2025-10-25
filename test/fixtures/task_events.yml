@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the "{}" from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+created_todo:
+  user: one
+  task: one
+  task_kind: 0           # todo
+  action: 0         # created
+  delta: 0
+  amount: 0
+  unit:
+  xp_amount: 0
+  occurred_at: 2025-01-01 00:00:00
+
+completed_todo:
+  user: one
+  task: one
+  task_kind: 0           # todo
+  action: 1         # completed
+  delta: 1
+  amount: 0
+  unit:
+  xp_amount: 10
+  occurred_at: 2025-01-02 00:00:00
