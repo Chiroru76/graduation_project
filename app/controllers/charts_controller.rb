@@ -14,7 +14,7 @@ class ChartsController < ApplicationController
                              .count
 
     # 習慣完了・ログ数（日別）
-    @habit_done = TaskEvent.where(user: current_user, task_kind: :habit, action: [:completed, :logged])
+    @habit_done = TaskEvent.where(user: current_user, task_kind: :habit, action: [ :completed, :logged ])
                          .group_by_day(:occurred_at, range: range)
                          .count
 
@@ -27,7 +27,7 @@ class ChartsController < ApplicationController
     # タスクメタ情報
     @task_meta = Task.where(id: log_events.distinct.pluck(:task_id))
                    .pluck(:id, :title, :target_unit)
-                   .map { |id, title, unit| [id, { title: title, unit: unit.presence || "数量" }] }
+                   .map { |id, title, unit| [ id, { title: title, unit: unit.presence || "数量" } ] }
                    .to_h
 
     # 日別×タスクごとの合計値

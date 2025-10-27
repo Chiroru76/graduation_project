@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
   resources :characters, only: [ :index, :show ]
 
-  resource :charts, only: [:show]
+  resource :charts, only: [ :show ]
 
   # 新規登録後のたまご入手画面
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg
