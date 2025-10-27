@@ -42,7 +42,7 @@ class Task < ApplicationRecord
   # ---- 完了処理（状態変更 + イベント + 必要ならXP付与）----
   def complete!(by_user:, amount: 0, unit: nil, award_exp: true)
     raise "Only for checkbox habits or todos" if habit? && !checkbox?
-    return self if done? # 二重押下対策（MVP：雑に弾く）
+    # return self if done? # 二重押下対策（MVP：雑に弾く）
 
     ApplicationRecord.transaction do
       update!(status: :done, completed_at: Time.current)

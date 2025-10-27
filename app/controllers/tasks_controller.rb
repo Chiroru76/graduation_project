@@ -64,13 +64,24 @@ class TasksController < ApplicationController
     before_level  = character&.level
     before_stage  = character&.character_kind&.stage # "egg" | "child" | "adult"
 
-    if @task.open?
+    if @task.habit?&& @task.open?
       @task.complete!(by_user: current_user)
-      notice = @task.todo? ? "TODOを完了しました" : "習慣を完了しました"
-    else
+      notice = "習慣を完了しました"
+    elsif @task.habit? && @task.done?
       @task.reopen!(by_user: current_user)
-      notice = @task.todo? ? "TODOを未完了に戻しました" : "習慣を未完了に戻しました"
+      notice = "習慣を未完了に戻しました"
+    elsif @task.todo?
+      @task.complete!(by_user: current_user)
+      notice = "TODOを完了しました"
     end
+
+    # if @task.open?
+    #   @task.complete!(by_user: current_user)
+    #   notice = @task.todo? ? "TODOを完了しました" : "習慣を完了しました"
+    # else
+    #   @task.reopen!(by_user: current_user)
+    #   notice = @task.todo? ? "TODOを未完了に戻しました" : "習慣を未完了に戻しました"
+    # end
 
     # 更新後を読みにいく（キャラがいれば）
     character&.reload
