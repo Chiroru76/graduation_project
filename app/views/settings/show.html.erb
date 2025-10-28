@@ -1,0 +1,29 @@
+<div class="max-w-md mx-auto py-12 px-4">
+  <h1 class="text-2xl font-bold mb-8 text-center">設定</h1>
+  <ul class="space-y-4">
+    <li>
+      <%= link_to 'ユーザー情報', profile_path,
+        class: "text-lg text-gray-800 underline hover:text-blue-600 transition" %>
+    </li>
+    <li>
+      <%= link_to 'LINE通知', "#",
+        class: "text-lg text-gray-800 underline hover:text-blue-600 transition" %>
+    </li>
+    <li>
+      <%= link_to '外部アプリ連携', "#",
+        class: "text-lg text-gray-800 underline hover:text-blue-600 transition" %>
+    </li>
+    <li>
+      <%= link_to '使い方', "#",
+        class: "text-lg text-gray-800 underline hover:text-blue-600 transition" %>
+    </li>
+    <li>
+      <%= link_to 'プライバシーポリシー', "#",
+        class: "text-lg text-gray-800 underline hover:text-blue-600 transition" %>
+    </li>
+    <li>
+      <%= link_to 'ログアウト', destroy_user_session_path, method: :delete,
+        class: "block w-full rounded-lg bg-red-100 px-6 py-4 text-lg font-semibold text-red-700 hover:bg-red-200 transition" %>
+    </li>
+  </ul>
+</div>
