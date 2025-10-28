@@ -1,0 +1,29 @@
+<!-- app/views/profiles/show.html.erb -->
+<div class="mx-auto max-w-xl px-6 py-10">
+  <!-- Avatar -->
+  <div class="mb-10 flex justify-center items-center">
+    <i class="fa-solid fa-circle-user text-7xl"></i>
+  </div>
+
+  <!-- ユーザーネーム -->
+  <div class="mb-8 flex items-center gap-4">
+    <span class="text-base font-semibold text-gray-700">ユーザーネーム：</span>
+    <span class="text-xl font-bold text-gray-800 truncate"><%= @user.name %></span>
+  </div>
+
+  <!-- メールアドレス -->
+  <div class="mb-8 flex items-center gap-4">
+    <span class="text-base font-semibold text-gray-700">メールアドレス：</span>
+    <span class="text-xl font-bold text-gray-800 truncate"><%= @user.email %></span>
+  </div>
+  <div class="mb-8 flex justify-center">
+    <%= link_to "変更する", edit_user_registration_path,
+          class: "rounded-full bg-amber-300 px-6 py-3 text-base font-extrabold text-gray-900 shadow hover:bg-amber-400 transition" %>
+  </div>
+
+  <!-- 戻る -->
+  <div class="flex justify-center mt-8">
+    <%= link_to "ホームへ戻る", dashboard_show_path,
+          class: "text-sm text-gray-700 hover:text-blue-600 underline" %>
+  </div>
+</div>
