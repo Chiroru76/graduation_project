@@ -26,6 +26,8 @@ Rails.application.routes.draw do
 
   resource :charts, only: [ :show ]
 
+  resource :settings, only: [ :show ]
+
   resource :profile, only: [ :show ]
 
   get "profile/edit_name",  to: "profiles#edit", defaults: { mode: "name" }, as: :edit_profile_name
