@@ -1,8 +1,10 @@
 <header class="w-full bg-gray-100 py-3 px-8 flex items-center justify-between border-b border-gray-400">
 
   <!-- 左: ロゴ -->
-  <div class="text-3xl font-extrabold tracking-widest">LOGO</div>
-
+  <%= link_to dashboard_show_path do %>
+    <%= image_tag "motipet_logo.svg", class: "h-15 w-auto" %>
+  <% end %>
+  <% if user_signed_in? %>
     <nav style="margin: 2px 0;">
       <ul class="flex items-center gap-x-3">
         <li class="flex flex-col items-center mx-4">
@@ -27,8 +29,6 @@
         </li>
       </ul>
     </nav>
-
-  <% if user_signed_in? %>
     <nav>
       <ul class="flex items-center space-x-8">
         <li>
@@ -40,6 +40,9 @@
     <nav>
       <ul class="flex items-center space-x-6">
         <li>
+          <%= link_to "ログイン", new_user_session_path, class: "text-base font-bold" %>
+        </li>
+        <li>
           <%= link_to new_user_registration_path, class: "flex items-center bg-yellow-200 hover:bg-yellow-300 text-black font-bold text-base rounded-2xl px-8 py-4 ml-4 transition" do %>
             <span class="mr-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="inline w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 1114 0H3z"/></svg>
@@ -47,9 +50,7 @@
             新規登録
           <% end %>
         </li>
-        <li>
-          <%= link_to "ログイン", new_user_session_path, class: "text-base font-bold" %>
-        </li>
+
       </ul>
     </nav>
   <% end %>
