@@ -30,8 +30,9 @@ character_kinds.each do |data|
   kind = CharacterKind.find_or_create_by!(
     asset_key: data[:asset_key],
     stage: data[:stage]
-  )
-  kind.update!(name: data[:name])
+  ) do |k|
+    k.name = data[:name]
+  end
 
   # --- CharacterAppearance 登録 ---
   data[:appearances].each do |pose|
