@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     sessions: "users/sessions"
   }
 
+  root to: "top#index"
+
 
   resources :tasks do
     member do
