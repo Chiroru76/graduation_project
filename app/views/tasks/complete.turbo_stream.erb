@@ -25,3 +25,7 @@
 <% if @task.todo? && @task.done? %>
   <%= turbo_stream.remove dom_id(@task) %>
 <% end %>
+
+<%= turbo_stream.replace dom_id(current_user, :food_counter) do %>
+  <%= render "dashboard/food_counter", user: current_user %>
+<% end %>

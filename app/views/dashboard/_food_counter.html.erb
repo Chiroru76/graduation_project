@@ -1,0 +1,9 @@
+<div id="<%= dom_id(user, :food_counter) %>" class="mt-0 flex justify-end items-center space-x-2">
+  <%= button_to "エサをあげる",
+                feed_characters_path,
+                method: :post,
+                class: "rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-pink-600 disabled:opacity-50",
+                disabled: current_user.food_count.to_i <= 0 %>
+  <%= image_tag "food.png", alt: "えさ", width: 30, height: 30, class: "" %>
+  <p class="text-sm text-gray-700">× <%= current_user.food_count %></p>
+</div>
