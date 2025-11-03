@@ -94,7 +94,7 @@ class Task < ApplicationRecord
   end
 
   # ---- 取り消し（openへ戻す + イベント。XP相殺もここで）----
-  def reopen!(by_user:, revert_exp: true)
+  def reopen!(by_user:, revert_exp: true, revert_food: true)
     return self if open?
 
     ApplicationRecord.transaction do
@@ -106,6 +106,10 @@ class Task < ApplicationRecord
 
       if revert_exp && xp_cancel.negative? && awarded&.respond_to?(:decrease_exp!)
         awarded.decrease_exp!(xp_cancel.abs)
+      end
+
+      if revert_food && reward_food_count.to_i > 0
+        by_user.decrement!(:food_count, reward_food_count)
       end
 
       task_events.create!(
