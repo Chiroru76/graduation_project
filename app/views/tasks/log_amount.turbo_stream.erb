@@ -1,29 +1,21 @@
-<%= turbo_stream.replace dom_id(@task) do %>
-  <%= render "tasks/task_item", t: @task %>
-<% end %>
-
 <%= turbo_stream.replace "character_status" do %>
   <%= render "characters/status", character: current_user.active_character %>
 <% end %>
 
-<% if hatched %>
+<% if local_assigns[:hatched] %>
   <%= turbo_stream.replace "character_image" do %>
     <%= render "characters/image", appearance: @appearance %>
   <% end %>
   <%= turbo_stream.append "modal_area" do %>
     <%= render "modals/egg_hatched", character: current_user.active_character %>
   <% end %>
-<% elsif evolved %>
+<% elsif local_assigns[:evolved] %>
   <%= turbo_stream.replace "character_image" do %>
     <%= render "characters/image", appearance: @appearance %>
   <% end %>
   <%= turbo_stream.append "modal_area" do %>
     <%= render "modals/character_evolved", character: current_user.active_character %>
   <% end %>
-<% end %>
-
-<% if @task.todo? && @task.done? %>
-  <%= turbo_stream.remove dom_id(@task) %>
 <% end %>
 
 <%= turbo_stream.replace dom_id(current_user, :food_counter) do %>

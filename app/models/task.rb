@@ -46,6 +46,7 @@ class Task < ApplicationRecord
 
     ApplicationRecord.transaction do
       update!(status: :done, completed_at: Time.current)
+      give_food_to_user
 
       awarded = by_user.active_character
       xp = reward_exp.to_i
@@ -77,6 +78,7 @@ class Task < ApplicationRecord
     unit = unit.presence || self.target_unit
 
     ApplicationRecord.transaction do
+      give_food_to_user
       awarded = by_user.active_character
       xp = reward_exp.to_i
       awarded&.gain_exp!(xp) if xp.positive?
@@ -92,7 +94,7 @@ class Task < ApplicationRecord
   end
 
   # ---- 取り消し（openへ戻す + イベント。XP相殺もここで）----
-  def reopen!(by_user:, revert_exp: true)
+  def reopen!(by_user:, revert_exp: true, revert_food: true)
     return self if open?
 
     ApplicationRecord.transaction do
@@ -104,6 +106,10 @@ class Task < ApplicationRecord
 
       if revert_exp && xp_cancel.negative? && awarded&.respond_to?(:decrease_exp!)
         awarded.decrease_exp!(xp_cancel.abs)
+      end
+
+      if revert_food && reward_food_count.to_i > 0
+        by_user.decrement!(:food_count, reward_food_count)
       end
 
       task_events.create!(
