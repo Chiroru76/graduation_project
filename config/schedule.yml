@@ -6,3 +6,9 @@ character_bond_hp_decay_daily: #ジョブの識別名
   # cron: "*/1 * * * *" # １分おき(test)
   cron: "0 0 * * *"        # 毎日 00:00
   timezone: "Asia/Tokyo"   # JSTで回す
+
+tasks_daily_reset_habit_status: #ジョブの識別名
+  class: "Tasks::DailyResetHabitStatusJob"
+  queue: "default"
+  cron: "0 0 * * *"
+  timezone: "Asia/Tokyo"
