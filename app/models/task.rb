@@ -46,6 +46,7 @@ class Task < ApplicationRecord
 
     ApplicationRecord.transaction do
       update!(status: :done, completed_at: Time.current)
+      give_food_to_user
 
       awarded = by_user.active_character
       xp = reward_exp.to_i
@@ -77,6 +78,7 @@ class Task < ApplicationRecord
     unit = unit.presence || self.target_unit
 
     ApplicationRecord.transaction do
+      give_food_to_user
       awarded = by_user.active_character
       xp = reward_exp.to_i
       awarded&.gain_exp!(xp) if xp.positive?

@@ -106,14 +106,30 @@ class TasksController < ApplicationController
     @task = current_user.tasks.find(params[:id]) unless defined?(@task)
     return head :unprocessable_entity unless @task.habit? && @task.log?
 
+    # 進化/孵化の判定用スナップショット
+    character     = current_user.active_character
+    before_level  = character&.level
+    before_stage  = character&.character_kind&.stage # "egg" | "child" | "adult"
+
     qty  = (BigDecimal(params[:amount].to_s) rescue 0)
     unit = params[:unit].presence || @task.target_unit
 
     @task.log!(by_user: current_user, amount: qty, unit: unit)
 
+    # 更新後を読みにいく
+    character&.reload
+    after_level = character&.level
+    after_stage = character&.character_kind&.stage
+
+    # 3) 判定 （進化 or 孵化）
+    hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
+    evolved = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+
+    @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
+
     respond_to do |f|
       f.html { redirect_to dashboard_show_path, notice: "記録しました" }
-      f.turbo_stream
+      f.turbo_stream { render locals: { hatched: hatched, evolved: evolved } }
     end
   rescue ActiveRecord::RecordInvalid => e
     redirect_to dashboard_show_path, alert: "記録に失敗しました: #{e.record.errors.full_messages.join(', ')}"

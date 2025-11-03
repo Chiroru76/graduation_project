@@ -1,0 +1,23 @@
+<%= turbo_stream.replace "character_status" do %>
+  <%= render "characters/status", character: current_user.active_character %>
+<% end %>
+
+<% if local_assigns[:hatched] %>
+  <%= turbo_stream.replace "character_image" do %>
+    <%= render "characters/image", appearance: @appearance %>
+  <% end %>
+  <%= turbo_stream.append "modal_area" do %>
+    <%= render "modals/egg_hatched", character: current_user.active_character %>
+  <% end %>
+<% elsif local_assigns[:evolved] %>
+  <%= turbo_stream.replace "character_image" do %>
+    <%= render "characters/image", appearance: @appearance %>
+  <% end %>
+  <%= turbo_stream.append "modal_area" do %>
+    <%= render "modals/character_evolved", character: current_user.active_character %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.replace dom_id(current_user, :food_counter) do %>
+  <%= render "dashboard/food_counter", user: current_user %>
+<% end %>
