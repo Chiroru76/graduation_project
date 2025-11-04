@@ -21,7 +21,7 @@ class CharacterBondHpDecayJob < ApplicationJob
       character.update!(bond_hp: new_bond_hp)
 
       # bond_hpが0になった場合の死亡処理
-      if new_bond_hp == 0 && character.alive?
+      if new_bond_hp <= 0 && character.alive?
         character.die!
       end
     end
