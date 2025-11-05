@@ -388,7 +388,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
-  brakeman
+  brakeman (~> 7.1)
   capybara
   chartkick
   debug
