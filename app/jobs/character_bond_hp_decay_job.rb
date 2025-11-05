@@ -2,7 +2,7 @@ class CharacterBondHpDecayJob < ApplicationJob
   queue_as :default
 
     DAILY_DECAY_AMOUNT = 10 # 毎日減少するきずなHP量
-    INACTIVE_DECAY_AMOUNT = 20 # 1日以上活動(タスクの実行orえさやり)が無い場合に減少するきずなHP量
+    INACTIVE_DECAY_AMOUNT = 10 # 1日以上活動(タスクの実行orえさやり)が無い場合に減少するきずなHP量
 
   def perform(*args)
     inactive_since = 1.day.ago
