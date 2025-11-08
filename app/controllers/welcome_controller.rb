@@ -7,7 +7,7 @@ class WelcomeController < ApplicationController
     #     redirect_to dashboard_show_path
     # end
 
-    # 現在育成中のキャラクター情報を取得
+    # 現在育成中のペット情報を取得
     character = current_user.active_character
     @appearance = CharacterAppearance.find_by(
       character_kind: character&.character_kind,

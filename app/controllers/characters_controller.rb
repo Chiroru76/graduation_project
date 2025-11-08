@@ -38,9 +38,9 @@ class CharactersController < ApplicationController
         last_activity_at: Time.current
     )
 
-    # ユーザーの現在育成中キャラクターをたまごに変更
+    # ユーザーの現在育成中ペットをたまごに変更
     current_user.update!(active_character: ch)
 
-    redirect_to welcome_egg_path, notice: "キャラクターをリセットしました"
+    redirect_to welcome_egg_path, notice: "ペットをリセットしました"
   end
 end
