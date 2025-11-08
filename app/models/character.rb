@@ -72,7 +72,7 @@ class Character < ApplicationRecord
     gain = 10
     # エサの消費・きずなHP増加をトランザクションでまとめて実行
     transaction do
-      self.last_activity_at = Time.current # キャラクターの最終活動日を更新
+      self.last_activity_at = Time.current # ペットの最終活動日を更新
       user.decrement!(:food_count, 1)
       increment!(:bond_hp, gain)
       if bond_hp > bond_hp_max
@@ -93,7 +93,7 @@ class Character < ApplicationRecord
     with_lock do
       self.exp += amount
       check_level_up
-      self.last_activity_at = Time.current # キャラクターの最終活動日を更新
+      self.last_activity_at = Time.current # ペットの最終活動日を更新
       save!
     end
   end
