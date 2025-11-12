@@ -76,3 +76,5 @@ gem "sidekiq" # 非同期処理を行うためのバックグラウンドジョ�
 gem "sidekiq-cron" # cron形式でSidekiqのジョブを定期実行するためのgem
 gem "chartkick"
 gem "groupdate"
+gem 'meta-tags'
+
