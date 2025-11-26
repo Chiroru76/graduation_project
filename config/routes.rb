@@ -38,6 +38,9 @@ Rails.application.routes.draw do
   # 新規登録後のたまご入手画面
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg
   get "dashboard", to: "dashboard#show", as: :dashboard_show
+
+  get "share/hatched/:id", to: "share#hatched", as: :share_hatched
+  get "share/evolved/:id", to: "share#evolved", as: :share_evolved
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
