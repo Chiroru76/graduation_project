@@ -1,0 +1,38 @@
+  <% assign_meta_tags(
+  title: "#{@character.character_kind.name}が進化しました！",
+  canonical: share_evolved_url(@character),
+  image: image_url(@ogp_image) # 適切な画像URLを返すヘルパー
+  ) %>
+
+  <!-- カードコンテナ -->
+  <div class="relative z-10 mt-6 mb-6 backdrop-blur-xl bg-gradient-to-b from-white/80 to-amber-50/80 border border-white/30 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-10 max-w-md w-full text-center transform transition-all">
+    <h2 class="text-2xl font-bold mb-4"><%= @character.character_kind.name %> が進化しました！</h2>
+
+    <div class="mb-6 flex flex-col items-center justify-center space-y-2">
+      <% appearance = CharacterAppearance.find_by(character_kind: @character.character_kind) %>
+      <%= image_tag @appearance.asset_path,
+          alt: @character.character_kind.name,
+                    class: "mx-auto w-72 h-auto" %>
+
+      <% tweet_text = URI.encode_www_form_component("#{@character.character_kind.name}が進化しました！") %>
+      <% share_url = CGI.escape(share_evolved_url(@character)) %>
+      <% x_intent = "https://twitter.com/intent/tweet?text=#{tweet_text}&url=#{share_url}&hashtags=MotiPet,ペット育成,タスク管理 " %>
+
+      <div class="mt-6">
+<%= link_to x_intent,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    class: "inline-flex items-center gap-2 bg-black text-white px-5 py-3 rounded-lg font-semibold hover:bg-gray-900 transition" do %>
+  <svg fill="white" viewBox="0 0 24 24" width="20" height="20">
+    <path d="M18.244 2H21.5l-7.51 8.578L23 22h-6.633l-5.468-7.14L4.5 22H1.245l8.081-9.23L1 2h6.67l5.06 6.496L18.243 2z"/>
+  </svg>
+  でシェア
+<% end %>
+    </div>
+
+    <div class="mmt-6">
+      <%= link_to "OK", dashboard_show_path,
+      class: "rounded-lg bg-amber-500 px-4 py-2 text-white block text-center" %>
+    </div>
+  </div>
+</div>
