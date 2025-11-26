@@ -94,10 +94,12 @@ class TasksController < ApplicationController
 
     @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
 
-
-    respond_to do |format|
-      format.html { redirect_to dashboard_show_path, notice: notice }
-      format.turbo_stream { render locals: { hatched: hatched, evolved: evolved } }
+    if evolved
+      redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！シェアしよう！"
+    elsif hatched
+      redirect_to share_hatched_path(current_user), notice: "ペットが孵化しました！シェアしよう！"
+    else
+      redirect_to dashboard_show_path, notice: notice
     end
   end
 
