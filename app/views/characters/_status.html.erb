@@ -1,12 +1,13 @@
-<div id="character_status" class="w-full">
-  <!-- ペット名表示 -->
-  <div class="text-lg text-black"><%= character.character_kind.name %></div>
-
-  <!-- レベル表示 -->
-  <div class="text-lm text-right font-bold text-gray-500">Lv. <%= character.level %></div>
+<div id="character_status" class="w-full h-40">
+  <div class="flex items-center justify-between gap-3 md:mb-5">
+    <!-- ペット名表示 -->
+    <div class="text-lg text-black font-semibold truncate"><%= character.character_kind.name %></div>
+    <!-- レベル表示 -->
+    <div class="text-sm font-bold text-gray-500">Lv. <%= character.level %></div>
+  </div>
 
   <!-- 経験値ゲージ -->
-  <div class="mb-2">
+  <div class="md:mb-4">
     <div class="mb-1">
       <span class="block text-sm text-gray-500">経験値</span>
       <span class="block text-[11px] text-gray-400 text-right">
@@ -19,7 +20,7 @@
     </div>
   </div>
 
-<!-- キズナゲージ -->
+  <!-- キズナゲージ -->
   <div>
     <div class="flex items-center justify-between mb-1">
       <span class="text-sm text-gray-500">きずな</span>
