@@ -2,14 +2,14 @@
 <!-- モーダル受け皿（Turbo Frame）。ここに show の部分HTMLが入る -->
 <turbo-frame id="character_modal"></turbo-frame>
 
-<div class="grid grid-cols-3 gap-6">
+<div class="grid grid-cols-2 md:grid-cols-3 gap-6">
   <% @characters.each do |c| %>
-    <% app = CharacterAppearance.find_by(character_kind: c.character_kind, pose: :idle) %>
+    <% appearance = CharacterAppearance.find_by(character_kind: c.character_kind, pose: :idle) %>
     <div class="bg-white p-4 rounded-xl shadow text-center">
       <!-- 画像クリックで show を GET。フレームに描画させる -->
       <%= link_to character_path(c), data: { turbo_frame: "character_modal" } do %>
-        <% if app %>
-          <%= image_tag app.asset_path, alt: c.character_kind.name,
+        <% if appearance %>
+          <%= image_tag appearance.asset_path, alt: c.character_kind.name,
                         class: "mx-auto mb-2 w-40 h-40 object-contain hover:opacity-90 transition" %>
         <% else %>
           <div class="mx-auto mb-2 w-40 h-40 grid place-items-center text-gray-400 bg-gray-50 rounded">
