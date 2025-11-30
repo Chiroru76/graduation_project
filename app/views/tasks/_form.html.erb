@@ -9,7 +9,7 @@
     <%= f.text_field :title, 
         class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
               placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-200",
-        placeholder: "毎日 5時半に起きる" %>
+        placeholder: "5時半に起きる" %>
   </div>
 
   <!-- レベル（難易度：モデル連動） -->
@@ -85,7 +85,6 @@
               <%= f.radio_button :tracking_mode, :checkbox, checked: (@task.checkbox? || @task.tracking_mode.nil?) %>
               <span class="ml-1">チェックボックス</span>
             </label>
-  
             <label class="flex items-center">
               <%= f.radio_button :tracking_mode, :log, checked: @task.log? %>
               <span class="ml-1">入力</span>
