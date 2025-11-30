@@ -1,16 +1,17 @@
-<div id="character_status" class="w-full">
-  <!-- ペット名表示 -->
-  <div class="text-lg text-black"><%= character.character_kind.name %></div>
-
-  <!-- レベル表示 -->
-  <div class="text-lm text-right font-bold text-gray-500">Lv. <%= character.level %></div>
+<div id="character_status" class="w-full h-43">
+  <div class="flex items-center justify-between gap-3 mb-4 md:mb-5">
+    <!-- ペット名表示 -->
+    <div class="text-sm mb:text-lg text-black font-semibold truncate"><%= character.character_kind.name %></div>
+    <!-- レベル表示 -->
+    <div class="text-sm font-bold text-gray-500">Lv. <%= character.level %></div>
+  </div>
 
   <!-- 経験値ゲージ -->
-  <div class="mb-2">
+  <div class="mb-3 md:mb-4">
     <div class="mb-1">
-      <span class="block text-sm text-gray-500">経験値</span>
+      <span class="block text-sm text-black">経験値</span>
       <span class="block text-[11px] text-gray-400 text-right">
-        次のレベルまであと <%= character.exp_needed %> EXP
+        あと <%= character.exp_needed %> EXP
       </span>
     </div>
     <div class="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden">
@@ -19,10 +20,10 @@
     </div>
   </div>
 
-<!-- キズナゲージ -->
+  <!-- キズナゲージ -->
   <div>
     <div class="flex items-center justify-between mb-1">
-      <span class="text-sm text-gray-500">きずな</span>
+      <span class="text-sm text-black">しあわせ度</span>
       <span class="text-[11px] text-gray-400">
         現在 <span class="tabular-nums"><%= character.bond_hp %></span>
       </span>

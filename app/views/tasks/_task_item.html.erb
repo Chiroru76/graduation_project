@@ -1,31 +1,33 @@
-<div id="<%= dom_id(t) %>" class="block rounded-2xl bg-white shadow-sm ring-1 ring-black/5 px-5 py-2 hover:shadow md:px-6">
-  <%= link_to edit_task_path(t) do %>
+<div id="<%= dom_id(task) %>" class="block rounded-2xl bg-white shadow-sm ring-1 ring-black/5 px-5 py-2 hover:shadow md:px-6">
+  <%= link_to edit_task_path(task) do %>
     <div class="flex items-center justify-between">
       <!-- 左：タイトル-->
       <div class="min-w-0">
         <div class="text-base font-semibold text-gray-900 truncate">
-          <%= t.title %>
+          <%= task.title %>
         </div>
       </div>
 
        <!-- 中央：タグ -->
-      <% if t.respond_to?(:tag) && t.tag.present? %>
+      <% if task.respond_to?(:tag) && task.tag.present? %>
         <span class="mx-4 hidden whitespace-nowrap rounded-lg bg-blue-100 px-3 py-1 text-xs font-bold tracking-wider text-pink-500 md:inline-block">
-          <%= t.tag %>
+          <%= task.tag %>
         </span>
       <% end %>
        <!-- 中央：目標 -->
-      <% if t.target_value.present? %>
-        <span class="mx-4 hidden whitespace-nowrap rounded-lg bg-black-100 px-3 py-1 text-xs font-bold tracking-wider md:inline-block">
-          <%= "目標：#{t.target_value}#{I18n.t("activerecord.attributes.task.target_unit.#{t.target_unit}")}/#{I18n.t("activerecord.attributes.task.target_period.#{t.target_period}")}" %>
+      <% if task.target_value.present? && task.target_unit.present? && task.target_period.present? %>
+        <span>目標：
+        <%= task.target_value %>
+        <%= t("enums.task.target_unit.#{task.target_unit}") %> /
+        <%= t("enums.task.target_period.#{task.target_period}") %>
         </span>
       <% end %>
 
   <% end %>
   <!-- 右：操作（checkbox or log） -->
   <div class="shrink-0">
-      <% if t.todo? || (t.habit? && t.checkbox?) %>
-        <%= form_with model: t, url: complete_task_path(t), method: :patch, html: { class: "inline-block" } do |f| %>
+      <% if task.todo? || (task.habit? && task.checkbox?) %>
+        <%= form_with model: task, url: complete_task_path(task), method: :patch, html: { class: "inline-block" } do |f| %>
           <%= f.check_box :status,
               { class: "h-9 w-9 rounded-lg border-2 border-gray-300
                         text-green-500 focus:ring-2 focus:ring-green-400",
@@ -35,12 +37,12 @@
               "open"
           %>
         <% end %>
-      <% elsif t.habit? && t.log? %>
+      <% elsif task.habit? && task.log? %>
         <details class="relative inline-block" onclick="event.stopPropagation();">
           <summary class="list-none grid h-9 w-9 place-items-center rounded-lg ring-1 ring-gray-300 hover:bg-gray-50 cursor-pointer"
                    aria-label="数量を記録"><i class="fa-solid fa-pencil"></i></summary>
           <div class="absolute right-0 z-10 mt-2 w-64 rounded-xl border bg-white p-3 shadow">
-            <%= form_with url: log_amount_task_path(t), method: :post,
+            <%= form_with url: log_amount_task_path(task), method: :post,
                           html: { onsubmit: "event.stopPropagation();" },
                           data: { turbo: true }, class: "space-y-2" do %>
               <div class="flex items-center gap-2">
@@ -50,7 +52,7 @@
               </div>
               <div class="flex items-center gap-2">
                 <label class="w-10 text-xs text-gray-500">単位</label>
-                <%= text_field_tag :unit, I18n.t("activerecord.attributes.task.target_unit.#{t.target_unit}"), class: "w-20 rounded border px-2 py-1" %>
+                <%= text_field_tag :unit, I18n.t("activerecord.attributes.task.target_unit.#{task.target_unit}"), class: "w-20 rounded border px-2 py-1" %>
               </div>
               <button type="submit"
                       class="w-full rounded bg-orange-400 px-3 py-1 text-white hover:bg-orange-500">

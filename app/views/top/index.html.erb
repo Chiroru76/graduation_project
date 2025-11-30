@@ -30,67 +30,70 @@
 
   <!-- ===== 使い方===== -->
   <section id="howto" class="container mx-auto px-4 md:px-8 py-14 space-y-8">
-    <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">使い方</h2>
+    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">
+      アプリの使い方
+    </h2>
+    <span class="block mx-auto w-56 md:w-64 h-1 bg-amber-400 rounded"></span>
 
     <!-- STEP 1 -->
-    <div class="grid md:grid-cols-2 gap-4 md:gap-6 items-center justify-center">
-      <div class="order-2 md:order-1 flex flex-col items-center md:items-start">
-        <h3 class="text-xl font-bold mb-2 text-center md:text-left">① たまごを手に入れる</h3>
-        <p class="text-gray-700 text-base md:text-lg text-center md:text-left">
-          新規登録すると“たまご”を入手できます！
-        </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
+      <div class="order-1 md:order-1 flex flex-col items-center md:items-start">
+      <h3 class="text-xl font-bold mb-2 text-center md:text-left">① たまごを手に入れる</h3>
+      <p class="text-gray-700 text-base md:text-lg text-left">
+        新規登録すると“たまご”を入手できます！
+      </p>
       </div>
-      <div class="order-1 md:order-2 flex justify-center">
-        <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-          <%= image_tag "characters/egg/egg_egg_idle.webp", alt: "ペット", width: 180, height: 180, class: "block mx-auto" %>
-        </div>
+      <div class="order-2 md:order-2 flex justify-center">
+      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
+        <%= image_tag "characters/egg/egg_egg_idle.png", alt: "ペット", width: 180, height: 180, class: "block mx-auto" %>
+      </div>
       </div>
     </div>
 
     <!-- STEP 2 -->
-    <div class="grid md:grid-cols-2 gap-4 md:gap-6 items-center justify-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
       <div class="flex flex-col items-center md:items-start">
-        <h3 class="text-xl font-bold mb-2 text-center md:text-left">② 習慣・TODOを登録</h3>
-        <p class="text-gray-700 text-base md:text-lg text-center md:text-left">
-          「勉強」「運動」「読書」など、続けたい習慣やTODOを登録。チェックまたは数値ログでタスクの完了を記録できます。
-        </p>
+      <h3 class="text-xl font-bold mb-2 text-center md:text-left">② 習慣・TODOを登録</h3>
+      <p class="text-gray-700 text-base md:text-lg text-left">
+        「勉強」「運動」「読書」など、続けたい習慣やTODOを登録しましょう。<br>チェックボックス形式またはログの入力によりタスクの完了を記録します。<br>
+        タスクの難易度によって完了時に入手できる経験値が異なります。
+      </p>
       </div>
       <div class="flex justify-center">
-        <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-          <%= image_tag "top/habit_image.png", alt: "習慣登録", width: 180, height: 180, class: "block mx-auto" %>
-        </div>
+      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
+        <%= image_tag "top/habit_image.png", alt: "習慣登録", width: 180, height: 180, class: "block mx-auto" %>
+      </div>
       </div>
     </div>
 
     <!-- STEP 3 -->
-    <div class="grid md:grid-cols-2 gap-4 md:gap-6 items-center justify-center">
-      <div class="order-2 md:order-1 flex flex-col items-center md:items-start">
-        <h3 class="text-xl font-bold mb-2 text-center md:text-left">③ ペットのレベルアップ</h3>
-        <p class="text-gray-700 text-base md:text-lg text-center md:text-left">
-          タスクを完了するほど経験値が貯まり、ペットがレベルアップ＆進化！
-        </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
+      <div class="flex flex-col items-center md:items-start">
+      <h3 class="text-xl font-bold mb-2 text-center md:text-left">③ ペットの誕生と成長</h3>
+      <p class="text-gray-700 text-base md:text-lg text-left">
+        まずは卵を孵化させるために、レベルアップを目指しましょう。<br>生まれたペットは、あなたの日々の行動によって成長していきます。
+        <br>一定のレベルに達すると進化するので、進化を目指して育ててください。
+      </p>
       </div>
-      <div class="order-1 md:order-2 flex justify-center">
-        <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-          <%= image_tag "top/levelup.png", alt: "レベルアップ", width: 180, height: 180, class: "block mx-auto" %>
-        </div>
+      <div class="flex justify-center">
+      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
+        <%= image_tag "top/levelup.png", alt: "レベルアップ", width: 180, height: 180, class: "block mx-auto" %>
+      </div>
       </div>
     </div>
 
     <!-- STEP 4 -->
-    <div class="grid md:grid-cols-2 gap-4 md:gap-6 items-center justify-center">
+    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
       <div class="flex flex-col items-center md:items-start">
-        <h3 class="text-xl font-bold mb-2 text-center md:text-left">④ エサやりは忘れずに…</h3>
-        <p class="text-gray-700 text-base md:text-lg text-center md:text-left">
-          タスクの完了時に入手できる「エサ」を与えるときずなゲージがアップします。
-          きずなゲージは毎日少しずつ減少するため、エサは定期的に与えましょう。
-          きずなゲージが0になるとペットは死んでしまいます…
-        </p>
+      <h3 class="text-xl font-bold mb-2 text-center md:text-left">④ エサやりは忘れずに…</h3>
+      <p class="text-gray-700 text-base md:text-lg text-left">
+        タスクの完了時に入手できる「エサ」を与えると「しあわせ度」がアップします。<br>「しあわせ度」は毎日少しずつ減少するため、エサは定期的に与えましょう。<br>「しあわせ度」が0になるとペットは死んでしまいます…
+      </p>
       </div>
       <div class="flex justify-center">
-        <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-          <%= image_tag "death.png", alt: "ペット", width: 180, height: 180, class: "block mx-auto" %>
-        </div>
+      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
+        <%= image_tag "death.png", alt: "ペット", width: 180, height: 180, class: "block mx-auto" %>
+      </div>
       </div>
     </div>
 

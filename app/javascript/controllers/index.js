@@ -15,3 +15,6 @@ application.register("modal", ModalController)
 
 import RepeatRuleController from "./repeat_rule_controller"
 application.register("repeat-rule", RepeatRuleController)
+
+import MenuController from "./menu_controller";
+application.register("menu", MenuController);

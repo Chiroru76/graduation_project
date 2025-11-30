@@ -1,7 +1,7 @@
 <ul class="space-y-3">
-  <% tasks.each do |t| %>
-    <li id="<%= dom_id(t) %>">
-      <%= render "tasks/task_item", t: t %>
+  <% tasks.each do |task| %>
+    <li id="<%= dom_id(task) %>">
+      <%= render "tasks/task_item", task: task %>
     </li>
   <% end %>
 
