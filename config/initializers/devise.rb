@@ -306,6 +306,10 @@ Devise.setup do |config|
   config.responder.error_status = :unprocessable_entity
   config.responder.redirect_status = :see_other
 
+  # リクエスト時の CSRF チェックを無効化
+  OmniAuth.config.request_validation_phase = Proc.new {}
+
+
   # ==> Configuration for :registerable
 
   # When set to false, does not sign a user in automatically after their password is
