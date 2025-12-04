@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :omniauthable, omniauth_providers: [ :google_oauth2 ]
   has_many :tasks, dependent: :destroy
   # 所有しているペット一覧をuser.charactersで参照できる
   has_many :characters, dependent: :destroy
@@ -11,7 +11,7 @@ class User < ApplicationRecord
   belongs_to :active_character, class_name: "Character", foreign_key: "character_id", optional: true
   # ユーザー作成後にペット作成メソッドを呼ぶ
   after_create_commit :create_initial_character
-  #　uidが存在する場合のみ、その一意性をproviderのスコープ内で確認
+  # 　uidが存在する場合のみ、その一意性をproviderのスコープ内で確認
   validates :uid, presence: true, uniqueness: { scope: :provider }, if: -> { uid.present? }
 
   def self.from_omniauth(auth)
