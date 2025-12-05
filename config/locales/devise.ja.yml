@@ -23,7 +23,7 @@ ja:
         name: 名前
         email: "メールアドレス"
         password: "パスワード"
-        password_confirmation: "パスワード確認"
+        password_confirmation: "パスワード(確認用)"
         remember_me: "次回から自動的にログイン"
     models:
       user: "ユーザー"
@@ -68,12 +68,14 @@ ja:
         update: "更新"
         we_need_your_current_password_to_confirm_your_changes: "変更を反映するには現在のパスワードを入力してください"
       new:
-        sign_up: "ユーザー登録"
+        sign_up: "新規登録"
         sign_up_button: "登録"
     sessions:
       new:
         sign_in: "ログイン"
         sign_in_button: "ログインする"
+        forgot_your_password: "パスワードを忘れた方はこちら"
+        sign_up: "ユーザー新規登録"
     shared:
       links:
         back: "戻る"
