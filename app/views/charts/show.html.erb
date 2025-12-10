@@ -1,6 +1,10 @@
 <div class="container mx-auto px-4 py-6 space-y-8">
   <h1 class="text-2xl font-bold mb-4">活動の記録</h1>
 
+  <turbo-frame id="calendar">
+    <%= render partial: "calendar" %>
+  </turbo-frame>
+
 
   <div class="container mx-auto p-6 space-y-6">
     <h1 class="text-2xl font-bold">直近<%= @days %>日のタスク完了件数</h1>
