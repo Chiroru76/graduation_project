@@ -44,6 +44,21 @@ class ChartsController < ApplicationController
     # 全期間合計値
     @total_by_task = log_events.group(:task_id).sum(:amount)
 
+    raw_date = params[:start_date].present? ? Date.parse(params[:start_date]) : Time.zone.today
+    @start_date = raw_date.beginning_of_month
+    @all_events = current_user.task_events.where(action: :completed)
+
+    respond_to do |format|
+      format.html
+
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.replace(
+          "calendar",
+          partial: "calendar"
+        )
+      end
+    end
+
     render :show
   end
 end

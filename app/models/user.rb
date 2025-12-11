@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_many :characters, dependent: :destroy
   # 現在育成中のペットをuser.active_characterで参照できる
   belongs_to :active_character, class_name: "Character", foreign_key: "character_id", optional: true
+  has_many :task_events, dependent: :destroy
   # ユーザー作成後にペット作成メソッドを呼ぶ
   after_create_commit :create_initial_character
   # 　uidが存在する場合のみ、その一意性をproviderのスコープ内で確認
