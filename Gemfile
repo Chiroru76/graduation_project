@@ -80,5 +80,4 @@ gem "meta-tags"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
 gem "dotenv-rails"
-gem 'simple_calendar', '~> 3.1.0'
-
+gem "simple_calendar", "~> 3.1.0"
