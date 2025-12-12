@@ -18,17 +18,17 @@ class User < ApplicationRecord
   def self.from_omniauth(auth)
     # メール一致 → 同一ユーザー扱い（Google と LINE を統合できる）
     user = User.find_by(email: auth.info.email) if auth.info.email.present?
-  
+
     # provider + uid で検索
     user ||= User.find_or_initialize_by(provider: auth.provider, uid: auth.uid)
-  
+
     # 初回ログイン時
     if user.new_record?
       user.name  = auth.info.name
       user.email = auth.info.email.presence || "#{auth.uid}@#{auth.provider}.generated"
       user.password = Devise.friendly_token[0, 20]
     end
-  
+
     user.save!
     user
   end
