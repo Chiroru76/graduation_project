@@ -55,6 +55,16 @@
       <% end %>
     </div>
 
+    <div class="mt-4">
+      <%= button_to user_line_omniauth_authorize_path,
+        method: :post,
+        data: { turbo: false },
+        class: "bg-green-500 hover:bg-green-600 text-white font-kiwi py-2 px-20 rounded-3xl text-base lg:text-md flex items-center justify-center gap-2 border-none cursor-pointer w-80 lg:w-96" do %>
+        <iconify-icon icon="simple-icons:line" width="24" height="24"></iconify-icon>
+        <span>LINEでログイン</span>
+      <% end %>
+    </div>
+
     <div class="text-center mt-12 text-gray-600">
       <%= link_to t(".forgot_your_password"), new_password_path(resource_name) %><br />
     </div>

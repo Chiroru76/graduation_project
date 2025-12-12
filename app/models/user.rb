@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [ :google_oauth2 ]
+         :omniauthable, omniauth_providers: [ :google_oauth2, :line ]
   has_many :tasks, dependent: :destroy
   # 所有しているペット一覧をuser.charactersで参照できる
   has_many :characters, dependent: :destroy
@@ -16,11 +16,21 @@ class User < ApplicationRecord
   validates :uid, presence: true, uniqueness: { scope: :provider }, if: -> { uid.present? }
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.name = auth.info.name
-      user.email = auth.info.email
+    # メール一致 → 同一ユーザー扱い（Google と LINE を統合できる）
+    user = User.find_by(email: auth.info.email) if auth.info.email.present?
+
+    # provider + uid で検索
+    user ||= User.find_or_initialize_by(provider: auth.provider, uid: auth.uid)
+
+    # 初回ログイン時
+    if user.new_record?
+      user.name  = auth.info.name
+      user.email = auth.info.email.presence || "#{auth.uid}@#{auth.provider}.generated"
       user.password = Devise.friendly_token[0, 20]
     end
+
+    user.save!
+    user
   end
 
   def self.create_unique_string
