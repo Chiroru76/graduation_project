@@ -277,8 +277,7 @@ Devise.setup do |config|
   ENV["LINE_CHANNEL_CHANNELID"],
   ENV["LINE_CHANNEL_CHANNELSECRET"],
   {
-    scope: "profile openid email",
-    callback_url: "#{ENV['BASE_URL']}/users/auth/line/callback"
+    scope: "profile openid email"
   }
 
   # ==> Warden configuration
