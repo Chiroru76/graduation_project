@@ -278,6 +278,8 @@ Devise.setup do |config|
   ENV["LINE_CHANNEL_CHANNELSECRET"],
   {
     scope: "profile openid email"
+    # 開発環境でlineログインを試す場合は、以下のコメントアウトを外してcallback_urlを指定する
+    # callback_url: "#{ENV['APP_URL']}/users/auth/line/callback"
   }
 
   # ==> Warden configuration

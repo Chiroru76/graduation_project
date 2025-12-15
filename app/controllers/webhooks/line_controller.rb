@@ -9,12 +9,12 @@ class Webhooks::LineController < ActionController::API
 
         return head :bad_request unless valid_signature?(body)
 
-        events = JSON.parse(body)['events'] || []
+        events = JSON.parse(body)["events"] || []
         events.each do |event|
-            case event['type']
-            when 'follow'
+            case event["type"]
+            when "follow"
                 handle_follow(event)
-            when 'unfollow'
+            when "unfollow"
                 handle_unfollow(event)
             else
                 Rails.logger.info("LINE event ignored: #{event['type']}")
@@ -33,13 +33,13 @@ class Webhooks::LineController < ActionController::API
     # - 環境変数からチャンネルシークレットを読み取り、リクエストヘッダの署名と照合する
     # - 不足や検証失敗時はfalseを返す
     def valid_signature?(body)
-        secret = ENV['LINE_MESSAGING_CHANNELSECRET']
+        secret = ENV["LINE_MESSAGING_CHANNELSECRET"]
         unless secret.present?
             Rails.logger.error("[LINE] missing channel secret env var (LINE_MESSAGING_CHANNELSECRET etc.)")
             return false
         end
 
-        signature = request.headers['X-Line-Signature']
+        signature = request.headers["X-Line-Signature"]
         return false if signature.blank?
 
         begin
@@ -56,11 +56,11 @@ class Webhooks::LineController < ActionController::API
     # - イベントからLINEのuserIdを取得し、既存Userと紐付けを試みる
     # - 見つかればline_user_idを更新しログを残す。見つからなければその旨をログに残す
     def handle_follow(event)
-        user_id = event.dig('source', 'userId')
+        user_id = event.dig("source", "userId")
         return if user_id.blank?
 
         # 既存ユーザーとの紐付け
-        user = User.find_by(provider: 'line', uid: user_id) ||
+        user = User.find_by(provider: "line", uid: user_id) ||
                      User.find_by(line_user_id: user_id)
 
         if user
@@ -76,7 +76,7 @@ class Webhooks::LineController < ActionController::API
     # - unfollowイベントを処理する
     # - イベントからLINEのuserIdを取得し、紐付け解除 (line_user_idをnilに設定) を行う
     def handle_unfollow(event)
-        user_id = event.dig('source', 'userId')
+        user_id = event.dig("source", "userId")
         return if user_id.blank?
         user = User.find_by(line_user_id: user_id)
         return unless user

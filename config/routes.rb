@@ -59,6 +59,6 @@ Rails.application.routes.draw do
   end
 
   namespace :webhooks do
-    post 'line', to: 'line#create'
+    post "line", to: "line#create"
   end
 end
