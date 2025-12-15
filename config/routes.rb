@@ -57,4 +57,8 @@ Rails.application.routes.draw do
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
+
+  namespace :webhooks do
+    post "line", to: "line#create"
+  end
 end
