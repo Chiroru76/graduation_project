@@ -29,7 +29,11 @@ Rails.application.routes.draw do
 
   resource :charts, only: [ :show ]
 
-  resource :settings, only: [ :show ]
+  # Line通知設定画面用のルーティング追加
+  resource :settings, only: [ :show ] do
+    # Line設定の表示・編集・更新
+    get "line", to: "settings#line_settings"
+  end
 
   resource :profile, only: [ :show ]
 

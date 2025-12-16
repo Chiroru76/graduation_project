@@ -1,0 +1,32 @@
+<div class="max-w-3xl mx-4 md:mx-20 p-4 md:p-6">
+    <div class="bg-gradient-to-r from-[#00C300] via-[#00B900] to-[#009A00] rounded-xl p-4 md:p-5 shadow-md">
+        <div class="flex items-center justify-center">
+            <h1 class="text-lg md:text-2xl font-semibold text-white text-center">LINE通知設定</h1>
+        </div>
+    </div>
+
+    <!-- 友だち追加カード -->
+    <div class="bg-white border border-gray-100 rounded-xl p-4 md:p-6 shadow-lg">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-center">
+            <div class="w-full">
+                <p class="my-4 md:my-6 text-xs md:text-sm text-gray-600 text-center">
+                    TODOに設定した期限の前日になるとLINEで通知が届きます。<br>
+                    LINE通知を有効にするには、以下のボタンから「モチペット」公式LINEを友だち追加してください。
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <!-- LINE 友だち追加ボタン -->
+            <div class="mb-4 flex items-center justify-center">
+                <div class="line-it-wrapper inline-block transform scale-125 md:scale-150 origin-center">
+                    <div class="line-it-button" data-lang="ja" data-type="friend" data-env="PROD" data-lineId="&#64;644ouadb" style="display: none;"></div>
+                </div>
+
+                <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+            </div>
+
+            <p class="text-xs md:text-sm text-gray-500">ボタンが機能しない場合は、LINEで「&#64;644ouadb」を検索して友だち追加してください。</p>
+        </div>
+    </div>
+</div>
