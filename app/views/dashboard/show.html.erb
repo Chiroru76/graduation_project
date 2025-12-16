@@ -3,7 +3,7 @@
   <!-- モーダル表示エリア -->
   <div id="modal_area"></div>
   <!-- キャラ育成エリア -->
-  <div id="character_" class="relative inline-block w-full max-w-none md:max-w-[500px] h-auto">
+  <div id="character_" class="relative inline-block w-full max-w-none md:max-w-[500px] h-auto p-2 bg-gray-200 border-4 border-gray-800 shadow-[4px_4px_0_0_rgba(0,0,0,0.8)] rounded-lg">
     <% if current_user.active_character.dead? %>
       <!-- 死亡時専用ビュー -->
       <div class="bg-black w-full h-full flex flex-col items-center justify-center rounded-2xl p-8 text-center">
