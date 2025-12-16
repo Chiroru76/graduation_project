@@ -23,8 +23,10 @@ class CharactersController < ApplicationController
     @character = current_user.active_character
     if @character.feed!(current_user)
       redirect_to dashboard_show_path, notice: "えさをあげました！"
-    else
-      redirect_to dashboard_show_path, alert: "えさをあげられませんでした"
+    elsif @character.bond_hp >= @character.bond_hp_max
+      redirect_to dashboard_show_path, alert: "ペットの幸せ度は最大です"
+    elsif
+      redirect_to dashboard_show_path, alert: "えさがありません"
     end
   end
 

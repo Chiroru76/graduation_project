@@ -14,6 +14,8 @@ class User < ApplicationRecord
   after_create_commit :create_initial_character
   # 　uidが存在する場合のみ、その一意性をproviderのスコープ内で確認
   validates :uid, presence: true, uniqueness: { scope: :provider }, if: -> { uid.present? }
+  validates :email, presence: true, uniqueness: true, length: { maximum: 255 }
+  validates :line_user_id, uniqueness: true, allow_nil: true, length: { maximum: 50 }
 
   def self.from_omniauth(auth)
     # メール一致 → 同一ユーザー扱い（Google と LINE を統合できる）

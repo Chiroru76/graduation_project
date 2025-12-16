@@ -18,3 +18,6 @@ application.register("repeat-rule", RepeatRuleController)
 
 import MenuController from "./menu_controller";
 application.register("menu", MenuController);
+
+import FlashController from "./flash_controller";
+application.register("flash", FlashController);

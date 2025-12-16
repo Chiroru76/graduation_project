@@ -1,113 +1,130 @@
 <!-- app/views/tasks/_form.html.erb -->
-<%= form_with model: task, local: true, class: "space-y-8" do |f| %>
+<%= form_with model: task, local: true, class: "space-y-6" do |f| %>
   <%= f.hidden_field :kind %>
+  <div class="bg-white shadow-sm rounded-lg p-6">
 
-
-  <!-- タイトル（モデル連動） -->
-  <div>
-    <%= f.label :title, "タイトル", class:"block text-sm font-bold mb-1" %>
-    <%= f.text_field :title, 
-        class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
-              placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-green-200",
-        placeholder: "5時半に起きる" %>
-  </div>
-
-  <!-- レベル（難易度：モデル連動） -->
-  <div>
-    <%= f.label :difficulty, "レベル", class: "block text-sm font-bold mb-1" %>
-    <%= f.select :difficulty,
-      [['1（やさしい）', 'easy'],
-       ['2（ふつう）',   'normal'],
-       ['3（難しい）',   'hard']],
-      { include_blank: false },
-      class: "block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-base
-              focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-  </div>
-
-  <!-- タグ（未実装のダミー。将来はタグ機能に接続） -->
-  <div>
-    <%= f.label :tag, "タグ", class: "block text-sm font-bold mb-1" %>
-    <%= f.text_field :tag,
-      class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
-              placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500",
-      placeholder: "タグを追加" %>
-  </div>
-
-
-  <!-- 期限(TODO専用) -->
-  <% if task.todo? %>
-    <div>
-      <%= f.label :due_on, "期限", class: "block text-sm font-bold mb-1" %>
-      <%= f.date_field :due_on,
-        class: "block w-full rounded-lg border border-gray-300 px-3 py-2 text-base
-                focus:outline-none focus:ring-2 focus:ring-blue-500" %>
-    </div>
-  <% end %>
-
-  <!-- habit専用 -->
-  <% if task.habit? %>
-    <!-- 繰り返し -->
-    <!-- 曜日チェックボックス-->
-    <div data-controller="repeat-rule">
-      <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-bold mb-1" %>
-      
-      <div class="flex gap-3 mt-2">
-        <% %w[月 火 水 木 金 土 日].each do |day| %>
-          <label class="inline-flex items-center">
-            <%= check_box_tag "task[repeat_rule][days][]",
-                              day,
-                              Array(@task.repeat_rule&.dig("days")).include?(day),  #編集画面で既存の選択を復元
-                              class: "rounded text-lime-500",
-                              data: { "repeat-rule-target": "checkbox",
-                                      action: "change->repeat-rule#toggle" } %>
-            <span class="ml-1"><%= day %></span>
-          </label>
+      <!-- タイトル -->
+      <div>
+        <%= f.label :title, class: "block text-sm font-semibold text-gray-700" do %>
+          タイトル
+          <span class="text-gray-400 text-sm ml-2" aria-hidden="true">＊</span>
+        <% end %>
+        <%= f.text_field :title,
+          required: true, "aria-required" => "true",
+          class: "mt-2 block w-full rounded-lg border px-3 py-2 text-sm bg-white
+                  placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-200
+                  focus:border-emerald-400 transition
+                  #{'border-red-500' if f.object.errors[:title].present?}" ,
+          placeholder: "5時半に起きる" %>
+        <% if f.object.errors[:title].present? %>
+          <p class="mt-2 text-sm text-red-600"><%= f.object.errors[:title].first %></p>
         <% end %>
       </div>
-      <!-- 選択結果の表示 -->
-      <p class="mt-2 text-sm text-gray-500" data-repeat-rule-target="output">未選択</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- レベル -->
+      <div class="mt-6">
+        <%= f.label :difficulty, class: "block text-sm font-semibold text-gray-700" do %>
+          レベル
+          <span class="text-gray-400 text-sm ml-2" aria-hidden="true">＊</span>
+        <% end %>
+        <%= f.select :difficulty,
+          [['1（やさしい）', 'easy'], ['2（ふつう）', 'normal'], ['3（難しい）', 'hard']],
+          { prompt: '選択してください' },
+          required: true, "aria-required" => "true",
+          class: "mt-2 block w-full rounded-lg border bg-white px-3 py-2 text-sm
+                  focus:outline-none focus:ring-2 focus:ring-sky-200 focus:border-sky-400
+                  #{'border-red-500' if f.object.errors[:difficulty].present?}" %>
+        <% if f.object.errors[:difficulty].present? %>
+          <p class="mt-2 text-sm text-red-600"><%= f.object.errors[:difficulty].first %></p>
+        <% end %>
+      </div>
+
+
+      <!-- タグ -->
+      <div class="mt-6">
+        <%= f.label :tag, "タグ", class: "block text-sm font-semibold text-gray-700" %>
+        <%= f.text_field :tag,
+          class: "mt-2 block w-full rounded-lg border px-3 py-2 text-sm bg-white
+                  placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-100
+                  focus:border-sky-300",
+          placeholder: "タグを追加" %>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- 左：目標 -->
-      <div>
-        <%= f.label :target_value, "目標", class: "block text-sm font-bold mb-1" %>
-        <%= render "tasks/goal_modal", f: f, task: task %>
+    <!-- 期限 -->
+    <% if task.todo? %>
+      <div class="mt-6">
+        <%= f.label :due_on, "期限", class: "block text-sm font-semibold text-gray-700" %>
+        <div class="mt-2 relative">
+          <%= f.date_field :due_on,
+            required: true, "aria-required" => "true",
+            class: "block w-full rounded-lg border px-3 py-2 text-sm bg-white
+                    focus:outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300
+                    #{'border-red-500' if f.object.errors[:due_on].present?}" %>
+        </div>
+        <% if f.object.errors[:due_on].present? %>
+          <p class="mt-2 text-sm text-red-600"><%= f.object.errors[:due_on].first %></p>
+        <% end %>
       </div>
-  
-      <!-- 右：実施記録方法 -->
-      <div>
-        <fieldset class="space-y-2">
-          <%= f.label :tracking_mode, "実施記録方法", class: "block text-sm font-bold mb-1" %>
-  
-          <div class="mt-2 flex items-center space-x-4">
-            <label class="flex items-center">
-              <%= f.radio_button :tracking_mode, :checkbox, checked: (@task.checkbox? || @task.tracking_mode.nil?) %>
-              <span class="ml-1">チェックボックス</span>
-            </label>
-            <label class="flex items-center">
-              <%= f.radio_button :tracking_mode, :log, checked: @task.log? %>
-              <span class="ml-1">入力</span>
-            </label>
-          </div>
-        </fieldset>
-      </div>
-    </div>
-  <% end %>
-
-
-  <!-- アクション -->
-  <div class="flex items-center gap-3">
-    <%= f.submit "保存",
-        class: "inline-flex items-center justify-center rounded-full px-10 py-3
-                font-bold text-white shadow-sm
-                bg-lime-400 hover:bg-lime-500/90
-                transition focus:outline-none focus:ring-lime-800" %>
-
-    <% if task.persisted? %>
-      <%= link_to "削除", task_path(@task),
-          data: {  turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
-          class: "bg-red-400 text-white font-bold px-10 py-3 rounded-full hover:bg-red-500" %>
     <% end %>
+
+    <!-- habit セクション -->
+    <% if task.habit? %>
+      <div class="mt-6 border-t pt-6">
+        <div data-controller="repeat-rule">
+          <%= f.label :repeat_rule, "繰り返し", class: "block text-sm font-semibold text-gray-700" %>
+          <div class="mt-3 flex flex-wrap gap-1">
+            <% %w[月 火 水 木 金 土 日].each do |day| %>
+              <label class="inline-flex items-center px-2 py-1 bg-gray-50 rounded-lg border text-sm">
+                <%= check_box_tag "task[repeat_rule][days][]", day, Array(task.repeat_rule&.dig("days")).include?(day),
+                  class: "mr-2 h-4 w-4 text-emerald-500 rounded" %>
+                <span><%= day %></span>
+              </label>
+            <% end %>
+          </div>
+          <p class="mt-3 text-sm text-gray-500" data-repeat-rule-target="output">未選択</p>
+        </div>
+
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-1">
+          <div>
+            <%= f.label :target_value, "目標", class: "block text-sm font-semibold text-gray-700" %>
+            <div class="mt-2"><%= render "tasks/goal_modal", f: f, task: task %></div>
+          </div>
+
+          <div>
+            <fieldset class="space-y-2">
+              <%= f.label :tracking_mode, class: "block text-sm font-semibold text-gray-700" do %>
+                記録方法
+                <span class="text-gray-400 text-sm ml-2" aria-hidden="true">＊</span>
+              <% end %>
+              <div class="mt-2 flex items-center gap-6">
+                <label class="inline-flex items-center">
+                  <%= f.radio_button :tracking_mode, :checkbox, checked: (task.checkbox? || task.tracking_mode.nil?) %>
+                  <span class="ml-2 text-sm">チェックボックス</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <%= f.radio_button :tracking_mode, :log, checked: task.log? %>
+                  <span class="ml-2 text-sm">入力</span>
+                </label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <!-- アクション -->
+    <div class="mt-6 flex items-center gap-4">
+      <%= f.submit "保存",
+        class: "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white
+                bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600
+                shadow-md focus:outline-none focus:ring-4 focus:ring-emerald-200" %>
+
+      <% if task.persisted? %>
+        <%= link_to "削除", task_path(task),
+          data: { turbo_method: :delete, turbo_confirm: "本当に削除しますか？" },
+          class: "inline-flex items-center justify-center px-5 py-3 rounded-full bg-red-100 text-red-700 text-sm font-medium hover:bg-red-200" %>
+      <% end %>
+    </div>
   </div>
 <% end %>
