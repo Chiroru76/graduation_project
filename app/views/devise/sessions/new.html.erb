@@ -2,6 +2,7 @@
   <h2 class="text-3xl font-bold mb-10"><%= t(".sign_in") %></h2>
 
   <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "space-y-6" }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
     <div>
       <%= f.label :email %><br />
       <div class="relative">
