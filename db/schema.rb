@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_13_010514) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_17_015705) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -89,6 +89,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_13_010514) do
     t.integer "tracking_mode"
     t.index ["kind", "tracking_mode"], name: "index_tasks_on_kind_and_tracking_mode"
     t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "titles", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.string "rule_type", null: false
+    t.integer "threshold", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_titles_on_key", unique: true
   end
 
   create_table "users", force: :cascade do |t|
