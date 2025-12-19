@@ -64,14 +64,19 @@ class TasksController < ApplicationController
     before_level  = character&.level
     before_stage  = character&.character_kind&.stage # "egg" | "child" | "adult"
 
+    completed = false
+    notice = nil
+
     if @task.habit?&& @task.open?
       @task.complete!(by_user: current_user)
+      completed = true
       notice = "習慣を完了しました"
     elsif @task.habit? && @task.done?
       @task.reopen!(by_user: current_user)
       notice = "習慣を未完了に戻しました"
     elsif @task.todo?
       @task.complete!(by_user: current_user)
+      completed = true
       notice = "TODOを完了しました"
     end
 
@@ -89,17 +94,31 @@ class TasksController < ApplicationController
     after_stage = character&.character_kind&.stage
 
     # 3) 判定 （進化 or 孵化）
-    hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
-    evolved = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+    @hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
+    @evolved  = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
 
     @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
 
-    if evolved
-      redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！シェアしよう！"
-    elsif hatched
-      redirect_to share_hatched_path(current_user), notice: "ペットが孵化しました！シェアしよう！"
-    else
-      redirect_to dashboard_show_path, notice: notice
+    if @evolved
+      return redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！シェアしよう！"
+    elsif @hatched
+      return redirect_to share_hatched_path(current_user), notice: "ペットが孵化しました！シェアしよう！"
+    end
+
+    # 6) 称号判定（完了時のみ）
+    unlocked_titles = completed ? Titles::Unlocker.new(user: current_user).call : []
+    # unlocked_titlesに値が入っているか確認
+    Rails.logger.debug "unlocked_titles=#{unlocked_titles.map(&:id)}"
+
+    respond_to do |format|
+      format.html do
+        redirect_to dashboard_show_path, notice: notice
+      end
+
+      format.turbo_stream do
+        flash.now[:notice] = notice
+        @unlocked_titles = unlocked_titles
+      end
     end
   end
 

@@ -10,6 +10,9 @@ class User < ApplicationRecord
   # 現在育成中のペットをuser.active_characterで参照できる
   belongs_to :active_character, class_name: "Character", foreign_key: "character_id", optional: true
   has_many :task_events, dependent: :destroy
+  # ユーザーが獲得した称号一覧をuser.user_titlesで参照できる
+  has_many :user_titles, dependent: :destroy
+  has_many :titles, through: :user_titles
   # ユーザー作成後にペット作成メソッドを呼ぶ
   after_create_commit :create_initial_character
   # 　uidが存在する場合のみ、その一意性をproviderのスコープ内で確認
