@@ -26,4 +26,20 @@
     <%= link_to "ホームへ戻る", dashboard_show_path,
           class: "text-sm text-gray-700 hover:text-blue-600 underline" %>
   </div>
+
+  <!-- 獲得した称号一覧 -->
+  <div class="mt-12 bg-slate-50 rounded-lg p-6">
+    <h2 class="text-xl font-bold mb-4">獲得した称号一覧</h2>
+    <% if current_user.user_titles.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <% current_user.user_titles.each do |user_title| %>
+          <div class="bg-yellow-50 rounded-lg shadow p-4">
+            <h3 class="text-lg font-semibold mb-2"><%= user_title.title.name %></h3>
+            <p class="text-sm text-gray-600"><%= user_title.title.description %></p>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-600">まだ称号を獲得していません。</p>
+    <% end %>
 </div>
