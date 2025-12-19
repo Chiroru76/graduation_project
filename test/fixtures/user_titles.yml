@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+todo_master:
   user: one
-  title: one
+  title: todo_5
   unlocked_at: 2025-12-17 11:06:27
 
-two:
+habit_master:
   user: two
-  title: two
+  title: habit_50
   unlocked_at: 2025-12-17 11:06:27
