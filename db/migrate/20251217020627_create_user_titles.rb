@@ -8,6 +8,6 @@ class CreateUserTitles < ActiveRecord::Migration[8.0]
       t.timestamps
     end
     # 複合ユニークインデックスで 重複付与防止
-    add_index :user_titles, [:user_id, :title_id], unique: true
+    add_index :user_titles, [ :user_id, :title_id ], unique: true
   end
 end
