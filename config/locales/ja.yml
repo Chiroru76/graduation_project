@@ -222,3 +222,8 @@ ja:
       long: "%Y/%m/%d %H:%M"
       short: "%m/%d %H:%M"
     pm: 午後
+  layouts:
+    footer:
+      privacy: "プライバシーポリシー"
+      contact: "お問い合わせ"
+      terms_text: "利用規約"
