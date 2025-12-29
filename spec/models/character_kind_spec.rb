@@ -5,6 +5,7 @@ RSpec.describe CharacterKind, type: :model do
   describe "associations" do
     describe "characters" do
       it "has_many :characters の関連を持つこと" do
+        setup_master_data
         character_kind = create(:character_kind)
         user = create(:user)
         character = Character.create!(
