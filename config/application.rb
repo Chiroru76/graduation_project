@@ -21,6 +21,7 @@ module App
     # sidekiq設定
     config.active_job.queue_adapter = :sidekiq
     config.app_url = "https://mochipet.onrender.com/"
+    config.hosts << '.example.com'
 
     # Configuration for the application, engines, and railties goes here.
     #
