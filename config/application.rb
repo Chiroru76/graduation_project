@@ -22,6 +22,11 @@ module App
     config.active_job.queue_adapter = :sidekiq
     config.app_url = "https://mochipet.onrender.com/"
 
+    # テスト環境以外でhost authorizationを有効化
+    unless Rails.env.test?
+      config.hosts << ".example.com"
+    end
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

@@ -22,8 +22,8 @@ class Task < ApplicationRecord
   validates :title, presence: true, length: { maximum: 255 }
   validates :difficulty, presence: true
   validates :tag, length: { maximum: 50 }, allow_blank: true
-  validates :reward_exp, numericality: { greater_than_or_equal_to: 0 }
-  validates :reward_food_count, numericality: { greater_than_or_equal_to: 0 }
+  validates :reward_exp, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :reward_food_count, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :tracking_mode, presence: true, if: :habit?
 
 
