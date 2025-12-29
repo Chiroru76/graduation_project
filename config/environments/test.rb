@@ -8,9 +8,8 @@ Rails.application.configure do
 
   # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = false
-  # test 環境で host を許可する
-  config.hosts.clear
-  config.hosts << "www.example.com"
+  # test 環境で host authorization ミドルウェアを完全に無効化（システムテスト用）
+  config.middleware.delete ActionDispatch::HostAuthorization
 
   # Eager loading loads your entire application. When running a single test locally,
   # this is usually not necessary, and can slow down your test suite. However, it's

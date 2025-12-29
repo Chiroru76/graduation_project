@@ -21,7 +21,11 @@ module App
     # sidekiq設定
     config.active_job.queue_adapter = :sidekiq
     config.app_url = "https://mochipet.onrender.com/"
-    config.hosts << '.example.com'
+
+    # テスト環境以外でhost authorizationを有効化
+    unless Rails.env.test?
+      config.hosts << '.example.com'
+    end
 
     # Configuration for the application, engines, and railties goes here.
     #

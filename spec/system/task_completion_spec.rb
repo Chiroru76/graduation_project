@@ -19,12 +19,13 @@ RSpec.describe 'タスク完了', type: :system do
 
       visit dashboard_show_path
 
-      # タスクが画面に表示されていることを確認
-      expect(page).to have_content(task.title)
+      # タスク項目内のチェックボックスをクリック
+      within("li#task_#{task.id}") do
+        find('input[type="checkbox"]').click
+      end
 
-      # rack_testではJavaScriptのonclick="this.form.requestSubmit()"が動作しないため、
-      # システムテストではモデルメソッドを直接呼び出してタスク完了をシミュレート
-      task.complete!(by_user: user)
+      # Turbo Streamでの更新を待つ
+      sleep 0.5
 
       # 経験値・エサが増加
       user.reload
@@ -42,12 +43,13 @@ RSpec.describe 'タスク完了', type: :system do
 
       visit dashboard_show_path
 
-      # タスクが画面に表示されていることを確認
-      expect(page).to have_content(habit.title)
+      # タスク項目内のチェックボックスをクリック
+      within("li#task_#{habit.id}") do
+        find('input[type="checkbox"]').click
+      end
 
-      # rack_testではJavaScriptのonclick="this.form.requestSubmit()"が動作しないため、
-      # システムテストではモデルメソッドを直接呼び出してタスク完了をシミュレート
-      habit.complete!(by_user: user)
+      # Turbo Streamでの更新を待つ
+      sleep 0.5
 
       user.reload
       expect(user.active_character.exp).to be > initial_exp

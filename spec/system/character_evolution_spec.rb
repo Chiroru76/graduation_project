@@ -24,16 +24,12 @@ RSpec.describe 'キャラクター孵化・進化', type: :system do
 
       visit dashboard_show_path
 
-      # タスクが画面に表示されていることを確認
-      expect(page).to have_selector("li#task_#{task.id}")
+      # タスク項目内のチェックボックスをクリック
+      within("li#task_#{task.id}") do
+        find('input[type="checkbox"]').click
+      end
 
-      # rack_testではJavaScriptが動作しないため、モデルメソッドを直接呼び出してタスク完了をシミュレート
-      # これにより孵化が発生し、コントローラーのリダイレクト処理が実行される
-      # しかし、system specではリダイレクトを追従しないため、直接シェア画面に遷移する
-      task.complete!(by_user: user)
-      visit share_hatched_path(user)
-
-      # シェア画面が表示される
+      # シェア画面へ自動リダイレクト
       expect(page).to have_current_path(share_hatched_path(user))
       expect(page).to have_content('誕生しました')
 
@@ -64,14 +60,12 @@ RSpec.describe 'キャラクター孵化・進化', type: :system do
 
       visit dashboard_show_path
 
-      # タスクが画面に表示されていることを確認
-      expect(page).to have_selector("li#task_#{task.id}")
+      # タスク項目内のチェックボックスをクリック
+      within("li#task_#{task.id}") do
+        find('input[type="checkbox"]').click
+      end
 
-      # rack_testではJavaScriptが動作しないため、モデルメソッドを直接呼び出してタスク完了をシミュレート
-      task.complete!(by_user: user)
-      visit share_evolved_path(user)
-
-      # シェア画面が表示される
+      # シェア画面へ自動リダイレクト
       expect(page).to have_current_path(share_evolved_path(user))
       expect(page).to have_content('進化しました')
 

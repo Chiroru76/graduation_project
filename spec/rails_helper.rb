@@ -1,6 +1,10 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
+
+# システムスペック用: すべてのホストを許可（Docker環境でのSelenium利用のため）
+ENV['RAILS_DEVELOPMENT_HOSTS'] = 'web,web:3001,0.0.0.0,127.0.0.1,localhost'
+
 require_relative '../config/environment'
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
