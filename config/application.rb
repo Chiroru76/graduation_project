@@ -24,7 +24,7 @@ module App
 
     # テスト環境以外でhost authorizationを有効化
     unless Rails.env.test?
-      config.hosts << '.example.com'
+      config.hosts << ".example.com"
     end
 
     # Configuration for the application, engines, and railties goes here.

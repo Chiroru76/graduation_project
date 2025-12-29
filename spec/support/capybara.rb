@@ -21,7 +21,7 @@ Capybara.server_host = '0.0.0.0'
 Capybara.server_port = 3001
 
 # 許可されたホストリストに明示的に追加
-allowed_hosts = ["web:3001", "web", "0.0.0.0:3001", "127.0.0.1:3001"]
+allowed_hosts = [ "web:3001", "web", "0.0.0.0:3001", "127.0.0.1:3001" ]
 Rails.application.config.hosts += allowed_hosts
 
 # リモートブラウザ（chromeコンテナ）からwebコンテナにアクセスするためのホスト名

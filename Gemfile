@@ -67,10 +67,9 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   # テストデータのクリーンアップ
-  gem 'database_cleaner'
+  gem "database_cleaner"
   # テストのエラー表示を見やすく
-  gem 'spring-commands-rspec'
-
+  gem "spring-commands-rspec"
 end
 
 gem "jsbundling-rails", "~> 1.3"
