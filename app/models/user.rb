@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
+         :confirmable,
          :omniauthable, omniauth_providers: [ :google_oauth2, :line ]
   has_many :tasks, dependent: :destroy
   # 所有しているペット一覧をuser.charactersで参照できる
@@ -15,6 +16,8 @@ class User < ApplicationRecord
   has_many :titles, through: :user_titles
   # ユーザー作成後にペット作成メソッドを呼ぶ
   after_create_commit :create_initial_character
+  # 新規登録時は自動的に確認済みにする
+  after_create :skip_confirmation_for_new_users
   # 　uidが存在する場合のみ、その一意性をproviderのスコープ内で確認
   validates :uid, presence: true, uniqueness: { scope: :provider }, if: -> { uid.present? }
   validates :email, presence: true, uniqueness: true, length: { maximum: 255 }
@@ -32,6 +35,7 @@ class User < ApplicationRecord
       user.name  = auth.info.name
       user.email = auth.info.email.presence || "#{auth.uid}@#{auth.provider}.generated"
       user.password = Devise.friendly_token[0, 20]
+      user.skip_confirmation!
     end
 
     user.save!
@@ -48,5 +52,9 @@ class User < ApplicationRecord
     egg_kind = CharacterKind.find_by!(asset_key: "egg", stage: 0)
     ch = characters.create!(character_kind: egg_kind, state: :alive, last_activity_at: Time.current)
     update!(active_character: ch)
+  end
+
+  def skip_confirmation_for_new_users
+    confirm unless confirmed?
   end
 end
