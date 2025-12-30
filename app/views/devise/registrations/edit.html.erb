@@ -12,7 +12,7 @@
 
     <!-- 新しいユーザー名 -->
     <div class="mb-8">
-      <%= f.text_field :name, value: "", autofocus: true, autocomplete: "name", placeholder: "新しいユーザー名", class: "w-full rounded-xl bg-gray-100 p-4 text-lg placeholder-gray-400 focus:outline-none mt-2" %>
+      <%= f.text_field :name, value: "", autofocus: true, autocomplete: "name", placeholder: "新しいユーザー名（未入力の場合は変更なし）", class: "w-full rounded-xl bg-gray-100 p-4 text-lg placeholder-gray-400 focus:outline-none mt-2" %>
     </div>
 
     <!-- 現在のメールアドレス -->
@@ -21,16 +21,20 @@
       <div class="text-xl font-bold text-gray-800"><%= current_user.email %></div>
     </div>
 
-    <!-- 新しいメールアドレス -->
-    <div class="mb-8">
-      <%= f.email_field :email, value: "", autocomplete: "email", placeholder: "新しいメールアドレス", class: "w-full rounded-xl bg-gray-100 p-4 text-lg placeholder-gray-400 focus:outline-none mt-2" %>
-    </div>
-
+    <!-- 確認待ちメールアドレスの表示 -->
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-      <div class="mb-6 text-sm text-gray-600">
-        現在確認待ち: <%= resource.unconfirmed_email %>
+      <div class="mb-4 p-4 bg-yellow-100 border border-yellow-400 rounded-lg">
+        <p class="text-sm text-yellow-800">
+          <strong>📧 確認待ち:</strong> <%= resource.unconfirmed_email %><br>
+          <span class="text-xs">メール内のリンクをクリックして変更を完了してください。</span>
+        </p>
       </div>
     <% end %>
+
+    <!-- 新しいメールアドレス -->
+    <div class="mb-8">
+      <%= f.email_field :email, value: "", autocomplete: "email", placeholder: "新しいメールアドレス（未入力の場合は変更なし）", class: "w-full rounded-xl bg-gray-100 p-4 text-lg placeholder-gray-400 focus:outline-none mt-2" %>
+    </div>
 
     <!-- パスワード変更 -->
     <div class="mb-6">
@@ -47,7 +51,7 @@
     <!-- 現在のパスワード -->
     <div class="mb-6">
       <%= f.label :current_password, "現在のパスワード", class: "text-base font-semibold text-gray-700 mb-2" %>
-      <span class="text-xs text-gray-500 ml-2">(ユーザー情報を変更するには入力が必要です)</span>
+      <span class="text-xs text-gray-500 ml-2">(パスワードを変更するには入力が必要です)</span>
       <%= f.password_field :current_password, autocomplete: "current-password", class: "w-full rounded-xl bg-gray-100 p-4 text-lg placeholder-gray-400 focus:outline-none mt-2" %>
     </div>
 
