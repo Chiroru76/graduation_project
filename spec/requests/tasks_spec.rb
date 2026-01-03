@@ -169,6 +169,100 @@ RSpec.describe "Tasks", type: :request do
         expect(task.completed_at).to be_present
       end
     end
+
+    context "ペットコメントの生成 (HTML format)" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+      let(:pet_comment) { "やったね、頑張ったね" }
+
+      before do
+        allow(PetComments::Generator).to receive(:for).and_return(pet_comment)
+      end
+
+      it "タスク完了時にペットコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :task_completed,
+          user: user,
+          context: hash_including(
+            task_title: task.title,
+            difficulty: task.difficulty
+          )
+        )
+
+        patch complete_task_path(task)
+      end
+
+      it "生成されたコメントがflashに保存されること" do
+        patch complete_task_path(task)
+        follow_redirect!
+
+        expect(flash[:pet_comment]).to eq(pet_comment)
+      end
+    end
+
+    context "ペットコメントの生成 (Turbo Stream format)" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+      let(:pet_comment) { "いい感じだね" }
+
+      before do
+        allow(PetComments::Generator).to receive(:for).and_return(pet_comment)
+      end
+
+      it "タスク完了時にペットコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :task_completed,
+          user: user,
+          context: hash_including(
+            task_title: task.title,
+            difficulty: task.difficulty
+          )
+        )
+
+        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      end
+
+      it "Turbo Streamレスポンスにpet_comment_areaが含まれること" do
+        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include("pet_comment_area")
+        expect(response.body).to include(pet_comment)
+      end
+
+      it "flash.nowにペットコメントが設定されること" do
+        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(controller.flash.now[:pet_comment]).to eq(pet_comment)
+      end
+    end
+
+    context "ペットコメントが生成されない場合" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+
+      before do
+        allow(PetComments::Generator).to receive(:for).and_return(nil)
+      end
+
+      it "flashにpet_commentが設定されないこと" do
+        patch complete_task_path(task)
+
+        expect(flash[:pet_comment]).to be_nil
+      end
+    end
+
+    context "キャラクターが存在しない場合" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+
+      before do
+        user.update!(active_character: nil)
+      end
+
+      it "タスクは完了するがペットコメントは生成されないこと" do
+        patch complete_task_path(task)
+
+        task.reload
+        expect(task.status).to eq("done")
+        expect(flash[:pet_comment]).to be_nil
+      end
+    end
   end
 
   # ===== POST /tasks/:id/log_amount (log_amount) =====
