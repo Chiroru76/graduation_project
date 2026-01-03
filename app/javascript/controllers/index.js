@@ -21,3 +21,6 @@ application.register("menu", MenuController);
 
 import FlashController from "./flash_controller";
 application.register("flash", FlashController);
+
+import PetCommentController from "./pet_comment_controller";
+application.register("pet-comment", PetCommentController);
