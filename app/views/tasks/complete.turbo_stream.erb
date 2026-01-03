@@ -2,6 +2,10 @@
   <%= render "layouts/flash" %>
 <% end %>
 
+<%= turbo_stream.replace "pet_comment_area" do %>
+  <%= render "shared/pet_comment", message: flash.now[:pet_comment] %>
+<% end %>
+
 <%= turbo_stream.replace dom_id(@task) do %>
   <%= render "tasks/task_item", task: @task %>
 <% end %>
