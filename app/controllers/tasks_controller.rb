@@ -80,13 +80,18 @@ class TasksController < ApplicationController
       notice = "TODOを完了しました"
     end
 
-    # if @task.open?
-    #   @task.complete!(by_user: current_user)
-    #   notice = @task.todo? ? "TODOを完了しました" : "習慣を完了しました"
-    # else
-    #   @task.reopen!(by_user: current_user)
-    #   notice = @task.todo? ? "TODOを未完了に戻しました" : "習慣を未完了に戻しました"
-    # end
+    # タスク完了時のペットコメント生成
+    if completed
+      pet_comment = PetComments::Generator.for(
+        :task_completed,
+        user: current_user,
+        context: {
+          task_title: @task.title,
+          difficulty: @task.difficulty
+        }
+      )
+      flash[:pet_comment] = pet_comment if pet_comment.present?
+    end
 
     # 更新後を読みにいく（キャラがいれば）
     character&.reload
@@ -107,8 +112,6 @@ class TasksController < ApplicationController
 
     # 6) 称号判定（完了時のみ）
     unlocked_titles = completed ? Titles::Unlocker.new(user: current_user).call : []
-    # unlocked_titlesに値が入っているか確認
-    Rails.logger.debug "unlocked_titles=#{unlocked_titles.map(&:id)}"
 
     respond_to do |format|
       format.html do
@@ -117,6 +120,7 @@ class TasksController < ApplicationController
 
       format.turbo_stream do
         flash.now[:notice] = notice
+        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
         @unlocked_titles = unlocked_titles
       end
     end
