@@ -23,8 +23,7 @@ module Line
 
         Rails.logger.info("[LINE] push_message success")
         response
-      rescue => e
-
+      rescue StandardError => e
         Rails.logger.error("[LINE] send_message failed: #{e.class}: #{e.message}")
         raise e
       end

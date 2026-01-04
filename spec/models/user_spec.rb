@@ -142,14 +142,14 @@ RSpec.describe User, type: :model do
       end
 
       it "255文字以下である必要があること" do
-        long_email = "a" * 244 + "@example.com" # 256文字
+        long_email = "#{'a' * 244}@example.com"
         user = build(:user, email: long_email)
         expect(user).not_to be_valid
         expect(user.errors[:email]).to be_present
       end
 
       it "255文字は許可されること" do
-        valid_email = "a" * 243 + "@example.com" # 255文字
+        valid_email = "#{'a' * 243}@example.com"
         user = build(:user, email: valid_email)
         expect(user).to be_valid
       end
@@ -209,24 +209,24 @@ RSpec.describe User, type: :model do
   describe ".from_omniauth" do
     let(:google_auth) do
       OmniAuth::AuthHash.new({
-        provider: "google_oauth2",
-        uid: "google123",
-        info: {
-          name: "Google User",
-          email: "google@example.com"
-        }
-      })
+                               provider: "google_oauth2",
+                               uid: "google123",
+                               info: {
+                                 name: "Google User",
+                                 email: "google@example.com"
+                               }
+                             })
     end
 
     let(:line_auth) do
       OmniAuth::AuthHash.new({
-        provider: "line",
-        uid: "line456",
-        info: {
-          name: "LINE User",
-          email: "line@example.com"
-        }
-      })
+                               provider: "line",
+                               uid: "line456",
+                               info: {
+                                 name: "LINE User",
+                                 email: "line@example.com"
+                               }
+                             })
     end
 
     before do
@@ -237,9 +237,9 @@ RSpec.describe User, type: :model do
     end
 
     it "新規ユーザーを作成できること" do
-      expect {
+      expect do
         User.from_omniauth(google_auth)
-      }.to change { User.count }.by(1)
+      end.to change { User.count }.by(1)
 
       user = User.last
       expect(user.provider).to eq("google_oauth2")
@@ -251,9 +251,9 @@ RSpec.describe User, type: :model do
     it "既存ユーザー(provider + uid)の場合は新規作成しないこと" do
       User.from_omniauth(google_auth)
 
-      expect {
+      expect do
         User.from_omniauth(google_auth)
-      }.not_to change { User.count }
+      end.not_to(change { User.count })
     end
 
     it "同じemailのユーザーがいる場合は統合すること" do
@@ -262,17 +262,17 @@ RSpec.describe User, type: :model do
 
       # LINEで同じemailでログイン
       line_auth_same_email = OmniAuth::AuthHash.new({
-        provider: "line",
-        uid: "line789",
-        info: {
-          name: "LINE User",
-          email: "google@example.com" # 同じemail
-        }
-      })
+                                                      provider: "line",
+                                                      uid: "line789",
+                                                      info: {
+                                                        name: "LINE User",
+                                                        email: "google@example.com" # 同じemail
+                                                      }
+                                                    })
 
-      expect {
+      expect do
         User.from_omniauth(line_auth_same_email)
-      }.not_to change { User.count }
+      end.not_to(change { User.count })
 
       user = User.from_omniauth(line_auth_same_email)
       expect(user.id).to eq(existing_user.id)
@@ -280,13 +280,13 @@ RSpec.describe User, type: :model do
 
     it "emailがない場合は生成されたemailを使用すること" do
       no_email_auth = OmniAuth::AuthHash.new({
-        provider: "line",
-        uid: "line999",
-        info: {
-          name: "LINE User No Email",
-          email: nil
-        }
-      })
+                                               provider: "line",
+                                               uid: "line999",
+                                               info: {
+                                                 name: "LINE User No Email",
+                                                 email: nil
+                                               }
+                                             })
 
       user = User.from_omniauth(no_email_auth)
       expect(user.email).to eq("line999@line.generated")

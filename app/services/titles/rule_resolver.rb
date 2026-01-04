@@ -1,9 +1,9 @@
 module Titles
   class RuleResolver
     RULE_MAP = {
-      "todo_completion"  => Rules::TodoCompletionRule,
+      "todo_completion" => Rules::TodoCompletionRule,
       "habit_completion" => Rules::HabitCompletionRule,
-      "pet_level"        => Rules::PetLevelRule
+      "pet_level" => Rules::PetLevelRule
     }.freeze
 
     def self.resolve(title, user:)

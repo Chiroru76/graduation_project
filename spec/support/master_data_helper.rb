@@ -14,7 +14,7 @@ module MasterDataHelper
     end
 
     # CharacterAppearances
-    [ egg, child, adult ].each do |kind|
+    [egg, child, adult].each do |kind|
       CharacterAppearance.find_or_create_by!(character_kind: kind, pose: :idle) do |a|
         a.asset_kind = :webp
       end

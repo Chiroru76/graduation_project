@@ -33,13 +33,13 @@ RSpec.describe "Share", type: :request do
       end
 
       it "存在しないユーザーIDは404エラー" do
-        get share_hatched_path(id: 99999)
+        get share_hatched_path(id: 99_999)
 
         expect(response).to have_http_status(404)
       end
 
       it "OGP画像パスが正しく生成される" do
-        character = user.active_character
+        user.active_character
 
         get share_hatched_path(user)
 
@@ -73,13 +73,13 @@ RSpec.describe "Share", type: :request do
       end
 
       it "存在しないユーザーIDは404エラー" do
-        get share_evolved_path(id: 99999)
+        get share_evolved_path(id: 99_999)
 
         expect(response).to have_http_status(404)
       end
 
       it "OGP画像パスが正しく生成される" do
-        character = user.active_character
+        user.active_character
 
         get share_evolved_path(user)
 

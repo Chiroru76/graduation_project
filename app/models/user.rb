@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
          :confirmable,
-         :omniauthable, omniauth_providers: [ :google_oauth2, :line ]
+         :omniauthable, omniauth_providers: [:google_oauth2, :line]
   has_many :tasks, dependent: :destroy
   # 所有しているペット一覧をuser.charactersで参照できる
   has_many :characters, dependent: :destroy
@@ -46,8 +46,8 @@ class User < ApplicationRecord
     SecureRandom.uuid
   end
 
-
   private
+
   def create_initial_character
     egg_kind = CharacterKind.find_by!(asset_key: "egg", stage: 0)
     ch = characters.create!(character_kind: egg_kind, state: :alive, last_activity_at: Time.current)
