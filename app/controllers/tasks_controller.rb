@@ -80,19 +80,6 @@ class TasksController < ApplicationController
       notice = "TODOを完了しました"
     end
 
-    # タスク完了時のペットコメント生成
-    if completed
-      pet_comment = PetComments::Generator.for(
-        :task_completed,
-        user: current_user,
-        context: {
-          task_title: @task.title,
-          difficulty: @task.difficulty
-        }
-      )
-      flash[:pet_comment] = pet_comment if pet_comment.present?
-    end
-
     # 更新後を読みにいく（キャラがいれば）
     character&.reload
     after_level = character&.level
@@ -101,8 +88,26 @@ class TasksController < ApplicationController
     # 3) 判定 （進化 or 孵化）
     @hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
     @evolved  = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+    leveled_up = completed && character.present? && after_level > before_level && !@hatched && !@evolved
 
-    @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
+    # ペットコメント生成（優先度: 進化/孵化 > レベルアップ > タスク完了）
+    if completed
+      event = if @evolved || @hatched
+                nil # 進化/孵化時はコメント不要（専用モーダルがある）
+              elsif leveled_up
+                :level_up
+              else
+                :task_completed
+              end
+
+      if event
+        context = event == :task_completed ? { task_title: @task.title, difficulty: @task.difficulty } : {}
+        pet_comment = PetComments::Generator.for(event, user: current_user, context: context)
+        flash[:pet_comment] = pet_comment if pet_comment.present?
+      end
+    end
+
+    @appearance = character&.character_kind&.then { |kind| CharacterAppearance.find_by(character_kind: kind, pose: :idle) }
 
     if @evolved
       return redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！シェアしよう！"
@@ -149,12 +154,30 @@ class TasksController < ApplicationController
     # 3) 判定 （進化 or 孵化）
     hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
     evolved = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+    leveled_up = character.present? && after_level > before_level && !hatched && !evolved
 
-    @appearance = CharacterAppearance.find_by(character_kind: character.character_kind, pose: :idle)
+    # ペットコメント生成（優先度: 進化/孵化 > レベルアップ）
+    event = if evolved || hatched
+              nil # 進化/孵化時はコメント不要（専用モーダルがある）
+            elsif leveled_up
+              :level_up
+            else
+              nil
+            end
+
+    if event
+      pet_comment = PetComments::Generator.for(event, user: current_user, context: {})
+      flash[:pet_comment] = pet_comment if pet_comment.present?
+    end
+
+    @appearance = character&.character_kind&.then { |kind| CharacterAppearance.find_by(character_kind: kind, pose: :idle) }
 
     respond_to do |f|
       f.html { redirect_to dashboard_show_path, notice: "記録しました" }
-      f.turbo_stream { render locals: { hatched: hatched, evolved: evolved } }
+      f.turbo_stream do
+        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
+        render locals: { hatched: hatched, evolved: evolved }
+      end
     end
   rescue ActiveRecord::RecordInvalid => e
     redirect_to dashboard_show_path, alert: "記録に失敗しました: #{e.record.errors.full_messages.join(', ')}"
