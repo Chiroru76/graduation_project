@@ -33,7 +33,7 @@ class Webhooks::LineController < ActionController::API
   # - 環境変数からチャンネルシークレットを読み取り、リクエストヘッダの署名と照合する
   # - 不足や検証失敗時はfalseを返す
   def valid_signature?(body)
-    secret = ENV.fetch("LINE_MESSAGING_CHANNELSECRET", nil)
+    secret = ENV["LINE_MESSAGING_CHANNELSECRET"]
     unless secret.present?
       Rails.logger.error("[LINE] missing channel secret env var (LINE_MESSAGING_CHANNELSECRET etc.)")
       return false
@@ -43,7 +43,7 @@ class Webhooks::LineController < ActionController::API
     return false if signature.blank?
 
     begin
-      hash = OpenSSL::HMAC.digest(OpenSSL::Digest.new('SHA256'), secret, body)
+      hash = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, secret, body)
       Base64.strict_encode64(hash) == signature
     rescue StandardError => e
       Rails.logger.error("[LINE] signature verification error: #{e.class} #{e.message}")

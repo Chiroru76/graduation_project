@@ -272,10 +272,10 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
-  config.omniauth :google_oauth2, ENV.fetch("GOOGLE_CLIENT_ID", nil), ENV.fetch("GOOGLE_CLIENT_SECRET", nil)
+  config.omniauth :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"]
   config.omniauth :line,
-                  ENV.fetch("LINE_CHANNEL_CHANNELID", nil),
-                  ENV.fetch("LINE_CHANNEL_CHANNELSECRET", nil),
+                  ENV["LINE_CHANNEL_CHANNELID"],
+                  ENV["LINE_CHANNEL_CHANNELSECRET"],
                   {
                     scope: "profile openid email"
                     # 開発環境でlineログインを試す場合は、以下のコメントアウトを外してcallback_urlを指定する

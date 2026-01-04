@@ -10,7 +10,7 @@ RSpec.describe "Webhooks::Line", type: :request do
   end
 
   def generate_signature(body, secret)
-    hash = OpenSSL::HMAC.digest(OpenSSL::Digest.new('SHA256'), secret, body)
+    hash = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, secret, body)
     Base64.strict_encode64(hash)
   end
 

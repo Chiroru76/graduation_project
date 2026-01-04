@@ -28,7 +28,7 @@ module PetComments
     attr_reader :event, :character, :user, :context
 
     def client
-      @client ||= OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY", nil))
+      @client ||= OpenAI::Client.new(access_token: ENV["OPENAI_API_KEY"])
     end
 
     def messages

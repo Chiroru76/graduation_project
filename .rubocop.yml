@@ -78,3 +78,7 @@ Lint/AssignmentInCondition:
 # メソッド名等の命名の指摘
 Naming/PredicatePrefix:
   Enabled: false
+
+# 環境変数の取得方法（ENV[]を許可）
+Style/FetchEnvVar:
+  Enabled: false
