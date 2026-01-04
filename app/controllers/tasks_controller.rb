@@ -94,11 +94,11 @@ class TasksController < ApplicationController
     if completed
       event = if @evolved || @hatched
                 nil # 進化/孵化時はコメント不要（専用モーダルがある）
-              elsif leveled_up
+      elsif leveled_up
                 :level_up
-              else
+      else
                 :task_completed
-              end
+      end
 
       if event
         context = event == :task_completed ? { task_title: @task.title, difficulty: @task.difficulty } : {}
@@ -159,11 +159,11 @@ class TasksController < ApplicationController
     # ペットコメント生成（優先度: 進化/孵化 > レベルアップ）
     event = if evolved || hatched
               nil # 進化/孵化時はコメント不要（専用モーダルがある）
-            elsif leveled_up
+    elsif leveled_up
               :level_up
-            else
+    else
               nil
-            end
+    end
 
     if event
       pet_comment = PetComments::Generator.for(event, user: current_user, context: {})
