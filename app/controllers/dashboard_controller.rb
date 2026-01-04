@@ -7,6 +7,7 @@ class DashboardController < ApplicationController
     character = current_user.active_character
     @appearance = CharacterAppearance.find_by(
       character_kind: character&.character_kind,
-      pose: :idle) # とりあえずidleで固定
+      pose: :idle
+    ) # とりあえずidleで固定
   end
 end

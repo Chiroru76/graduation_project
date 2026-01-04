@@ -3,11 +3,11 @@ class CharactersController < ApplicationController
 
   def index
     @characters = current_user.characters
-                              .joins(:character_kind)
-                              .where.not(character_kinds: { stage: "egg" }) # 卵は除く
-                              .select("DISTINCT ON (character_kinds.id) characters.*")
-                              .order("character_kinds.id, characters.created_at DESC")
-                              .includes(:character_kind)
+      .joins(:character_kind)
+      .where.not(character_kinds: { stage: "egg" }) # 卵は除く
+      .select("DISTINCT ON (character_kinds.id) characters.*")
+      .order("character_kinds.id, characters.created_at DESC")
+      .includes(:character_kind)
   end
 
   def show
@@ -52,9 +52,9 @@ class CharactersController < ApplicationController
     egg_kind = CharacterKind.find_by!(asset_key: "egg")
     # 新しいたまごを作成
     ch = current_user.characters.create!(
-        character_kind: egg_kind,
-        state: :alive,
-        last_activity_at: Time.current
+      character_kind: egg_kind,
+      state: :alive,
+      last_activity_at: Time.current
     )
 
     # ユーザーの現在育成中ペットをたまごに変更

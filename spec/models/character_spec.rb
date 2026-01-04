@@ -235,9 +235,9 @@ RSpec.describe Character, type: :model do
       user.update!(food_count: 5)
       character = create(:character, user: user, bond_hp: 30, bond_hp_max: 100)
 
-      expect {
+      expect do
         character.feed!(user)
-      }.to change { character.reload.bond_hp }.by(10)
+      end.to change { character.reload.bond_hp }.by(10)
 
       expect(user.reload.food_count).to eq(4)
     end
@@ -255,9 +255,9 @@ RSpec.describe Character, type: :model do
       user.update!(food_count: 5)
       character = create(:character, user: user, bond_hp: 100, bond_hp_max: 100)
 
-      expect {
+      expect do
         character.feed!(user)
-      }.not_to change { character.reload.bond_hp }
+      end.not_to(change { character.reload.bond_hp })
 
       expect(user.reload.food_count).to eq(5) # 食べ物は消費されない
     end
@@ -266,9 +266,9 @@ RSpec.describe Character, type: :model do
       user.update!(food_count: 0)
       character = create(:character, user: user, bond_hp: 50, bond_hp_max: 100)
 
-      expect {
+      expect do
         character.feed!(user)
-      }.not_to change { character.reload.bond_hp }
+      end.not_to(change { character.reload.bond_hp })
     end
 
     it "最終活動時刻が記録されること" do
@@ -286,21 +286,21 @@ RSpec.describe Character, type: :model do
     it "経験値が加算されること" do
       character = create(:character, level: 1, exp: 50)
 
-      expect {
+      expect do
         character.gain_exp!(30)
-      }.to change { character.reload.exp }.by(30)
+      end.to change { character.reload.exp }.by(30)
     end
 
     it "0以下の値の場合は何もしないこと" do
       character = create(:character, level: 1, exp: 50)
 
-      expect {
+      expect do
         character.gain_exp!(0)
-      }.not_to change { character.reload.exp }
+      end.not_to(change { character.reload.exp })
 
-      expect {
+      expect do
         character.gain_exp!(-10)
-      }.not_to change { character.reload.exp }
+      end.not_to(change { character.reload.exp })
     end
 
     it "last_activity_atが更新されること" do
@@ -314,9 +314,9 @@ RSpec.describe Character, type: :model do
     it "経験値がexp_ceilingを超えるとレベルアップすること" do
       character = create(:character, level: 1, exp: 90)
 
-      expect {
+      expect do
         character.gain_exp!(20) # 合計110、threshold=100を超える
-      }.to change { character.reload.level }.by(1)
+      end.to change { character.reload.level }.by(1)
     end
 
     it "複数レベルアップすること" do
@@ -324,9 +324,9 @@ RSpec.describe Character, type: :model do
 
       # level 1→2の閾値=100, level 2→3の閾値=220
       # 300の経験値を付与すると level 3になる
-      expect {
+      expect do
         character.gain_exp!(300)
-      }.to change { character.reload.level }.from(1).to(3)
+      end.to change { character.reload.level }.from(1).to(3)
     end
   end
 
@@ -334,9 +334,9 @@ RSpec.describe Character, type: :model do
     it "経験値が減算されること" do
       character = create(:character, level: 2, exp: 150)
 
-      expect {
+      expect do
         character.decrease_exp!(30)
-      }.to change { character.reload.exp }.by(-30)
+      end.to change { character.reload.exp }.by(-30)
     end
 
     it "経験値が0未満にならないこと" do
@@ -350,13 +350,13 @@ RSpec.describe Character, type: :model do
     it "0以下の値の場合は何もしないこと" do
       character = create(:character, level: 1, exp: 50)
 
-      expect {
+      expect do
         character.decrease_exp!(0)
-      }.not_to change { character.reload.exp }
+      end.not_to(change { character.reload.exp })
 
-      expect {
+      expect do
         character.decrease_exp!(-10)
-      }.not_to change { character.reload.exp }
+      end.not_to(change { character.reload.exp })
     end
   end
 
@@ -430,9 +430,9 @@ RSpec.describe Character, type: :model do
     it "stateがdeadになること" do
       character = create(:character, state: :alive)
 
-      expect {
+      expect do
         character.die!
-      }.to change { character.reload.state }.from("alive").to("dead")
+      end.to change { character.reload.state }.from("alive").to("dead")
     end
 
     it "dead_atが設定されること" do

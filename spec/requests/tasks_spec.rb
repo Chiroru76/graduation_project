@@ -102,7 +102,7 @@ RSpec.describe "Tasks", type: :request do
       end
 
       it "TODO(todo)を作成できる" do
-        expect {
+        expect do
           post tasks_path, params: {
             task: {
               title: "新しいTODO",
@@ -110,7 +110,7 @@ RSpec.describe "Tasks", type: :request do
               difficulty: "easy"
             }
           }
-        }.to change { Task.count }.by(1)
+        end.to change { Task.count }.by(1)
 
         task = Task.order(:created_at).last
         expect(task).to be_present
@@ -144,9 +144,9 @@ RSpec.describe "Tasks", type: :request do
     context "タスクの削除" do
       it "作成したタスクを削除できる" do
         task = create(:task, user: user)
-        expect {
+        expect do
           delete task_path(task)
-        }.to change { Task.count }.by(-1)
+        end.to change { Task.count }.by(-1)
 
         expect(Task.find_by(id: task.id)).to be_nil
       end

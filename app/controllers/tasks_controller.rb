@@ -1,13 +1,12 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_task, only: [ :show, :edit, :update, :destroy, :complete ]
+  before_action :set_task, only: [:show, :edit, :update, :destroy, :complete]
 
   def index
     @tasks = current_user.tasks.order(created_at: :desc)
   end
 
-  def show
-  end
+  def show; end
 
   def new
     # クエリパラメータ kind を読んで、"todo" か "habit" だけを許可
@@ -29,8 +28,7 @@ class TasksController < ApplicationController
     end
   end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @task.update(task_update_params)
@@ -52,12 +50,9 @@ class TasksController < ApplicationController
     end
   end
 
-
   def complete
     # 数量ログ型の習慣は complete を禁止して、数量記録フォームへ誘導
-    if @task.habit? && @task.log?
-      return redirect_to dashboard_show_path, alert: "この習慣は数量ログで記録してください"
-    end
+    return redirect_to dashboard_show_path, alert: "この習慣は数量ログで記録してください" if @task.habit? && @task.log?
 
     # 進化/孵化の判定用スナップショット
     character     = current_user.active_character
@@ -67,7 +62,7 @@ class TasksController < ApplicationController
     completed = false
     notice = nil
 
-    if @task.habit?&& @task.open?
+    if @task.habit? && @task.open?
       @task.complete!(by_user: current_user)
       completed = true
       notice = "習慣を完了しました"
@@ -86,19 +81,19 @@ class TasksController < ApplicationController
     after_stage = character&.character_kind&.stage
 
     # 3) 判定 （進化 or 孵化）
-    @hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
-    @evolved  = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+    @hatched = before_stage == "egg" && after_stage == "child" && before_level == 1 && after_level == 2
+    @evolved = before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10
     leveled_up = completed && character.present? && after_level > before_level && !@hatched && !@evolved
 
     # ペットコメント生成（優先度: 進化/孵化 > レベルアップ > タスク完了）
     if completed
       event = if @evolved || @hatched
                 nil # 進化/孵化時はコメント不要（専用モーダルがある）
-      elsif leveled_up
+              elsif leveled_up
                 :level_up
-      else
+              else
                 :task_completed
-      end
+              end
 
       if event
         context = event == :task_completed ? { task_title: @task.title, difficulty: @task.difficulty } : {}
@@ -141,7 +136,11 @@ class TasksController < ApplicationController
     before_level  = character&.level
     before_stage  = character&.character_kind&.stage # "egg" | "child" | "adult"
 
-    qty  = (BigDecimal(params[:amount].to_s) rescue 0)
+    qty = begin
+      BigDecimal(params[:amount].to_s)
+    rescue StandardError
+      0
+    end
     unit = params[:unit].presence || @task.target_unit
 
     @task.log!(by_user: current_user, amount: qty, unit: unit)
@@ -152,18 +151,16 @@ class TasksController < ApplicationController
     after_stage = character&.character_kind&.stage
 
     # 3) 判定 （進化 or 孵化）
-    hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
-    evolved = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+    hatched = before_stage == "egg"   && after_stage == "child" && before_level == 1 && after_level == 2
+    evolved = before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10
     leveled_up = character.present? && after_level > before_level && !hatched && !evolved
 
     # ペットコメント生成（優先度: 進化/孵化 > レベルアップ）
     event = if evolved || hatched
               nil # 進化/孵化時はコメント不要（専用モーダルがある）
-    elsif leveled_up
+            elsif leveled_up
               :level_up
-    else
-              nil
-    end
+            end
 
     if event
       pet_comment = PetComments::Generator.for(event, user: current_user, context: {})
@@ -181,11 +178,10 @@ class TasksController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid => e
     redirect_to dashboard_show_path, alert: "記録に失敗しました: #{e.record.errors.full_messages.join(', ')}"
-  rescue => e
+  rescue StandardError => e
     Rails.logger.error("[Tasks#log_amount] #{e.class}: #{e.message}\n#{e.backtrace&.first(5)&.join("\n")}")
     redirect_to dashboard_show_path, alert: "想定外のエラーが発生しました"
   end
-
 
   private
 
