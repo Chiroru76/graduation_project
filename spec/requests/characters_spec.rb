@@ -144,6 +144,89 @@ RSpec.describe "Characters", type: :request do
         expect(character.bond_hp).to eq(character.bond_hp_max)
       end
     end
+
+    context "えさやり時のペットコメント生成 (HTML format)" do
+      let(:fed_comment) { "おいしかったよ" }
+
+      before do
+        user.update!(food_count: 10)
+        allow(PetComments::Generator).to receive(:for).and_return(fed_comment)
+      end
+
+      it "えさやり時にfedイベントでコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :fed,
+          user: user,
+          context: {}
+        )
+
+        post feed_characters_path
+      end
+
+      it "生成されたコメントがflashに保存されること" do
+        post feed_characters_path
+        follow_redirect!
+
+        expect(flash[:pet_comment]).to eq(fed_comment)
+      end
+    end
+
+    context "えさやり時のペットコメント生成 (Turbo Stream format)" do
+      let(:fed_comment) { "ありがとう" }
+
+      before do
+        user.update!(food_count: 10)
+        allow(PetComments::Generator).to receive(:for).and_return(fed_comment)
+      end
+
+      it "えさやり時にfedイベントでコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :fed,
+          user: user,
+          context: {}
+        )
+
+        post feed_characters_path, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      end
+
+      it "Turbo Streamレスポンスにpet_comment_areaが含まれること" do
+        post feed_characters_path, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include("pet_comment_area")
+        expect(response.body).to include(fed_comment)
+      end
+
+      it "flash.nowにペットコメントが設定されること" do
+        post feed_characters_path, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(controller.flash.now[:pet_comment]).to eq(fed_comment)
+      end
+    end
+
+    context "えさがない場合はペットコメントを生成しない" do
+      before do
+        user.update!(food_count: 0)
+      end
+
+      it "ペットコメントが生成されないこと" do
+        expect(PetComments::Generator).not_to receive(:for)
+
+        post feed_characters_path
+      end
+    end
+
+    context "幸せ度が最大の場合はペットコメントを生成しない" do
+      before do
+        user.active_character.update!(bond_hp: user.active_character.bond_hp_max)
+        user.update!(food_count: 10)
+      end
+
+      it "ペットコメントが生成されないこと" do
+        expect(PetComments::Generator).not_to receive(:for)
+
+        post feed_characters_path
+      end
+    end
   end
 
   # ===== POST /characters/reset (reset) =====

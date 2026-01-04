@@ -18,6 +18,11 @@
       <!-- 通常時専用ビュー -->
       <%= image_tag "background.png", alt: "背景", class: "block w-full h-auto" %>
 
+      <!-- ペットコメント吹き出し -->
+      <div id="pet_comment_area">
+        <%= render "shared/pet_comment", message: flash[:pet_comment] %>
+      </div>
+
       <!-- キャラ + ステータス -->
       <div class="absolute bottom-0 left-0 flex items-center px-4 md:px-12 w-full">
         <!-- ペット画像-->

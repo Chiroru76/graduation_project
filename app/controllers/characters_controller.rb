@@ -21,12 +21,29 @@ class CharactersController < ApplicationController
 
   def feed
     @character = current_user.active_character
-    if @character.feed!(current_user)
-      redirect_to dashboard_show_path, notice: "えさをあげました！"
-    elsif @character.bond_hp >= @character.bond_hp_max
-      redirect_to dashboard_show_path, alert: "ペットの幸せ度は最大です"
-    elsif
-      redirect_to dashboard_show_path, alert: "えさがありません"
+
+    if @character.bond_hp >= @character.bond_hp_max
+      flash[:alert] = "ペットの幸せ度は最大です"
+    elsif current_user.food_count < 1
+      flash[:alert] = "えさがありません"
+    elsif @character.feed!(current_user)
+      # えさやり成功時のペットコメント生成
+      pet_comment = PetComments::Generator.for(
+        :fed,
+        user: current_user,
+        context: {}
+      )
+      flash[:pet_comment] = pet_comment if pet_comment.present?
+      flash[:notice] = "えさをあげました！"
+    end
+
+    respond_to do |format|
+      format.html { redirect_to dashboard_show_path }
+      format.turbo_stream do
+        flash.now[:notice] = flash[:notice] if flash[:notice]
+        flash.now[:alert] = flash[:alert] if flash[:alert]
+        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
+      end
     end
   end
 

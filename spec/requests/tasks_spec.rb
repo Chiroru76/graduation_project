@@ -169,6 +169,153 @@ RSpec.describe "Tasks", type: :request do
         expect(task.completed_at).to be_present
       end
     end
+
+    context "ペットコメントの生成 (HTML format)" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+      let(:pet_comment) { "やったね、頑張ったね" }
+
+      before do
+        allow(PetComments::Generator).to receive(:for).and_return(pet_comment)
+      end
+
+      it "タスク完了時にペットコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :task_completed,
+          user: user,
+          context: hash_including(
+            task_title: task.title,
+            difficulty: task.difficulty
+          )
+        )
+
+        patch complete_task_path(task)
+      end
+
+      it "生成されたコメントがflashに保存されること" do
+        patch complete_task_path(task)
+        follow_redirect!
+
+        expect(flash[:pet_comment]).to eq(pet_comment)
+      end
+    end
+
+    context "ペットコメントの生成 (Turbo Stream format)" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+      let(:pet_comment) { "いい感じだね" }
+
+      before do
+        allow(PetComments::Generator).to receive(:for).and_return(pet_comment)
+      end
+
+      it "タスク完了時にペットコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :task_completed,
+          user: user,
+          context: hash_including(
+            task_title: task.title,
+            difficulty: task.difficulty
+          )
+        )
+
+        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+      end
+
+      it "Turbo Streamレスポンスにpet_comment_areaが含まれること" do
+        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response.body).to include("pet_comment_area")
+        expect(response.body).to include(pet_comment)
+      end
+
+      it "flash.nowにペットコメントが設定されること" do
+        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(controller.flash.now[:pet_comment]).to eq(pet_comment)
+      end
+    end
+
+    context "ペットコメントが生成されない場合" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+
+      before do
+        allow(PetComments::Generator).to receive(:for).and_return(nil)
+      end
+
+      it "flashにpet_commentが設定されないこと" do
+        patch complete_task_path(task)
+
+        expect(flash[:pet_comment]).to be_nil
+      end
+    end
+
+    context "キャラクターが存在しない場合" do
+      let(:task) { create(:task, :todo, user: user, status: :open) }
+
+      before do
+        user.update!(active_character: nil)
+      end
+
+      it "タスクは完了するがペットコメントは生成されないこと" do
+        patch complete_task_path(task)
+
+        task.reload
+        expect(task.status).to eq("done")
+        expect(flash[:pet_comment]).to be_nil
+      end
+    end
+
+    context "レベルアップ時のペットコメント生成" do
+      let(:task) { create(:task, :todo, user: user, status: :open, reward_exp: 150) }
+      let(:character) { user.active_character }
+      let(:level_up_comment) { "レベルアップしたね" }
+
+      before do
+        # 子供のキャラクターに変更（孵化を避けるため）
+        child_kind = CharacterKind.find_by!(asset_key: "green_robo", stage: :child)
+        character.update!(character_kind: child_kind, level: 2, exp: 200)
+        allow(PetComments::Generator).to receive(:for).and_return(level_up_comment)
+      end
+
+      it "レベルアップ時にlevel_upイベントでコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :level_up,
+          user: user,
+          context: {}
+        )
+
+        patch complete_task_path(task)
+      end
+
+      it "レベルアップコメントがflashに保存されること" do
+        patch complete_task_path(task)
+        follow_redirect!
+
+        expect(flash[:pet_comment]).to eq(level_up_comment)
+      end
+
+      it "Turbo Stream形式でもレベルアップコメントが設定されること" do
+        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(controller.flash.now[:pet_comment]).to eq(level_up_comment)
+      end
+    end
+
+    context "進化/孵化時はペットコメントを生成しない" do
+      let(:task) { create(:task, :todo, user: user, status: :open, reward_exp: 500) }
+      let(:character) { user.active_character }
+
+      before do
+        # 卵の状態でレベル1、経験値99に設定（次の経験値で孵化）
+        character.update!(level: 1, exp: 99)
+        character.character_kind.update!(stage: :egg)
+      end
+
+      it "孵化時にはペットコメントが生成されないこと" do
+        expect(PetComments::Generator).not_to receive(:for)
+
+        patch complete_task_path(task)
+      end
+    end
   end
 
   # ===== POST /tasks/:id/log_amount (log_amount) =====
@@ -185,6 +332,53 @@ RSpec.describe "Tasks", type: :request do
         follow_redirect!
 
         expect(response.body).to include("記録しました")
+      end
+    end
+
+    context "レベルアップ時のペットコメント生成" do
+      let(:task) { create(:task, :habit_log, user: user, status: :open, reward_exp: 150) }
+      let(:character) { user.active_character }
+      let(:level_up_comment) { "やったねレベルアップ" }
+
+      before do
+        # 子供のキャラクターに変更（孵化を避けるため）
+        child_kind = CharacterKind.find_by!(asset_key: "green_robo", stage: :child)
+        character.update!(character_kind: child_kind, level: 2, exp: 200)
+        allow(PetComments::Generator).to receive(:for).and_return(level_up_comment)
+      end
+
+      it "レベルアップ時にlevel_upイベントでコメントが生成されること" do
+        expect(PetComments::Generator).to receive(:for).with(
+          :level_up,
+          user: user,
+          context: {}
+        )
+
+        post log_amount_task_path(task), params: { amount: 5, unit: "回" }
+      end
+
+      it "Turbo Stream形式でレベルアップコメントが設定されること" do
+        post log_amount_task_path(task), params: { amount: 5, unit: "回" }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(controller.flash.now[:pet_comment]).to eq(level_up_comment)
+        expect(response.body).to include("pet_comment_area")
+      end
+    end
+
+    context "進化/孵化時はペットコメントを生成しない" do
+      let(:task) { create(:task, :habit_log, user: user, status: :open, reward_exp: 500) }
+      let(:character) { user.active_character }
+
+      before do
+        # 卵の状態でレベル1、経験値99に設定（次の経験値で孵化）
+        character.update!(level: 1, exp: 99)
+        character.character_kind.update!(stage: :egg)
+      end
+
+      it "孵化時にはペットコメントが生成されないこと" do
+        expect(PetComments::Generator).not_to receive(:for)
+
+        post log_amount_task_path(task), params: { amount: 5, unit: "回" }
       end
     end
   end
