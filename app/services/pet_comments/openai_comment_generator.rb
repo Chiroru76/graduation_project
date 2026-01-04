@@ -80,6 +80,8 @@ module PetComments
           ユーザーが「#{task_title}」というタスク（難易度: #{difficulty}）を完了しました。
           ペットとして、短く励ましのコメントをしてください。
         PROMPT
+      when :fed
+        "ユーザーがえさをくれました。嬉しそうなコメントをしてください。"
       when :login
         "ユーザーがログインしました。歓迎のコメントをしてください。"
       when :level_up
