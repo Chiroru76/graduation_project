@@ -124,6 +124,23 @@ RSpec.describe PetComments::OpenaiCommentGenerator, type: :service do
       end
     end
 
+    context "えさやりイベントの場合" do
+      let(:event) { :fed }
+      let(:context) { {} }
+
+      before do
+        allow(openai_client).to receive(:chat).and_return(openai_response)
+      end
+
+      it "適切なプロンプトが生成されること" do
+        generator.call
+        expect(openai_client).to have_received(:chat) do |args|
+          user_message = args[:parameters][:messages].find { |m| m[:role] == "user" }
+          expect(user_message[:content]).to include("えさをくれました")
+        end
+      end
+    end
+
     context "OpenAI APIがエラーを返す場合" do
       before do
         allow(openai_client).to receive(:chat).and_raise(StandardError.new("API Error"))
