@@ -82,3 +82,7 @@ Naming/PredicatePrefix:
 # 環境変数の取得方法（ENV[]を許可）
 Style/FetchEnvVar:
   Enabled: false
+
+# OpenSSL::Digest::SHA256.newを許可
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: false
