@@ -20,7 +20,7 @@ module App
 
     # sidekiq設定
     config.active_job.queue_adapter = :sidekiq
-    config.app_url = "https://mochipet.onrender.com/"
+    config.app_url = "https://www.motipet.com/"
 
     # 独自ドメイン設定
     config.hosts << ".motipet.com"
