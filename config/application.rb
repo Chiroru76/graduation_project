@@ -27,7 +27,6 @@ module App
     config.hosts << "www.motipet.com"
     config.hosts << "motipet.com"
 
-
     # テスト環境以外でhost authorizationを有効化
     config.hosts << ".example.com" unless Rails.env.test?
 
