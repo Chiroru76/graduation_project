@@ -46,7 +46,6 @@ Rails.application.routes.draw do
 
   get "share/hatched/:id", to: "share#hatched", as: :share_hatched
   get "share/evolved/:id", to: "share#evolved", as: :share_evolved
-
   get "terms", to: "pages#terms", as: :terms
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
