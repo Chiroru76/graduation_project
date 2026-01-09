@@ -21,6 +21,16 @@ tasks_due_line_notifications:
   cron: "0 9 * * *"
   timezone: "Asia/Tokyo"
 
+# 毎日 00:00 にペット死亡のLINE通知を送る
+bond_hp_dead_line_notifications:
+  class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper"
+  queue: "default"
+  args:
+    job_class: "BondHpDeadLineNotifyJob"
+  # cron: "*/1 * * * *" # １分おき(test)
+  cron: "0 0 * * *"
+  timezone: "Asia/Tokyo"
+
 # 毎日 09:00 にきずなHPが10のユーザーへえさやり通知を送る
 bond_hp_low_line_notifications:
   class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper"
