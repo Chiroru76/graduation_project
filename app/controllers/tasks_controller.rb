@@ -154,8 +154,8 @@ class TasksController < ApplicationController
     after_stage = character&.character_kind&.stage
 
     # 判定 （進化 or 孵化）
-    hatched = (before_stage == "egg"   && after_stage == "child" && before_level == 1  && after_level == 2)
-    evolved = (before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10)
+    hatched = before_stage == "egg"   && after_stage == "child" && before_level == 1 && after_level == 2
+    evolved = before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10
     leveled_up = character.present? && after_level > before_level && !hatched && !evolved
 
     # ペットコメント生成（優先度: 進化/孵化 > レベルアップ）
