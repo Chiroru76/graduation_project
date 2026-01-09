@@ -1,26 +1,27 @@
-<div class="min-h-screen flex flex-col">
+<div class="min-h-screen flex flex-col bg-white">
 
   <!-- ===== Hero ===== -->
-  <section class="relative h-[56svh] md:h-[70svh] w-full overflow-hidden flex flex-col justify-center mb-15">
-
-    <div class="flex flex-col items-center justify-center mt-12">
-      <%= image_tag "motipet_toppage.svg", alt: "toppagelogo", class: "block mx-auto w-64 md:w-[600px] h-auto" %>
-      <p class="mt-6 text-base md:text-lg text-gray-800 font-medium drop-shadow text-center">
+  <section class="relative min-h-[70vh] w-full flex flex-col justify-center items-center px-4 py-16">
+    <div class="flex flex-col items-center justify-center max-w-5xl mx-auto">
+      <%= image_tag "motipet_toppage.svg", alt: "toppagelogo", class: "block mx-auto w-72 md:w-[500px] h-auto mb-10 drop-shadow-sm" %>
+      <p class="text-xl md:text-2xl text-gray-600 font-medium text-center max-w-2xl leading-relaxed">
         習慣とTODOの完了が、ペットの成長に直結
       </p>
     </div>
 
-    <div class="mt-10 flex justify-center">
+    <div class="mt-12 flex justify-center">
       <div class="flex flex-wrap items-center justify-center gap-4">
         <% if user_signed_in? %>
-          <%= link_to "ダッシュボードへ", dashboard_show_path,
-            class: "rounded-full bg-amber-300 px-6 py-3 font-bold text-gray-900 shadow hover:bg-amber-400 transition" %>
+          <%= link_to "ホームへ", dashboard_show_path,
+            class: "px-8 py-3.5 bg-amber-300 text-black font-semibold rounded-xl hover:bg-amber-500 transition-all duration-200 shadow-sm" %>
         <% else %>
-          <%= link_to "ログイン", new_user_session_path, class: "flex items-center bg-gray-200 hover:bg-gray-300 text-black font-bold text-base rounded-2xl px-8 py-4 transition" %>
-          <%= link_to new_user_registration_path, class: "flex items-center bg-yellow-200 hover:bg-yellow-300 text-black font-bold text-base rounded-2xl px-8 py-4 transition" do %>
-            <span class="mr-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="inline w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 1114 0H3z"/></svg>
-            </span>
+          <%= link_to "ログイン", new_user_session_path,
+            class: "px-8 py-3.5 bg-gray-100 text-gray-900 font-semibold rounded-xl border-2 border-gray-400 hover:bg-gray-50 transition-all duration-200" %>
+          <%= link_to new_user_registration_path,
+            class: "flex items-center gap-2 px-8 py-3.5 bg-amber-300 text-black font-semibold rounded-xl hover:bg-amber-500 transition-all duration-200 shadow-sm" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
             新規登録
           <% end %>
         <% end %>
@@ -28,90 +29,132 @@
     </div>
   </section>
 
-  <!-- ===== 使い方===== -->
-  <section id="howto" class="container mx-auto px-4 md:px-8 py-14 space-y-8">
-    <h2 class="text-2xl md:text-3xl font-bold text-center mb-2">
-      アプリの使い方
-    </h2>
-    <span class="block mx-auto w-56 md:w-64 h-1 bg-amber-400 rounded"></span>
+  <!-- ===== 使い方 ===== -->
+  <section id="howto" class="bg-gray-50 py-20 md:py-28">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          使い方
+        </h2>
+        <p class="text-gray-600 max-w-xl mx-auto">
+          4つのステップで始めるペット育成
+        </p>
+      </div>
 
-    <!-- STEP 1 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
-      <div class="order-1 md:order-1 flex flex-col items-center md:items-start">
-      <h3 class="text-xl font-bold mb-2 text-center md:text-left">① たまごを手に入れる</h3>
-      <p class="text-gray-700 text-base md:text-lg text-left">
-        新規登録すると“たまご”を入手できます！
-      </p>
+      <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <!-- STEP 1 -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-20 h-20 rounded-xl bg-gray-50 flex items-center justify-center">
+              <%= image_tag "characters/egg/egg_egg_idle.png", alt: "ペット", class: "w-16 h-16 object-contain" %>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-2 mb-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 text-white text-xs font-bold">1</span>
+                <h3 class="text-lg font-bold text-gray-900">たまごを手に入れる</h3>
+              </div>
+              <p class="text-gray-600 text-sm leading-relaxed">
+                新規登録すると"たまご"を入手できます
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-20 h-20 rounded-xl bg-gray-50 flex items-center justify-center">
+              <%= image_tag "top/habit_image.png", alt: "習慣登録", class: "w-16 h-16 object-contain" %>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-2 mb-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 text-white text-xs font-bold">2</span>
+                <h3 class="text-lg font-bold text-gray-900">習慣・TODOを登録</h3>
+              </div>
+              <p class="text-gray-600 text-sm leading-relaxed">
+                続けたい習慣やTODOを登録。タスクの難易度により経験値が異なります
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-20 h-20 rounded-xl bg-gray-50 flex items-center justify-center">
+              <%= image_tag "top/levelup.png", alt: "レベルアップ", class: "w-16 h-16 object-contain" %>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-2 mb-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 text-white text-xs font-bold">3</span>
+                <h3 class="text-lg font-bold text-gray-900">ペットの誕生と成長</h3>
+              </div>
+              <p class="text-gray-600 text-sm leading-relaxed">
+                卵を孵化させてペットを誕生させ、レベルアップで進化を目指しましょう
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
+          <div class="flex items-start gap-6">
+            <div class="flex-shrink-0 w-20 h-20 rounded-xl bg-gray-50 flex items-center justify-center">
+              <%= image_tag "death.png", alt: "ペット", class: "w-16 h-16 object-contain" %>
+            </div>
+            <div>
+              <div class="inline-flex items-center gap-2 mb-3">
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 text-white text-xs font-bold">4</span>
+                <h3 class="text-lg font-bold text-gray-900">エサやりは忘れずに</h3>
+              </div>
+              <p class="text-gray-600 text-sm leading-relaxed">
+                「しあわせ度」が0になるとペットは死んでしまいます…定期的にエサを与えましょう
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="order-2 md:order-2 flex justify-center">
-      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-        <%= image_tag "characters/egg/egg_egg_idle.png", alt: "ペット", width: 180, height: 180, class: "block mx-auto" %>
-      </div>
+
+      <!-- LINE通知案内 -->
+      <div class="mt-12 max-w-3xl mx-auto text-center">
+        <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+          <div class="flex items-center justify-center gap-2 mb-3">
+            <svg class="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <h3 class="text-base font-semibold text-gray-900">LINE通知機能</h3>
+          </div>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            LINE通知を有効にすると、TODOの締切やエサやりのリマインドを受け取れます
+          </p>
+          <%= link_to line_settings_path,
+            class: "inline-flex items-center gap-1 text-sm font-semibold text-gray-900 hover:text-gray-700 transition-colors" do %>
+            設定する
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          <% end %>
+        </div>
       </div>
     </div>
-
-    <!-- STEP 2 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
-      <div class="flex flex-col items-center md:items-start">
-      <h3 class="text-xl font-bold mb-2 text-center md:text-left">② 習慣・TODOを登録</h3>
-      <p class="text-gray-700 text-base md:text-lg text-left">
-        「勉強」「運動」「読書」など、続けたい習慣やTODOを登録しましょう。<br>チェックボックス形式またはログの入力によりタスクの完了を記録します。<br>
-        タスクの難易度によって完了時に入手できる経験値が異なります。
-      </p>
-      </div>
-      <div class="flex justify-center">
-      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-        <%= image_tag "top/habit_image.png", alt: "習慣登録", width: 180, height: 180, class: "block mx-auto" %>
-      </div>
-      </div>
-    </div>
-
-    <!-- STEP 3 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
-      <div class="flex flex-col items-center md:items-start">
-      <h3 class="text-xl font-bold mb-2 text-center md:text-left">③ ペットの誕生と成長</h3>
-      <p class="text-gray-700 text-base md:text-lg text-left">
-        まずは卵を孵化させるために、レベルアップを目指しましょう。<br>生まれたペットは、あなたの日々の行動によって成長していきます。
-        <br>一定のレベルに達すると進化するので、進化を目指して育ててください。
-      </p>
-      </div>
-      <div class="flex justify-center">
-      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-        <%= image_tag "top/levelup.png", alt: "レベルアップ", width: 180, height: 180, class: "block mx-auto" %>
-      </div>
-      </div>
-    </div>
-
-    <!-- STEP 4 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 m-10 gap-1 items-center justify-center bg-amber-50/80 rounded-2xl p-6 shadow-sm">
-      <div class="flex flex-col items-center md:items-start">
-      <h3 class="text-xl font-bold mb-2 text-center md:text-left">④ エサやりは忘れずに…</h3>
-      <p class="text-gray-700 text-base md:text-lg text-left">
-        タスクの完了時に入手できる「エサ」を与えると「しあわせ度」がアップします。<br>「しあわせ度」は毎日少しずつ減少するため、エサは定期的に与えましょう。<br>「しあわせ度」が0になるとペットは死んでしまいます…
-      </p>
-      </div>
-      <div class="flex justify-center">
-      <div class="aspect-video w-56 md:w-64 rounded-2xl bg-white/50 grid place-items-center text-gray-400">
-        <%= image_tag "death.png", alt: "ペット", width: 180, height: 180, class: "block mx-auto" %>
-      </div>
-      </div>
-    </div>
-
   </section>
 
-  <section class="py-12 bg-gradient-to-b from-white to-amber-50/60">
+  <!-- CTA Section -->
+  <section class="py-20 md:py-28 bg-white">
     <div class="container mx-auto px-6 md:px-10 text-center">
-      <h3 class="text-xl md:text-2xl font-bold">今すぐ始めましょう</h3>
-      <div class="mt-6 flex justify-center gap-4">
+      <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8">今すぐ始めよう</h3>
+      <div class="flex justify-center gap-4 flex-wrap">
         <% if user_signed_in? %>
-          <%= link_to "ダッシュボードへ", dashboard_show_path,
-            class: "rounded-full bg-amber-300 px-6 py-3 font-bold text-gray-900 shadow hover:bg-amber-400 transition" %>
+          <%= link_to "ホームへ", dashboard_show_path,
+            class: "px-8 py-3.5 bg-amber-300 text-black font-semibold rounded-xl hover:bg-amber-500 transition-all duration-200 shadow-sm" %>
         <% else %>
-          <%= link_to "ログイン", new_user_session_path, class: "flex items-center bg-gray-200 hover:bg-gray-300 text-black font-bold text-base rounded-2xl px-8 py-4 ml-4 transition" %>
-          <%= link_to new_user_registration_path, class: "flex items-center bg-yellow-200 hover:bg-yellow-300 text-black font-bold text-base rounded-2xl px-8 py-4 ml-4 transition" do %>
-            <span class="mr-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="inline w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M10 10a4 4 0 100-8 4 4 0 000 8zm-7 8a7 7 0 1114 0H3z"/></svg>
-            </span>
+          <%= link_to "ログイン", new_user_session_path,
+            class: "px-8 py-3.5 bg-white text-gray-900 font-semibold rounded-xl border-2 border-gray-900 hover:bg-gray-50 transition-all duration-200" %>
+          <%= link_to new_user_registration_path,
+            class: "flex items-center gap-2 px-8 py-3.5 bg-amber-300 text-black font-semibold rounded-xl hover:bg-amber-500 transition-all duration-200 shadow-sm" do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
             新規登録
           <% end %>
         <% end %>
