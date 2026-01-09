@@ -66,14 +66,18 @@ RSpec.describe 'タスク完了', type: :system do
 
       visit dashboard_show_path
 
-      # detailsタグを開いてフォームに入力
-      within("li#task_#{habit.id}") do
-        # summaryをクリックしてdetailsを開く
-        find('summary').click
+      # モーダルを開いてフォームに入力
+      within("#task_#{habit.id}") do
+        # 鉛筆アイコンボタンをクリックしてモーダルを開く
+        find('button[aria-label="数量を記録"]').click
+      end
+
+      # モーダル内のフォームを操作
+      within('[data-modal-target="dialog"]') do
         # フォーム内の数値入力欄に入力
         fill_in 'amount', with: '25'
         # 記録ボタンをクリック
-        click_button '記録'
+        click_button '記録する'
       end
 
       user.reload

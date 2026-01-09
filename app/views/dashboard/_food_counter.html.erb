@@ -1,9 +1,19 @@
-<div id="<%= dom_id(user, :food_counter) %>" class="mt-0 flex justify-end items-center space-x-2">
-  <%= button_to "エサをあげる",
-                feed_characters_path,
+<div id="<%= dom_id(user, :food_counter) %>" class="flex items-center justify-end gap-4 w-full max-w-none md:max-w-[500px] mx-auto">
+  <%= button_to feed_characters_path,
                 method: :post,
-                class: "rounded-lg bg-orange-500 px-4 py-2 text-white hover:bg-pink-600 disabled:opacity-50",
-                disabled: current_user.food_count.to_i <= 0 %>
-  <%= image_tag "food.png", alt: "えさ", width: 30, height: 30, class: "" %>
-  <p class="text-sm text-gray-700">× <%= current_user.food_count %></p>
+                class: "group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-400 to-orange-500 text-white font-bold shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed overflow-hidden #{current_user.food_count.to_i <= 0 ? '' : 'hover:scale-105'}",
+                disabled: current_user.food_count.to_i <= 0 do %>
+    <!-- 光沢効果 -->
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+    <i class="fa-solid fa-utensils relative z-10"></i>
+    <span class="relative z-10">エサをあげる</span>
+  <% end %>
+
+  <div class="flex items-center gap-3 px-4 py-3 bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-xl border-2 border-game-gold shadow-lg">
+    <%= image_tag "food.png", alt: "えさ", width: 28, height: 28, class: "w-7 h-7 drop-shadow-md" %>
+    <span class="text-base font-black text-yellow-900 tabular-nums">
+      × <%= current_user.food_count %>
+    </span>
+  </div>
 </div>

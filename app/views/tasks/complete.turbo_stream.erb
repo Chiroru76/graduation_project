@@ -7,7 +7,9 @@
 <% end %>
 
 <%= turbo_stream.replace dom_id(@task) do %>
-  <%= render "tasks/task_item", task: @task %>
+  <li id="<%= dom_id(@task) %>">
+    <%= render "tasks/task_item", task: @task %>
+  </li>
 <% end %>
 
 <%= turbo_stream.replace "character_status" do %>

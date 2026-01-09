@@ -105,13 +105,16 @@ class TasksController < ApplicationController
     @appearance = character&.character_kind&.then { |kind| CharacterAppearance.find_by(character_kind: kind, pose: :idle) }
 
     if @evolved
-      return redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！シェアしよう！"
+      return redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！"
     elsif @hatched
-      return redirect_to share_hatched_path(current_user), notice: "ペットが孵化しました！シェアしよう！"
+      return redirect_to share_hatched_path(current_user), notice: "ペットが生まれました！"
     end
 
     # 6) 称号判定（完了時のみ）
     unlocked_titles = completed ? Titles::Unlocker.new(user: current_user).call : []
+
+    # タスクの最新状態を確実にロード
+    @task.reload
 
     respond_to do |format|
       format.html do
@@ -150,7 +153,7 @@ class TasksController < ApplicationController
     after_level = character&.level
     after_stage = character&.character_kind&.stage
 
-    # 3) 判定 （進化 or 孵化）
+    # 判定 （進化 or 孵化）
     hatched = before_stage == "egg"   && after_stage == "child" && before_level == 1 && after_level == 2
     evolved = before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10
     leveled_up = character.present? && after_level > before_level && !hatched && !evolved
@@ -172,6 +175,7 @@ class TasksController < ApplicationController
     respond_to do |f|
       f.html { redirect_to dashboard_show_path, notice: "記録しました" }
       f.turbo_stream do
+        flash.now[:notice] = "記録しました"
         flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
         render locals: { hatched: hatched, evolved: evolved }
       end

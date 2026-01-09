@@ -3,7 +3,7 @@
   <!-- モーダル表示エリア -->
   <div id="modal_area"></div>
   <!-- キャラ育成エリア -->
-  <div id="character_" class="relative inline-block w-full max-w-none md:max-w-[500px] h-auto p-2 bg-gray-200 border-4 border-gray-800 shadow-[4px_4px_0_0_rgba(0,0,0,0.8)] rounded-lg">
+  <div id="character_" class="relative w-full max-w-none md:max-w-[500px] mx-auto h-auto p-2 bg-gray-200 border-4 border-gray-800 shadow-[4px_4px_0_0_rgba(0,0,0,0.8)] rounded-lg">
     <% if current_user.active_character.dead? %>
       <!-- 死亡時専用ビュー -->
       <div class="bg-black w-full h-full flex flex-col items-center justify-center rounded-2xl p-8 text-center">
@@ -18,15 +18,15 @@
       <!-- 通常時専用ビュー -->
       <%= image_tag "background.png", alt: "背景", class: "block w-full h-auto" %>
 
-      <!-- ペットコメント吹き出し -->
-      <div id="pet_comment_area">
-        <%= render "shared/pet_comment", message: flash[:pet_comment] %>
-      </div>
-
       <!-- キャラ + ステータス -->
       <div class="absolute bottom-0 left-0 flex items-center px-4 md:px-12 w-full">
-        <!-- ペット画像-->
-        <div id="character_image" class="mr-auto">
+        <!-- ペット画像とコメント -->
+        <div id="character_image" class="mr-auto relative">
+          <!-- ペットコメント吹き出し -->
+          <div id="pet_comment_area" class="absolute bottom-full left-0 mb-1 max-w-xs z-20">
+            <%= render "shared/pet_comment", message: flash[:pet_comment] %>
+          </div>
+
           <% if @appearance.present? %>
             <%= image_tag @appearance.asset_path, alt: "ペット", class: "w-35 sm:w-50 md:w-64 h-auto block"  %>
           <% else %>

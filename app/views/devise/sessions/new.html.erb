@@ -31,7 +31,7 @@
     <% end %>
 
     <div>
-      <%= f.submit t(".sign_in"), class: "w-full rounded-full bg-yellow-300 hover:bg-yellow-400 text-black font-bold text-xl py-4 mt-6 transition" %>
+      <%= f.submit t(".sign_in"), class: "w-full rounded-xl bg-amber-300 hover:bg-amber-500 text-black font-semibold text-lg py-3.5 mt-6 transition-all duration-200 shadow-sm" %>
     </div>
   <% end %>
 
@@ -44,7 +44,7 @@
     <div class="mt-4">
       <%= button_to user_google_oauth2_omniauth_authorize_path,
             method: :post,
-            class: "flex w-full items-center justify-center gap-2 rounded-full bg-white-600 px-4 py-2 text-base font-semibold text-black shadow-sm interactive-lift hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600",
+            class: "flex w-full items-center justify-center gap-2 rounded-xl bg-white border-2 border-gray-200 px-4 py-3 text-base font-semibold text-black shadow-sm hover:bg-gray-50 transition-all duration-200",
             form: { data: { turbo: false } } do %>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 533.5 544.3" class="h-5 w-5" aria-hidden="true">
           <path fill="#4285f4" d="M533.5 278.4c0-17.4-1.6-34.1-4.7-50.2H272.1v95.0h146.9c-6.3 34.0-25.2 62.9-53.5 82.1v68.2h86.6c50.7-46.7 81.4-115.4 81.4-195.1Z"/>
@@ -60,7 +60,7 @@
       <%= button_to user_line_omniauth_authorize_path,
         method: :post,
         data: { turbo: false },
-        class: "bg-green-500 hover:bg-green-600 text-white font-kiwi py-2 px-20 rounded-3xl text-base lg:text-md flex items-center justify-center gap-2 border-none cursor-pointer w-80 lg:w-96" do %>
+        class: "w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-xl text-base flex items-center justify-center gap-2 border-none cursor-pointer transition-all duration-200 shadow-sm" do %>
         <iconify-icon icon="simple-icons:line" width="24" height="24"></iconify-icon>
         <span>LINEでログイン</span>
       <% end %>
