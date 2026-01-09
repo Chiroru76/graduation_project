@@ -20,14 +20,14 @@
     <script src="https://kit.fontawesome.com/66398c5714.js" crossorigin="anonymous"></script>
   </head>
 
-  <%= render "layouts/header" %>
+  <body class="flex flex-col min-h-screen">
+    <%= render "layouts/header" %>
 
-  <div id="flash_messages">
-    <%= render "layouts/flash" %>
-  </div>
+    <div id="flash_messages">
+      <%= render "layouts/flash" %>
+    </div>
 
-  <body>
-    <main class="container mx-auto mt-10 px-1 md:px-5 flex items-center justify-center">
+    <main class="flex-1 container mx-auto px-1 md:px-5">
       <%= yield %>
     </main>
 

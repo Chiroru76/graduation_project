@@ -22,6 +22,12 @@ module App
     config.active_job.queue_adapter = :sidekiq
     config.app_url = "https://mochipet.onrender.com/"
 
+    # 独自ドメイン設定
+    config.hosts << ".motipet.com"
+    config.hosts << "www.motipet.com"
+    config.hosts << "motipet.com"
+
+
     # テスト環境以外でhost authorizationを有効化
     unless Rails.env.test?
       config.hosts << ".example.com"
