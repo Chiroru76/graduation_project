@@ -1,57 +1,63 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto px-4 py-6">
   <div>
 
-    <div class="grid p-6 space-y-6">
-      <h1 class="text-2xl font-bold mb-4">活動の記録</h1>
-      <turbo-frame id="calendar">
-        <%= render partial: "calendar" %>
-      </turbo-frame>
+  <!-- カレンダーセクション -->
+  <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">活動の記録</h1>
+    <turbo-frame id="calendar">
+      <%= render partial: "calendar" %>
+    </turbo-frame>
+  </div>
+
+  <!-- タスク完了件数セクション -->
+  <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+    <h1 class="text-2xl font-bold text-gray-900 mb-4">直近<%= @days %>日のタスク完了件数</h1>
+
+    <div class="flex gap-2 mb-6">
+      <% [[7, "直近7日"], [30, "直近30日"]].each do |range_val, label| %>
+        <%= link_to label, charts_path(range: range_val),
+            class: "px-4 py-2 rounded-lg font-medium transition-all duration-200 #{
+              @days == range_val ?
+              'bg-gray-900 text-white shadow-md' :
+              'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }" %>
+      <% end %>
     </div>
 
-    <div class="grid p-6 space-y-6">
-      <h1 class="text-2xl font-bold">直近<%= @days %>日のタスク完了件数</h1>
+    <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+      <%= column_chart [
+            { name: "TODO", data: @todo_completed },
+            { name: "習慣", data: @habit_done }
+          ],
+          xtitle: "日付", ytitle: "完了数" %>
+    </div>  </div>
 
-      <div class="flex gap-2">
-        <% [[7, "直近7日"], [30, "直近30日"]].each do |range_val, label| %>
-          <%= link_to label, charts_path(range: range_val),
-              class: "rounded px-3 py-1 #{ @days == range_val ? 'bg-blue-600 text-white' : 'bg-gray-100' }" %>
-        <% end %>
-      </div>
+  <!-- 日別の実績値セクション -->
+  <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+    <h1 class="text-xl font-bold text-gray-900 mb-6">日別の実績値</h1>
 
-      <div class="bg-white rounded shadow p-4">
-        <%= column_chart [
-              { name: "TODO", data: @todo_completed },
-              { name: "習慣", data: @habit_done }
-            ],
-            xtitle: "日付", ytitle: "完了数" %>
-      </div>
-    </div>
-
-    <div class="grid gap-6 mx-auto px-4 py-6">
-      <h1 class="text-xl font-bold mb-4">日別の実績値</h1>
-
-      <div>
-        <% @series_by_task.each do |tid, series| %>
-          <% meta = @task_meta[tid] || { title: "不明なタスク", unit: "数量" } %>
-          <% total = @total_by_task[tid] || 0 %>
-          <div class="bg-white rounded-xl shadow p-4">
-            <div class="mb-2 font-semibold truncate">
+    <div class="space-y-6">
+      <% @series_by_task.each do |tid, series| %>
+        <% meta = @task_meta[tid] || { title: "不明なタスク", unit: "数量" } %>
+        <% total = @total_by_task[tid] || 0 %>
+        <div class="bg-gray-50 rounded-lg border border-gray-200 p-5">
+          <div class="mb-4">
+            <h2 class="font-bold text-gray-900 text-base truncate">
               <%= meta[:title] %>
-              <span class="text-xs text-gray-500">（合計: <%= total %> <%= meta[:unit] %>）</span>
-            </div>
-            <%= column_chart series,
-                  xtitle: "日付",
-                  ytitle: meta[:unit],
-                  points: true,
-                  curve: false,
-                  library: {
-                    scales: { y: { beginAtZero: true } },
-                    plugins: { legend: { display: false } }
-                  } %>
+            </h2>
+            <span class="text-sm text-gray-600">合計: <%= total %> <%= meta[:unit] %></span>
           </div>
-        <% end %>
-      </div>
+          <%= column_chart series,
+                xtitle: "日付",
+                ytitle: meta[:unit],
+                points: true,
+                curve: false,
+                library: {
+                  scales: { y: { beginAtZero: true } },
+                  plugins: { legend: { display: false } }
+                } %>
+        </div>
+      <% end %>
     </div>
-
   </div>
 </div>
