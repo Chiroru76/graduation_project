@@ -8,8 +8,10 @@ character_bond_hp_decay_daily: #ジョブの識別名
   timezone: "Asia/Tokyo"   # JSTで回す
 
 tasks_daily_reset_habit_status: #ジョブの識別名
-  class: "Tasks::DailyResetHabitStatusJob"
+  class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper"
   queue: "default"
+  args:
+    job_class: "Tasks::DailyResetHabitStatusJob"
   cron: "0 0 * * *"
   timezone: "Asia/Tokyo"
 
