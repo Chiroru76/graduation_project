@@ -1,5 +1,6 @@
 module ApplicationHelper
   include MetaTags::ViewHelper
+
   def show_meta_tags
     assign_meta_tags if display_meta_tags.blank?
     display_meta_tags
@@ -10,7 +11,7 @@ module ApplicationHelper
     options.reverse_merge!(defaults)
     site = options[:site]
     title = options[:title]
-    canonical = options[:canonical].presence || options[:url].presence || request.original_url
+    options[:canonical].presence || options[:url].presence || request.original_url
     image = options[:image].presence || image_url("motipet_toppage.png")
     configs = {
       separator: "|",

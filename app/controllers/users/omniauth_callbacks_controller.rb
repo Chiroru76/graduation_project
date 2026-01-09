@@ -1,5 +1,5 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  skip_before_action :verify_authenticity_token, only: [ :google_oauth2, :line ]
+  skip_before_action :verify_authenticity_token, only: [:google_oauth2, :line]
 
   def google_oauth2
     handle_auth("google")

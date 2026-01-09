@@ -92,10 +92,9 @@ RSpec.describe CharacterAppearance, type: :model do
     it "正しいasset_pathを生成すること (webp, idle)" do
       character_kind = create(:character_kind, asset_key: "green_robo_path1", stage: :child, name: "グリモン1")
       appearance = create(:character_appearance,
-        character_kind: character_kind,
-        pose: :idle,
-        asset_kind: :webp
-      )
+                          character_kind: character_kind,
+                          pose: :idle,
+                          asset_kind: :webp)
 
       expected_path = "characters/green_robo_path1/green_robo_path1_child_idle.webp"
       expect(appearance.asset_path).to eq(expected_path)
@@ -104,10 +103,9 @@ RSpec.describe CharacterAppearance, type: :model do
     it "正しいasset_pathを生成すること (png, happy)" do
       character_kind = create(:character_kind, asset_key: "blue_dragon_path2", stage: :adult, name: "ドラゴン")
       appearance = create(:character_appearance,
-        character_kind: character_kind,
-        pose: :happy,
-        asset_kind: :png
-      )
+                          character_kind: character_kind,
+                          pose: :happy,
+                          asset_kind: :png)
 
       expected_path = "characters/blue_dragon_path2/blue_dragon_path2_adult_happy.png"
       expect(appearance.asset_path).to eq(expected_path)
@@ -116,10 +114,9 @@ RSpec.describe CharacterAppearance, type: :model do
     it "正しいasset_pathを生成すること (egg stage)" do
       character_kind = create(:character_kind, asset_key: "egg_path3", stage: :egg, name: "たまご3")
       appearance = create(:character_appearance,
-        character_kind: character_kind,
-        pose: :sleep,
-        asset_kind: :webp
-      )
+                          character_kind: character_kind,
+                          pose: :sleep,
+                          asset_kind: :webp)
 
       expected_path = "characters/egg_path3/egg_path3_egg_sleep.webp"
       expect(appearance.asset_path).to eq(expected_path)
@@ -129,16 +126,15 @@ RSpec.describe CharacterAppearance, type: :model do
       character_kind = create(:character_kind, asset_key: "test_pet", stage: :child)
 
       webp_appearance = create(:character_appearance,
-        character_kind: character_kind,
-        pose: :idle,
-        asset_kind: :webp
-      )
+                               character_kind: character_kind,
+                               pose: :idle,
+                               asset_kind: :webp)
       expect(webp_appearance.asset_path).to end_with(".webp")
 
       # 同じcharacter_kindに異なるposeで作成
       png_appearance = CharacterAppearance.create!(
         character_kind: character_kind,
-        pose: :happy,  # 異なるposeを使用
+        pose: :happy, # 異なるposeを使用
         asset_kind: :png
       )
       expect(png_appearance.asset_path).to end_with(".png")

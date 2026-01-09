@@ -13,7 +13,6 @@ Rails.application.routes.draw do
 
   root to: "top#index"
 
-
   resources :tasks do
     member do
       patch :complete
@@ -26,17 +25,17 @@ Rails.application.routes.draw do
     post "reset", to: "characters#reset"
   end
 
-  resources :characters, only: [ :index, :show ]
+  resources :characters, only: [:index, :show]
 
-  resource :charts, only: [ :show ]
+  resource :charts, only: [:show]
 
   # Line通知設定画面用のルーティング追加
-  resource :settings, only: [ :show ] do
+  resource :settings, only: [:show] do
     # Line設定の表示・編集・更新
     get "line", to: "settings#line_settings"
   end
 
-  resource :profile, only: [ :show ]
+  resource :profile, only: [:show]
 
   get "profile/edit_name",  to: "profiles#edit", defaults: { mode: "name" }, as: :edit_profile_name
   get "profile/edit_email", to: "profiles#edit", defaults: { mode: "email" }, as: :edit_profile_email
@@ -47,6 +46,7 @@ Rails.application.routes.draw do
 
   get "share/hatched/:id", to: "share#hatched", as: :share_hatched
   get "share/evolved/:id", to: "share#evolved", as: :share_evolved
+  get "terms", to: "pages#terms", as: :terms
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -59,9 +59,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  if Rails.env.development?
-    mount LetterOpenerWeb::Engine, at: "/letter_opener"
-  end
+  mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   namespace :webhooks do
     post "line", to: "line#create"

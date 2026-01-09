@@ -3,9 +3,7 @@
     <span>©<%= Time.current.year %> MotiPet</span>
   </div>
   <div class="footer-links flex gap-6 mt-2 justify-center">
-    <span class="footer-link text-gray-400 cursor-not-allowed">
-      <%= t('layouts.footer.terms_text') %>
-    </span>
+    <%= link_to t('layouts.footer.terms_text'), terms_path, class: "footer-link" %>
     <%= link_to t('layouts.footer.privacy'), "https://www.kiyac.app/privacypolicy/IiKWefRFnOIvmxtRY43T", 
                 class: "footer-link", target: "_blank", rel: "noopener" %>
     <%= link_to t('layouts.footer.contact'), "https://docs.google.com/forms/d/e/1FAIpQLSdN1zaM7oU0bO4o3IsvhZyQM4msqGsegoV9pSkfoYQtzKdhyQ/viewform?usp=header", 

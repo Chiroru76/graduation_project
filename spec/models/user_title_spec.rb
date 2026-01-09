@@ -84,13 +84,13 @@ RSpec.describe UserTitle, type: :model do
         unlocked_at: 1.day.ago
       )
 
-      expect {
+      expect do
         UserTitle.create!(
           user: user,
           title: title,
           unlocked_at: Time.current
         )
-      }.to raise_error(ActiveRecord::RecordNotUnique)
+      end.to raise_error(ActiveRecord::RecordNotUnique)
     end
 
     it "異なるユーザーが同じ称号をアンロックできること" do

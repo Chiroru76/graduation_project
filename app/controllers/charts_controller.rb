@@ -10,13 +10,13 @@ class ChartsController < ApplicationController
 
     # TODO完了数（日別）
     @todo_completed = TaskEvent.where(user: current_user, task_kind: :todo, action: :completed)
-                             .group_by_day(:occurred_at, range: range)
-                             .count
+      .group_by_day(:occurred_at, range: range)
+      .count
 
     # 習慣完了・ログ数（日別）
-    @habit_done = TaskEvent.where(user: current_user, task_kind: :habit, action: [ :completed, :logged ])
-                         .group_by_day(:occurred_at, range: range)
-                         .count
+    @habit_done = TaskEvent.where(user: current_user, task_kind: :habit, action: [:completed, :logged])
+      .group_by_day(:occurred_at, range: range)
+      .count
 
     # --- 習慣の数量ロググラフ用 ---
     log_range = 7.days.ago.beginning_of_day..Time.zone.now
@@ -26,14 +26,15 @@ class ChartsController < ApplicationController
 
     # タスクメタ情報
     @task_meta = Task.where(id: log_events.distinct.pluck(:task_id))
-                   .pluck(:id, :title, :target_unit)
-                   .map { |id, title, unit| [ id, { title: title, unit: unit.presence || "数量" } ] }
-                   .to_h
+      .pluck(:id, :title, :target_unit)
+      .to_h do |id, title, unit|
+        [id, { title: title, unit: unit.presence || "数量" }]
+      end
 
     # 日別×タスクごとの合計値
     raw = log_events.group_by_day(:occurred_at, range: log_range)
-                  .group(:task_id)
-                  .sum(:amount) # { [Date, task_id] => 合計 }
+      .group(:task_id)
+      .sum(:amount) # { [Date, task_id] => 合計 }
 
     # 整形: { task_id => { date => 合計 } }
     @series_by_task = Hash.new { |h, k| h[k] = {} }

@@ -5,6 +5,5 @@ class SettingsController < ApplicationController
     @user = current_user
   end
 
-  def line_settings
-  end
+  def line_settings; end
 end

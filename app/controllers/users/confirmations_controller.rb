@@ -24,7 +24,7 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
   # end
 
   # The path used after confirmation.
-  def after_confirmation_path_for(resource_name, resource)
+  def after_confirmation_path_for(_resource_name, _resource)
     flash[:notice] = "メールアドレスの変更が完了しました。"
     edit_user_registration_path
   end

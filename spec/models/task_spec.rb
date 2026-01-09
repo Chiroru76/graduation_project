@@ -234,9 +234,9 @@ RSpec.describe Task, type: :model do
       user = create(:user)
       task = create(:task, user: user)
 
-      expect {
+      expect do
         task.log_created!(by_user: user)
-      }.to change { TaskEvent.count }.by(1)
+      end.to change { TaskEvent.count }.by(1)
 
       event = TaskEvent.last
       expect(event.action).to eq("created")
@@ -251,9 +251,9 @@ RSpec.describe Task, type: :model do
     it "TODOタスクを完了できること" do
       task = create(:task, :todo, user: user, difficulty: :normal)
 
-      expect {
+      expect do
         task.complete!(by_user: user)
-      }.to change { task.reload.status }.from("open").to("done")
+      end.to change { task.reload.status }.from("open").to("done")
 
       expect(task.completed_at).to be_present
     end
@@ -261,17 +261,17 @@ RSpec.describe Task, type: :model do
     it "チェックボックス型習慣を完了できること" do
       task = create(:task, :habit_checkbox, user: user, difficulty: :normal)
 
-      expect {
+      expect do
         task.complete!(by_user: user)
-      }.to change { task.reload.status }.from("open").to("done")
+      end.to change { task.reload.status }.from("open").to("done")
     end
 
     it "完了イベントを記録すること" do
       task = create(:task, user: user, difficulty: :normal)
 
-      expect {
+      expect do
         task.complete!(by_user: user)
-      }.to change { TaskEvent.count }.by(1)
+      end.to change { TaskEvent.count }.by(1)
 
       event = TaskEvent.last
       expect(event.action).to eq("completed")
@@ -282,35 +282,35 @@ RSpec.describe Task, type: :model do
     it "ユーザーに食べ物を付与すること" do
       task = create(:task, user: user, reward_food_count: 3)
 
-      expect {
+      expect do
         task.complete!(by_user: user)
-      }.to change { user.reload.food_count }.by(3)
+      end.to change { user.reload.food_count }.by(3)
     end
 
     it "キャラクターに経験値を付与すること" do
       character = user.active_character
       task = create(:task, user: user, difficulty: :normal)
 
-      expect {
+      expect do
         task.complete!(by_user: user)
-      }.to change { character.reload.exp }.by(20)
+      end.to change { character.reload.exp }.by(20)
     end
 
     it "award_exp: falseの場合は経験値を付与しないこと" do
       character = user.active_character
       task = create(:task, user: user, difficulty: :normal)
 
-      expect {
+      expect do
         task.complete!(by_user: user, award_exp: false)
-      }.not_to change { character.reload.exp }
+      end.not_to(change { character.reload.exp })
     end
 
     it "ログ型習慣では例外を発生させること" do
       task = create(:task, :habit_log, user: user)
 
-      expect {
+      expect do
         task.complete!(by_user: user)
-      }.to raise_error("Only for checkbox habits or todos")
+      end.to raise_error("Only for checkbox habits or todos")
     end
   end
 
@@ -320,9 +320,9 @@ RSpec.describe Task, type: :model do
     it "ログ型習慣に数量を記録できること" do
       task = create(:task, :habit_log, user: user, difficulty: :normal)
 
-      expect {
+      expect do
         task.log!(by_user: user, amount: 5.0, unit: :times)
-      }.to change { TaskEvent.count }.by(1)
+      end.to change { TaskEvent.count }.by(1)
 
       event = TaskEvent.last
       expect(event.action).to eq("logged")
@@ -342,34 +342,34 @@ RSpec.describe Task, type: :model do
     it "ユーザーに食べ物を付与すること" do
       task = create(:task, :habit_log, user: user, reward_food_count: 2)
 
-      expect {
+      expect do
         task.log!(by_user: user, amount: 5.0, unit: :times)
-      }.to change { user.reload.food_count }.by(2)
+      end.to change { user.reload.food_count }.by(2)
     end
 
     it "キャラクターに経験値を付与すること" do
       character = user.active_character
       task = create(:task, :habit_log, user: user, difficulty: :normal)
 
-      expect {
+      expect do
         task.log!(by_user: user, amount: 5.0, unit: :times)
-      }.to change { character.reload.exp }.by(20)
+      end.to change { character.reload.exp }.by(20)
     end
 
     it "チェックボックス型習慣では例外を発生させること" do
       task = create(:task, :habit_checkbox, user: user)
 
-      expect {
+      expect do
         task.log!(by_user: user, amount: 5.0, unit: :times)
-      }.to raise_error("Only for habit log mode")
+      end.to raise_error("Only for habit log mode")
     end
 
     it "TODOタスクでは例外を発生させること" do
       task = create(:task, :todo, user: user)
 
-      expect {
+      expect do
         task.log!(by_user: user, amount: 5.0, unit: :times)
-      }.to raise_error("Only for habit log mode")
+      end.to raise_error("Only for habit log mode")
     end
   end
 
@@ -379,9 +379,9 @@ RSpec.describe Task, type: :model do
     it "完了したタスクを再開できること" do
       task = create(:task, user: user, status: :done, completed_at: Time.current)
 
-      expect {
+      expect do
         task.reopen!(by_user: user)
-      }.to change { task.reload.status }.from("done").to("open")
+      end.to change { task.reload.status }.from("done").to("open")
 
       expect(task.completed_at).to be_nil
     end
@@ -389,9 +389,9 @@ RSpec.describe Task, type: :model do
     it "再開イベントを記録すること" do
       task = create(:task, user: user, status: :done, difficulty: :normal)
 
-      expect {
+      expect do
         task.reopen!(by_user: user)
-      }.to change { TaskEvent.count }.by(1)
+      end.to change { TaskEvent.count }.by(1)
 
       event = TaskEvent.last
       expect(event.action).to eq("reopened")
@@ -404,18 +404,18 @@ RSpec.describe Task, type: :model do
       task = create(:task, user: user, status: :done, difficulty: :normal)
       character.update!(exp: 50)
 
-      expect {
+      expect do
         task.reopen!(by_user: user, revert_exp: true)
-      }.to change { character.reload.exp }.by(-20)
+      end.to change { character.reload.exp }.by(-20)
     end
 
     it "食べ物を相殺すること" do
       task = create(:task, user: user, status: :done, reward_food_count: 3)
       user.update!(food_count: 10)
 
-      expect {
+      expect do
         task.reopen!(by_user: user, revert_food: true)
-      }.to change { user.reload.food_count }.by(-3)
+      end.to change { user.reload.food_count }.by(-3)
     end
 
     it "revert_exp: falseの場合は経験値を相殺しないこと" do
@@ -423,26 +423,26 @@ RSpec.describe Task, type: :model do
       task = create(:task, user: user, status: :done, difficulty: :normal)
       character.update!(exp: 50)
 
-      expect {
+      expect do
         task.reopen!(by_user: user, revert_exp: false)
-      }.not_to change { character.reload.exp }
+      end.not_to(change { character.reload.exp })
     end
 
     it "revert_food: falseの場合は食べ物を相殺しないこと" do
       task = create(:task, user: user, status: :done, reward_food_count: 3)
       user.update!(food_count: 10)
 
-      expect {
+      expect do
         task.reopen!(by_user: user, revert_food: false)
-      }.not_to change { user.reload.food_count }
+      end.not_to(change { user.reload.food_count })
     end
 
     it "既にopenの場合は何もしないこと" do
       task = create(:task, user: user, status: :open)
 
-      expect {
+      expect do
         task.reopen!(by_user: user)
-      }.not_to change { TaskEvent.count }
+      end.not_to(change { TaskEvent.count })
 
       expect(task.reload.status).to eq("open")
     end

@@ -2,13 +2,11 @@ class ShareController < ApplicationController
   # 公開ページなので認証は不要にする
   skip_before_action :authenticate_user!, raise: false
 
-   before_action :load_character, only: [ :hatched, :evolved ]
+  before_action :load_character, only: [:hatched, :evolved]
 
-  def hatched
-  end
+  def hatched; end
 
-  def evolved
-  end
+  def evolved; end
 
   private
 
@@ -23,7 +21,6 @@ class ShareController < ApplicationController
 
     @ogp_image = ogp_image_for(@character, pose: :idle)
   end
-
 
   def ogp_image_for(character, pose: :idle)
     kind  = character.character_kind.asset_key

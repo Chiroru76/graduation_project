@@ -1,7 +1,5 @@
-class LineNotifyJob
-  include Sidekiq::Worker
-
-  sidekiq_options queue: :default, retry: 5
+class LineNotifyJob < ApplicationJob
+  queue_as :default
 
   def perform
     target_date = Date.tomorrow
@@ -23,15 +21,16 @@ class LineNotifyJob
   private
 
   def build_message_text(tasks, date)
-    app_url = Rails.application.config.app_url
-
+    app_host = Rails.application.config.app_url
+    dashboard_url = Rails.application.routes.url_helpers.dashboard_show_url(host: app_host)
     <<~TEXT.strip
       ⏰ 以下のタスクの期限が明日までです。
 
       期限：#{date.strftime('%Y-%m-%d')}
       #{tasks.each_with_index.map { |t, i| "#{i + 1}. #{t.title}" }.join("\n")}
 
-      アプリで確認する: #{app_url}
+      ーーーーーーーーーーーーーーー
+      👉 アプリで確認する: #{dashboard_url}
     TEXT
   end
 end

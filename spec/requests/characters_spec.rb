@@ -20,8 +20,8 @@ RSpec.describe "Characters", type: :request do
         child_kind = CharacterKind.find_by!(stage: :child)
         adult_kind = CharacterKind.find_by!(stage: :adult)
 
-        child_char = create(:character, user: user, character_kind: child_kind, level: 5)
-        adult_char = create(:character, user: user, character_kind: adult_kind, level: 15)
+        create(:character, user: user, character_kind: child_kind, level: 5)
+        create(:character, user: user, character_kind: adult_kind, level: 15)
 
         get characters_path
 
@@ -32,7 +32,7 @@ RSpec.describe "Characters", type: :request do
 
       it "たまごは一覧から除外される" do
         egg_kind = CharacterKind.find_by!(stage: :egg)
-        egg_char = create(:character, user: user, character_kind: egg_kind)
+        create(:character, user: user, character_kind: egg_kind)
 
         get characters_path
 
@@ -50,7 +50,7 @@ RSpec.describe "Characters", type: :request do
 
         expect(response).to have_http_status(:success)
         # 自分のキャラクターのみ表示される
-        assigns = response.parsed_body
+        response.parsed_body
         # HTML解析で他人のキャラクターIDが含まれないことを確認
         expect(response.body).not_to include("data-character-id=\"#{other_char.id}\"")
       end
@@ -236,9 +236,9 @@ RSpec.describe "Characters", type: :request do
         old_character = user.active_character
         egg_kind = CharacterKind.find_by!(asset_key: "egg", stage: :egg)
 
-        expect {
+        expect do
           post reset_characters_path
-        }.to change { user.characters.count }.by(1)
+        end.to change { user.characters.count }.by(1)
 
         user.reload
         new_character = user.active_character

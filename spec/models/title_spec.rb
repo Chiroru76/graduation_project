@@ -16,7 +16,7 @@ RSpec.describe Title, type: :model do
 
       it "タイトルが削除されるとuser_titlesも削除されること" do
         title = create(:title)
-        user_title = UserTitle.create!(
+        UserTitle.create!(
           title: title,
           user: create(:user),
           unlocked_at: Time.current
@@ -109,11 +109,10 @@ RSpec.describe Title, type: :model do
 
     it "すべての必須属性が揃っていれば保存できること" do
       title = build(:title,
-        key: "test_key",
-        name: "テスト称号",
-        rule_type: "todo_completion",
-        threshold: 10
-      )
+                    key: "test_key",
+                    name: "テスト称号",
+                    rule_type: "todo_completion",
+                    threshold: 10)
       expect(title.save).to be true
     end
   end

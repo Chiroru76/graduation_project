@@ -21,12 +21,17 @@ module Line
 
         response = client.push_message(push_message_request: request)
 
+        if response.is_a?(Line::Bot::V2::MessagingApi::ErrorResponse)
+          message = response.message
+          Rails.logger.error("[LINE] push_message failed: #{message}")
+          raise StandardError, message
+        end
+
         Rails.logger.info("[LINE] push_message success")
         response
-      rescue => e
-
+      rescue StandardError => e
         Rails.logger.error("[LINE] send_message failed: #{e.class}: #{e.message}")
-        raise e
+        raise
       end
     end
   end

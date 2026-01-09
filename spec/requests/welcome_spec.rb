@@ -23,7 +23,7 @@ RSpec.describe "Welcome", type: :request do
       end
 
       it "キャラクター情報が表示される" do
-        character = user.active_character
+        user.active_character
 
         get welcome_egg_path
 

@@ -8,11 +8,11 @@ FactoryBot.define do
 
     after(:create) do
       kinds = [
-        { asset_key: "egg", stage: 0, name: "たまご", appearances: [ :idle ] },
-        { asset_key: "green_robo", stage: 1, name: "グリモン", appearances: [ :idle ] },
-        { asset_key: "green_robo", stage: 2, name: "グリモン", appearances: [ :idle ] },
-        { asset_key: "hurozapple", stage: 1, name: "フロザップル", appearances: [ :idle ] },
-        { asset_key: "hurozapple", stage: 2, name: "フロザップル", appearances: [ :idle ] }
+        { asset_key: "egg", stage: 0, name: "たまご", appearances: [:idle] },
+        { asset_key: "green_robo", stage: 1, name: "グリモン", appearances: [:idle] },
+        { asset_key: "green_robo", stage: 2, name: "グリモン", appearances: [:idle] },
+        { asset_key: "hurozapple", stage: 1, name: "フロザップル", appearances: [:idle] },
+        { asset_key: "hurozapple", stage: 2, name: "フロザップル", appearances: [:idle] }
       ]
 
       kinds.each do |data|
