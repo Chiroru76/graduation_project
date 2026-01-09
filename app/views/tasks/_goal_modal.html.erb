@@ -1,5 +1,5 @@
 <div data-controller="goal-modal" class="space-y-2">
-  <div class="text-sm text-gray-600">
+  <div class="text-sm font-bold text-gray-600">
     現在の目標：
     <span data-goal-modal-target="summary">
       <% if task.target_value && task.target_unit && task.target_period %>
@@ -12,9 +12,9 @@
 
   <!--  モーダルを開くボタン -->
   <button type="button"
-          class="rounded-full bg-gray-100 px-4 py-2 text-sm hover:bg-gray-200"
+          class="inline-flex items-center justify-center rounded-full bg-emerald-100 px-6 py-2 text-sm font-semibold text-emerald-800 shadow-sm transition hover:bg-emerald-300"
           data-action="goal-modal#open">
-    目標を編集
+    目標を設定
   </button>
   <!--  最初は hidden で非表示。open() が呼ばれると hidden が外れて全画面にオーバーレイ -->
   <div class="hidden fixed inset-0 z-50 flex items-center justify-center" data-goal-modal-target="backdrop">
@@ -32,33 +32,46 @@
       <!--  入力フォーム（3列グリッド）値が変わると refresh() でサマリーを更新 -->
       <div class="grid grid-cols-3 gap-3">
         <div>
-          <%= f.label :target_value, "値", class: "block text-sm mb-1" %>
+          <%= f.label :target_value, "値", class: "form-label" %>
           <%= f.number_field :target_value, step: 1.0, min: 0,
-                class: "block w-full rounded-lg border border-gray-300 px-3 py-2",
+                class: "form-control form-control-md",
                 data: { "goal-modal-target": "value", action: "input->goal-modal#refresh" } %>
         </div>
 
         <div>
-          <%= f.label :target_unit, "単位", class: "block text-sm mb-1" %>
+          <%= f.label :target_unit, "単位", class: "form-label" %>
           <%= f.select :target_unit,
                 Task.target_units.keys.map { |u| [t("enums.task.target_unit.#{u}"), u] }, { include_blank: "選択してください" },
-                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 bg-white",
+                class: "form-control form-control-md",
                 data: { "goal-modal-target": "unit", action: "change->goal-modal#refresh" } %>
         </div>
 
         <div>
-          <%= f.label :target_period, "期間", class: "block text-sm mb-1" %>
+          <%= f.label :target_period, "期間", class: "form-label" %>
           <%= f.select :target_period,
-                Task.target_periods.keys.map { |p| [t("enums.task.target_period.#{p}"), p] }, { include_blank: "選択してください" },
-                class: "block w-full rounded-lg border border-gray-300 px-3 py-2 bg-white",
+                Task.target_periods.keys.map { |p| [t("enums.task.target_period.#{p}"), p] },
+                { selected: task.target_period.presence || "day" },
+                class: "form-control form-control-md",
                 data: { "goal-modal-target": "period", action: "change->goal-modal#refresh" } %>
         </div>
       </div>
 
       <div class="mt-5 flex justify-end gap-3">
-        <button type="button" class="px-4 py-2 rounded bg-gray-100 hover:bg-gray-200"
-                data-action="goal-modal#close">キャンセル</button>
-        <button type="button" class="px-4 py-2 rounded bg-lime-500 text-white"
+        <button type="button" class="group relative flex-1 px-6 py-4 rounded-2xl font-semibold text-gray-700 text-base
+                              bg-gray-50 border-2 border-gray-200/60
+                              transition-all duration-300 ease-out
+                              hover:bg-gray-100 hover:border-gray-300 hover:shadow-md
+                              active:scale-95
+                              focus:outline-none focus:ring-4 focus:ring-gray-200"
+                      data-action="click->goal-modal#close">キャンセル</button>
+        <button type="button" class="group relative flex-1 px-1 py-4 rounded-2xl font-bold text-white text-base
+                              bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600
+                              shadow-lg shadow-emerald-500/30
+                              transition-all duration-300 ease-out
+                              hover:shadow-xl hover:shadow-emerald-500/40 hover:scale-105
+                              active:scale-95
+                              focus:outline-none focus:ring-4 focus:ring-emerald-200
+                              flex items-center justify-center gap-2"
                 data-action="goal-modal#close">決定</button>
       </div>
     </div>
