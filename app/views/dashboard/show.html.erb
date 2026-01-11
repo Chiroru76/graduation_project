@@ -1,8 +1,9 @@
 <!-- app/views/dashboard/show.html.erb -->
-<div class="mx-auto max-w-screen-xl px-4 md:px-20 space-y-6 bg-black/5 rounded-2xl">
+<div class="mx-auto max-w-screen-xl px-4 md:px-40 space-y-6 bg-black/5 rounded-2xl">
   <!-- モーダル表示エリア -->
   <div id="modal_area"></div>
   <!-- キャラ育成エリア -->
+  <div class="pt-3 pb-2">
   <div id="character_" class="relative w-full max-w-none md:max-w-[500px] mx-auto h-auto p-2 bg-gray-200 border-4 border-gray-800 shadow-[4px_4px_0_0_rgba(0,0,0,0.8)] rounded-lg">
     <% if current_user.active_character.dead? %>
       <!-- 死亡時専用ビュー -->
@@ -43,9 +44,12 @@
       </div>
     <% end %>
   </div>
+  </div>
   <%= render "dashboard/food_counter", user: current_user %>
 
-  <div class="grid md:grid-cols-2 gap-5 mb-10">
+  <!-- タスク一覧エリア -->
+  <div class="pt-2 pb-6">
+  <div class="grid md:grid-cols-2 gap-5 mb-5">
       <!-- TODO一覧 -->
     <section class="space-y-2">
       <div class="w-ful ">
@@ -61,6 +65,7 @@
         <%= render "tasks/todolist", tasks: @habits, kind: :habit %>
       </div>
     </section>
+  </div>
   </div>
 
 </div>
