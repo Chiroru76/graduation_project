@@ -72,9 +72,19 @@
                 </svg>
                 単位
               </label>
-              <%= text_field_tag :unit, task.target_unit.present? ? I18n.t("activerecord.attributes.task.target_unit.#{task.target_unit}") : "",
-                    class: "form-control form-control-lg form-focus-sky",
-                    placeholder: "単位を入力" %>
+              <% if task.target_unit.present? %>
+                <%= hidden_field_tag :unit, task.target_unit %>
+                <%= text_field_tag :unit_display, t("enums.task.target_unit.#{task.target_unit}"),
+                      readonly: true,
+                      class: "form-control form-control-lg bg-gray-50 text-gray-700 cursor-default" %>
+              <% else %>
+                <%= select_tag :unit,
+                      options_for_select(
+                        [["選択してください", ""]] +
+                        Task.target_units.keys.map { |key| [t("enums.task.target_unit.#{key}"), key] }
+                      ),
+                      class: "form-control form-control-lg form-focus-sky" %>
+              <% end %>
             </div>
 
             <!-- Action buttons -->

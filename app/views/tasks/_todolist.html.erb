@@ -1,18 +1,42 @@
-<ul class="space-y-3">
+<ul class="space-y-3.5">
   <% tasks.each do |task| %>
-    <li id="<%= dom_id(task) %>">
+    <li id="<%= dom_id(task) %>" class="transform transition-all duration-300 ease-out">
       <%= render "tasks/task_item", task: task %>
     </li>
   <% end %>
 
-  <!-- 新しいTODO or 習慣の追加）-->
-  <li>
+  <!-- 新しいTODO or 習慣の追加 -->
+  <li class="transform transition-all duration-300 ease-out">
     <%= link_to new_task_path(kind: kind),
-      class: "block rounded-2xl bg-white shadow-sm ring-1 ring-black/5 px-5 py-3 hover:shadow md:px-6" do %>
-      <div class="flex items-center gap-5">
-        <div class="grid h-10 w-10 place-items-center rounded-full bg-gray-100 text-2xl text-gray-600">+</div>
-        <div class="text-base font-semibold text-gray-900">
-          新しい<%= kind == :todo ? "TODO" : "習慣" %>の追加
+      class: "group/add relative block" do %>
+      <!-- Subtle glow effect on hover -->
+      <div class="absolute -inset-0.5 bg-gradient-to-br from-blue-200/40 to-blue-300/40 rounded-2xl blur opacity-0 group-hover/add:opacity-10 transition duration-300"></div>
+
+      <div class="relative rounded-2xl bg-gradient-to-br from-white to-gray-50/30 border-2 border-dashed border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-md transition-all duration-300 px-5 py-4 md:px-6">
+        <div class="flex items-center gap-4">
+          <!-- Plus icon with gradient background -->
+          <div class="flex items-center justify-center h-11 w-11 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/50 border border-blue-100/60 shadow-sm group-hover/add:from-blue-100 group-hover/add:to-blue-200/50 transition-all duration-300">
+            <svg class="w-6 h-6 text-blue-600 group-hover/add:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
+            </svg>
+          </div>
+
+          <!-- Text -->
+          <div class="flex-1">
+            <div class="text-base font-bold text-gray-700 group-hover/add:text-blue-700 transition-colors duration-300">
+              新しい<%= kind == :todo ? "TODO" : "習慣" %>の追加
+            </div>
+            <div class="text-xs text-gray-500 mt-0.5">
+              クリックして新規作成
+            </div>
+          </div>
+
+          <!-- Arrow icon -->
+          <div class="opacity-0 group-hover/add:opacity-100 transition-opacity duration-300">
+            <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
         </div>
       </div>
     <% end %>
