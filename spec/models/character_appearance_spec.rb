@@ -29,8 +29,8 @@ RSpec.describe CharacterAppearance, type: :model do
       end
 
       it "異なるcharacter_kindであればpose重複を許可すること" do
-        character_kind1 = create(:character_kind, asset_key: "pet_a")
-        character_kind2 = create(:character_kind, asset_key: "pet_b")
+        character_kind1 = create(:character_kind, asset_key: "pet_a", name: "ペットA")
+        character_kind2 = create(:character_kind, asset_key: "pet_b", name: "ペットB")
         create(:character_appearance, character_kind: character_kind1, pose: :idle)
         different_kind = build(:character_appearance, character_kind: character_kind2, pose: :idle)
         expect(different_kind).to be_valid
