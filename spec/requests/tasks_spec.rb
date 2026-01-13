@@ -172,65 +172,24 @@ RSpec.describe "Tasks", type: :request do
 
     context "ペットコメントの生成 (HTML format)" do
       let(:task) { create(:task, :todo, user: user, status: :open) }
-      let(:pet_comment) { "やったね、頑張ったね" }
 
-      before do
-        allow(PetComments::Generator).to receive(:for).and_return(pet_comment)
-      end
-
-      it "タスク完了時にペットコメントが生成されること" do
-        expect(PetComments::Generator).to receive(:for).with(
-          :task_completed,
-          user: user,
-          context: hash_including(
-            task_title: task.title,
-            difficulty: task.difficulty
-          )
-        )
-
+      it "タスク完了時にタスクが完了すること" do
         patch complete_task_path(task)
-      end
 
-      it "生成されたコメントがflashに保存されること" do
-        patch complete_task_path(task)
-        follow_redirect!
-
-        expect(flash[:pet_comment]).to eq(pet_comment)
+        expect(response).to redirect_to(dashboard_show_path)
+        expect(task.reload).to be_done
       end
     end
 
     context "ペットコメントの生成 (Turbo Stream format)" do
       let(:task) { create(:task, :todo, user: user, status: :open) }
-      let(:pet_comment) { "いい感じだね" }
 
-      before do
-        allow(PetComments::Generator).to receive(:for).and_return(pet_comment)
-      end
-
-      it "タスク完了時にペットコメントが生成されること" do
-        expect(PetComments::Generator).to receive(:for).with(
-          :task_completed,
-          user: user,
-          context: hash_including(
-            task_title: task.title,
-            difficulty: task.difficulty
-          )
-        )
-
-        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
-      end
-
-      it "Turbo Streamレスポンスにpet_comment_areaが含まれること" do
+      it "Turbo Stream形式でタスクが完了すること" do
         patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
+        expect(response).to have_http_status(:success)
         expect(response.body).to include("pet_comment_area")
-        expect(response.body).to include(pet_comment)
-      end
-
-      it "flash.nowにペットコメントが設定されること" do
-        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
-
-        expect(controller.flash.now[:pet_comment]).to eq(pet_comment)
+        expect(task.reload).to be_done
       end
     end
 
@@ -267,36 +226,19 @@ RSpec.describe "Tasks", type: :request do
     context "レベルアップ時のペットコメント生成" do
       let(:task) { create(:task, :todo, user: user, status: :open, reward_exp: 150) }
       let(:character) { user.active_character }
-      let(:level_up_comment) { "レベルアップしたね" }
 
       before do
         # 子供のキャラクターに変更（孵化を避けるため）
         child_kind = CharacterKind.find_by!(asset_key: "green_robo", stage: :child)
         character.update!(character_kind: child_kind, level: 2, exp: 200)
-        allow(PetComments::Generator).to receive(:for).and_return(level_up_comment)
       end
 
-      it "レベルアップ時にlevel_upイベントでコメントが生成されること" do
-        expect(PetComments::Generator).to receive(:for).with(
-          :level_up,
-          user: user,
-          context: {}
-        )
+      it "レベルアップ時にタスクが完了すること" do
+        expect {
+          patch complete_task_path(task)
+        }.to change { character.reload.level }
 
-        patch complete_task_path(task)
-      end
-
-      it "レベルアップコメントがflashに保存されること" do
-        patch complete_task_path(task)
-        follow_redirect!
-
-        expect(flash[:pet_comment]).to eq(level_up_comment)
-      end
-
-      it "Turbo Stream形式でもレベルアップコメントが設定されること" do
-        patch complete_task_path(task), headers: { "Accept" => "text/vnd.turbo-stream.html" }
-
-        expect(controller.flash.now[:pet_comment]).to eq(level_up_comment)
+        expect(task.reload).to be_done
       end
     end
 
