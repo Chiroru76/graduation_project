@@ -9,7 +9,7 @@ RSpec.describe Tasks::Completer, type: :service do
 
   let(:user) { create(:user) }
   let(:character) { user.active_character }
-  let(:task) { create(:task, :todo, user: user, state: :open) }
+  let(:task) { create(:task, :todo, user: user, status: :open) }
 
   describe "#call" do
     context "TODOを完了するとき" do
@@ -33,7 +33,7 @@ RSpec.describe Tasks::Completer, type: :service do
     end
 
     context "習慣（checkbox型）を完了するとき" do
-      let(:habit) { create(:task, :habit, user: user, state: :open, tracking_mode: :checkbox) }
+      let(:habit) { create(:task, :habit, user: user, status: :open, tracking_mode: :checkbox) }
 
       it "タスクが完了状態になる" do
         completer = described_class.new(habit, user)
@@ -46,7 +46,7 @@ RSpec.describe Tasks::Completer, type: :service do
     end
 
     context "習慣を未完了に戻す時" do
-      let(:habit) { create(:task, :habit, user: user, state: :done) }
+      let(:habit) { create(:task, :habit, user: user, status: :done, tracking_mode: :checkbox) }
 
       it "未完了状態になる" do
         completer = described_class.new(habit, user)
@@ -79,7 +79,7 @@ RSpec.describe Tasks::Completer, type: :service do
 
         task = create(:task, :todo, user: user)
         allow_any_instance_of(Task).to receive(:complete!).and_wrap_original do |method, **args|
-          result = method.call
+          result = method.call(**args)
           character.update!(character_kind: adult_kind, level: 10, exp: 0)
           result
         end
@@ -110,12 +110,12 @@ RSpec.describe Tasks::Completer, type: :service do
       let(:user_without_character) { create(:user) }
 
       before do
-        user_without_character.characters.destroy_all
+        allow(user_without_character).to receive(:active_character).and_return(nil)
       end
 
       it "エラーなく処理される" do
-        task = create(:task, :todo, user: user)
-        completer = described_class.new(task, user)
+        task = create(:task, :todo, user: user_without_character)
+        completer = described_class.new(task, user_without_character)
 
         expect { completer.call }.not_to raise_error
       end
