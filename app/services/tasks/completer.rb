@@ -94,7 +94,7 @@ module Tasks
 
       Characters::PetResponseBuilder.new(
         character: character,
-        growth_result: growth_result,
+        evolution_result: growth_result,
         event_context: event_context
       ).build
     rescue StandardError => e
