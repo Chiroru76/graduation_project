@@ -2,11 +2,11 @@
 
 module Characters
   class PetResponseBuilder
-    attr_reader :character, :evolution_result, :event_context
+    attr_reader :character, :growth_result, :event_context
 
-    def initialize(character:, evolution_result:, event_context: {})
+    def initialize(character:, growth_result:, event_context: {})
       @character = character
-      @evolution_result = evolution_result
+      @growth_result = growth_result
       @event_context = event_context
     end
 
@@ -18,7 +18,7 @@ module Characters
     end
 
     def generate_comment
-      return nil if evolution_result[:evolved] || evolution_result[:hatched]
+      return nil if growth_result[:evolved] || growth_result[:hatched]
 
       event = determine_event
       return nil unless event
@@ -33,7 +33,7 @@ module Characters
     private
 
     def determine_event
-      if evolution_result[:leveled_up]
+      if growth_result[:leveled_up]
         :level_up
       elsif event_context[:task_completed]
         :task_completed
