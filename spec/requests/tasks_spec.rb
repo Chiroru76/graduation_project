@@ -234,9 +234,9 @@ RSpec.describe "Tasks", type: :request do
       end
 
       it "レベルアップ時にタスクが完了すること" do
-        expect {
+        expect do
           patch complete_task_path(task)
-        }.to change { character.reload.level }
+        end.to(change { character.reload.level })
 
         expect(task.reload).to be_done
       end
