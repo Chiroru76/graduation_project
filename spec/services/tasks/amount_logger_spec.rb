@@ -129,7 +129,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
     context "AmountとUnitの処理" do
       it "指定したunitで記録される" do
         logger = described_class.new(log_habit, user, amount: 45, unit: "km")
-        result = logger.call
+        logger.call
 
         event = log_habit.task_events.last
         expect(event.amount).to eq 45
