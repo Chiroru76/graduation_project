@@ -10,6 +10,13 @@ module Characters
       @event_context = event_context
     end
 
+    def build
+      {
+        comment: generate_comment,
+        appearance: fetch_appearance
+      }
+    end
+
     def generate_comment
       return nil if evolution_result[:evolved] || evolution_result[:hatched]
 
@@ -31,6 +38,15 @@ module Characters
       elsif event_context[:task_completed]
         :task_completed
       end
+    end
+
+    def fetch_appearance
+      return nil unless character&.character_kind
+
+      CharacterAppearance.find_by(
+        character_kind: character.character_kind,
+        pose: :idle
+      )
     end
   end
 end
