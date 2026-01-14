@@ -34,6 +34,11 @@ module Tasks
       pet_response[:comment]
     end
 
+    # ペットのアピアランス（画像表示用）
+    def appearance
+      pet_response[:appearance]
+    end
+
     # タスクが完了状態か？
     def completed?
       task.done?
