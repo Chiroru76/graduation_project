@@ -76,11 +76,7 @@ class TasksController < ApplicationController
     @task = current_user.tasks.find(params[:id]) unless defined?(@task)
     return head :unprocessable_entity unless @task.habit? && @task.log?
 
-    # 進化/孵化の判定用スナップショット
-    character     = current_user.active_character
-    before_level  = character&.level
-    before_stage  = character&.character_kind&.stage # "egg" | "child" | "adult"
-
+    # 数量を準備
     qty = begin
       BigDecimal(params[:amount].to_s)
     rescue StandardError
@@ -88,38 +84,16 @@ class TasksController < ApplicationController
     end
     unit = params[:unit].presence || @task.target_unit
 
-    @task.log!(by_user: current_user, amount: qty, unit: unit)
-
-    # 更新後を読みにいく
-    character&.reload
-    after_level = character&.level
-    after_stage = character&.character_kind&.stage
-
-    # 判定 （進化 or 孵化）
-    hatched = before_stage == "egg"   && after_stage == "child" && before_level == 1 && after_level == 2
-    evolved = before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10
-    leveled_up = character.present? && after_level > before_level && !hatched && !evolved
-
-    # ペットコメント生成（優先度: 進化/孵化 > レベルアップ）
-    event = if evolved || hatched
-              nil # 進化/孵化時はコメント不要（専用モーダルがある）
-            elsif leveled_up
-              :level_up
-            end
-
-    if event
-      pet_comment = PetComments::Generator.for(event, user: current_user, context: {})
-      flash[:pet_comment] = pet_comment if pet_comment.present?
-    end
-
-    @appearance = character&.character_kind&.then { |kind| CharacterAppearance.find_by(character_kind: kind, pose: :idle) }
+    # 数量ログ記録処理
+    result = Tasks::AmountLogger.new(@task, current_user, amount: qty, unit: unit).call
 
     respond_to do |f|
-      f.html { redirect_to dashboard_show_path, notice: "記録しました" }
+      f.html { redirect_to dashboard_show_path, notice: result.notice }
       f.turbo_stream do
-        flash.now[:notice] = "記録しました"
-        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
-        render locals: { hatched: hatched, evolved: evolved }
+        flash.now[:notice] = result.notice
+        flash.now[:pet_comment] = result.pet_comment if result.pet_comment
+        @appearance = result.appearance
+        render locals: { hatched: result.hatched?, evolved: result.evolved? }
       end
     end
   rescue ActiveRecord::RecordInvalid => e
