@@ -51,80 +51,22 @@ class TasksController < ApplicationController
   end
 
   def complete
-    # 数量ログ型の習慣は complete を禁止して、数量記録フォームへ誘導
-    return redirect_to dashboard_show_path, alert: "この習慣は数量ログで記録してください" if @task.habit? && @task.log?
+    # タスク完了処理 + ペット進化/孵化判定 + コメント生成 + 称号付与を一括実行
+    result = Tasks::Completer.new(@task, current_user).call
 
-    # 進化/孵化の判定用スナップショット
-    character     = current_user.active_character
-    before_level  = character&.level
-    before_stage  = character&.character_kind&.stage # "egg" | "child" | "adult"
+    # 進化/孵化時は専用シェアページへ
+    return redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！" if result.evolved?
+    return redirect_to share_hatched_path(current_user), notice: "ペットが生まれました！" if result.hatched?
 
-    completed = false
-    notice = nil
-
-    if @task.habit? && @task.open?
-      @task.complete!(by_user: current_user)
-      completed = true
-      notice = "習慣を完了しました"
-    elsif @task.habit? && @task.done?
-      @task.reopen!(by_user: current_user)
-      notice = "習慣を未完了に戻しました"
-    elsif @task.todo?
-      @task.complete!(by_user: current_user)
-      completed = true
-      notice = "TODOを完了しました"
-    end
-
-    # 更新後を読みにいく（キャラがいれば）
-    character&.reload
-    after_level = character&.level
-    after_stage = character&.character_kind&.stage
-
-    # 3) 判定 （進化 or 孵化）
-    @hatched = before_stage == "egg" && after_stage == "child" && before_level == 1 && after_level == 2
-    @evolved = before_stage == "child" && after_stage == "adult" && before_level == 9 && after_level == 10
-    leveled_up = completed && character.present? && after_level > before_level && !@hatched && !@evolved
-
-    # ペットコメント生成（優先度: 進化/孵化 > レベルアップ > タスク完了）
-    if completed
-      event = if @evolved || @hatched
-                nil # 進化/孵化時はコメント不要（専用モーダルがある）
-              elsif leveled_up
-                :level_up
-              else
-                :task_completed
-              end
-
-      if event
-        context = event == :task_completed ? { task_title: @task.title, difficulty: @task.difficulty } : {}
-        pet_comment = PetComments::Generator.for(event, user: current_user, context: context)
-        flash[:pet_comment] = pet_comment if pet_comment.present?
-      end
-    end
-
-    @appearance = character&.character_kind&.then { |kind| CharacterAppearance.find_by(character_kind: kind, pose: :idle) }
-
-    if @evolved
-      return redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！"
-    elsif @hatched
-      return redirect_to share_hatched_path(current_user), notice: "ペットが生まれました！"
-    end
-
-    # 6) 称号判定（完了時のみ）
-    unlocked_titles = completed ? Titles::Unlocker.new(user: current_user).call : []
-
-    # タスクの最新状態を確実にロード
-    @task.reload
-
+    # 通常完了時のレスポンス
     respond_to do |format|
-      format.html do
-        redirect_to dashboard_show_path, notice: notice
-      end
-
+      format.html { redirect_to dashboard_show_path, notice: result.notice }
       format.turbo_stream do
-        flash.now[:notice] = notice
-        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
-        @unlocked_titles = unlocked_titles
+        flash.now[:notice] = result.notice
+        flash.now[:pet_comment] = result.pet_comment if result.pet_comment
+        @unlocked_titles = result.unlocked_titles
+        @appearance = result.appearance
+        @task = result.task
       end
     end
   end

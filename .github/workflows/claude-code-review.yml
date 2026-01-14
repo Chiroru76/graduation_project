@@ -1,5 +1,9 @@
 name: Claude Code Review
 
+# 手動実行
+on:
+  workflow_dispatch:
+
 # on:
 #   pull_request:
 #     types: [opened, synchronize]
