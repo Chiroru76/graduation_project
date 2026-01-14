@@ -293,7 +293,7 @@ RSpec.describe "Tasks", type: :request do
         expect(PetComments::Generator).to receive(:for).with(
           :level_up,
           user: user,
-          context: {}
+          context: { task_title: task.title, difficulty: task.difficulty }
         )
 
         post log_amount_task_path(task), params: { amount: 5, unit: "回" }

@@ -13,13 +13,13 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
 
   describe "#generate_comment" do
     context "進化時" do
-      let(:evolution_result) { { hatched: false, evolved: true, leveled_up: false } }
+      let(:growth_result) { { hatched: false, evolved: true, leveled_up: false } }
       let(:event_context) { { task_completed: true, task_title: "勉強", difficulty: "medium" } }
 
       it "nilを返す（専用モーダルがあるため）" do
         builder = described_class.new(
           character: character,
-          evolution_result: evolution_result,
+          growth_result: growth_result,
           event_context: event_context
         )
 
@@ -28,13 +28,13 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
     end
 
     context "孵化時" do
-      let(:evolution_result) { { hatched: true, evolved: false, leveled_up: false } }
+      let(:growth_result) { { hatched: true, evolved: false, leveled_up: false } }
       let(:event_context) { { task_completed: true, task_title: "勉強", difficulty: "medium" } }
 
       it "nilを返す（専用モーダルがあるため）" do
         builder = described_class.new(
           character: character,
-          evolution_result: evolution_result,
+          growth_result: growth_result,
           event_context: event_context
         )
 
@@ -43,7 +43,7 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
     end
 
     context "レベルアップ時" do
-      let(:evolution_result) { { hatched: false, evolved: false, leveled_up: true } }
+      let(:growth_result) { { hatched: false, evolved: false, leveled_up: true } }
       let(:event_context) { { task_completed: true } }
 
       it ":level_upイベントでコメントを生成する" do
@@ -51,7 +51,7 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
 
         builder = described_class.new(
           character: character,
-          evolution_result: evolution_result,
+          growth_result: growth_result,
           event_context: event_context
         )
 
@@ -67,7 +67,7 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
     end
 
     context "タスク完了時（レベルアップなし）" do
-      let(:evolution_result) { { hatched: false, evolved: false, leveled_up: false } }
+      let(:growth_result) { { hatched: false, evolved: false, leveled_up: false } }
       let(:event_context) { { task_completed: true, task_title: "掃除", difficulty: "easy" } }
 
       it ":task_completedイベントでコメントを生成する" do
@@ -75,7 +75,7 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
 
         builder = described_class.new(
           character: character,
-          evolution_result: evolution_result,
+          growth_result: growth_result,
           event_context: event_context
         )
 
@@ -91,13 +91,13 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
     end
 
     context "タスク未完了でレベルアップもなし" do
-      let(:evolution_result) { { hatched: false, evolved: false, leveled_up: false } }
+      let(:growth_result) { { hatched: false, evolved: false, leveled_up: false } }
       let(:event_context) { { task_completed: false } }
 
       it "nilを返す（イベントが発生していないため）" do
         builder = described_class.new(
           character: character,
-          evolution_result: evolution_result,
+          growth_result: growth_result,
           event_context: event_context
         )
 
@@ -106,13 +106,13 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
     end
 
     context "event_contextが空の場合" do
-      let(:evolution_result) { { hatched: false, evolved: false, leveled_up: false } }
+      let(:growth_result) { { hatched: false, evolved: false, leveled_up: false } }
       let(:event_context) { {} }
 
       it "nilを返す" do
         builder = described_class.new(
           character: character,
-          evolution_result: evolution_result,
+          growth_result: growth_result,
           event_context: event_context
         )
 
@@ -121,7 +121,7 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
     end
 
     context "PetComments::Generatorがnilを返す場合" do
-      let(:evolution_result) { { hatched: false, evolved: false, leveled_up: true } }
+      let(:growth_result) { { hatched: false, evolved: false, leveled_up: true } }
       let(:event_context) { { task_completed: true } }
 
       it "nilを返す" do
@@ -129,7 +129,7 @@ RSpec.describe Characters::PetResponseBuilder, type: :service do
 
         builder = described_class.new(
           character: character,
-          evolution_result: evolution_result,
+          growth_result: growth_result,
           event_context: event_context
         )
 
