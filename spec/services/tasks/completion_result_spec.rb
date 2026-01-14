@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Tasks::CompletionResult do
   let(:user) { create(:user) }
-  let(:task) { create(:task, :todo, user: user, state: :done) }
+  let(:task) { create(:task, :todo, user: user, status: :done) }
 
   let(:growth_result) do
     { hatched: false, evolved: true, leveled_up: false }
@@ -123,7 +123,7 @@ RSpec.describe Tasks::CompletionResult do
 
   describe "#completed?" do
     context "タスクが完了状態の場合" do
-      let(:task) { create(:task, :todo, user: user, state: :done) }
+      let(:task) { create(:task, :todo, user: user, status: :done) }
 
       it "trueを返す" do
         expect(result.completed?).to be true
@@ -131,7 +131,7 @@ RSpec.describe Tasks::CompletionResult do
     end
 
     context "タスクが未完了状態の場合" do
-      let(:task) { create(:task, :todo, user: user, state: :open) }
+      let(:task) { create(:task, :todo, user: user, status: :open) }
 
       it "falseを返す" do
         expect(result.completed?).to be false
