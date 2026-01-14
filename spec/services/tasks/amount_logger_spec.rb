@@ -9,12 +9,12 @@ RSpec.describe Tasks::AmountLogger, type: :service do
 
   let(:user) { create(:user) }
   let(:character) { user.active_character }
-  let(:log_habit) { create(:task, :habit, user: user, tracking_mode: :log, target_unit: "分") }
+  let(:log_habit) { create(:task, :habit, user: user, tracking_mode: :log, target_unit: :minutes) }
 
   describe "#call" do
     context "数量ログを記録するとき" do
       it "タスクに数量が記録される" do
-        logger = described_class.new(log_habit, user, amount: 30, unit: "分")
+        logger = described_class.new(log_habit, user, amount: 30, unit: "minutes")
         result = logger.call
 
         expect(result).to be_a(Tasks::CompletionResult)
@@ -24,7 +24,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
       end
 
       it "CompletionResultを返す" do
-        logger = described_class.new(log_habit, user, amount: 30, unit: "分")
+        logger = described_class.new(log_habit, user, amount: 30, unit: "minutes")
         result = logger.call
 
         expect(result).to be_a(Tasks::CompletionResult)
@@ -37,7 +37,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
       let(:todo) { create(:task, :todo, user: user) }
 
       it "エラーメッセージを返す" do
-        logger = described_class.new(todo, user, amount: 30, unit: "分")
+        logger = described_class.new(todo, user, amount: 30, unit: "minutes")
         result = logger.call
 
         expect(result.notice).to eq "この習慣は数量ログ型ではありません"
@@ -59,7 +59,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
           result
         end
 
-        logger = described_class.new(log_habit, user, amount: 30, unit: "分")
+        logger = described_class.new(log_habit, user, amount: 30, unit: "minutes")
         result = logger.call
 
         expect(result.evolved?).to be true
@@ -81,7 +81,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
           result
         end
 
-        logger = described_class.new(log_habit, user, amount: 30, unit: "分")
+        logger = described_class.new(log_habit, user, amount: 30, unit: "minutes")
         result = logger.call
 
         expect(result.hatched?).to be true
@@ -102,7 +102,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
           result
         end
 
-        logger = described_class.new(log_habit, user, amount: 30, unit: "分")
+        logger = described_class.new(log_habit, user, amount: 30, unit: "minutes")
         result = logger.call
 
         expect(result.leveled_up?).to be true
@@ -120,7 +120,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
 
       it "エラーなく処理される" do
         task = create(:task, :habit, user: user_without_character, tracking_mode: :log)
-        logger = described_class.new(task, user_without_character, amount: 30, unit: "分")
+        logger = described_class.new(task, user_without_character, amount: 30, unit: "minutes")
 
         expect { logger.call }.not_to raise_error
       end
@@ -137,7 +137,7 @@ RSpec.describe Tasks::AmountLogger, type: :service do
       end
 
       it "数量が0でも記録される" do
-        logger = described_class.new(log_habit, user, amount: 0, unit: "分")
+        logger = described_class.new(log_habit, user, amount: 0, unit: "minutes")
         result = logger.call
 
         expect(result.notice).to eq "記録しました"
