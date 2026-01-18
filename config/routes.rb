@@ -20,12 +20,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :characters, only: [] do
-    post "feed", to: "characters#feed"
-    post "reset", to: "characters#reset"
+  resources :characters, only: [:index, :show] do
+    collection do
+      post :feed
+      post :reset
+    end
   end
-
-  resources :characters, only: [:index, :show]
 
   resource :charts, only: [:show]
 
