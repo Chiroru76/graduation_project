@@ -29,7 +29,7 @@ class CharactersController < ApplicationController
     elsif @character.feed!(current_user)
       # えさやり成功時のペットコメント生成
       pet_comment = PetComments::Generator.for(
-        :fed,
+        :feed,
         user: current_user,
         context: {}
       )
