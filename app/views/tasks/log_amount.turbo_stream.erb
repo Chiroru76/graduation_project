@@ -2,6 +2,10 @@
   <%= render "layouts/flash" %>
 <% end %>
 
+<%= turbo_stream.replace "pet_comment_area" do %>
+  <%= render "shared/pet_comment", message: flash.now[:pet_comment] %>
+<% end %>
+
 <%= turbo_stream.replace "character_status" do %>
   <%= render "characters/status", character: current_user.active_character %>
 <% end %>

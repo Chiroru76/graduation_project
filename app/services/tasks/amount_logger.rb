@@ -35,7 +35,11 @@ module Tasks
       Rails.logger.debug "[Tasks::AmountLogger] Evolution result: #{growth_result}"
 
       # ペットコメント生成
-      event_context = { task_title: task.title, difficulty: task.difficulty }
+      event_context = {
+        task_title: task.title,
+        difficulty: task.difficulty,
+        task_logged: true
+      }
       pet_response = build_pet_response(character, growth_result, event_context)
 
       # タスクリロード

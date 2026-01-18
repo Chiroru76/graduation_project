@@ -12,8 +12,8 @@ module PetComments
         parameters: {
           model: "gpt-4o",
           messages: messages,
-          max_tokens: 50,
-          temperature: 0.5
+          max_tokens: 100,
+          temperature: 0.9
         }
       )
 
@@ -44,48 +44,51 @@ module PetComments
       ]
     end
 
+    def tone_rules_for(kind)
+      {
+        "egg" => "まだ幼く素朴。語尾はふんわり（〜だよ、〜だね）。驚きや喜びを素直に出す。",
+        "green_robo" => "機械的だが陽気。短文で力強い語尾（〜だ、〜だぞ、ピコ！）。応援をストレートに。",
+        "hurozapple" => "りんご妖精のように甘めで甘やかし系（〜だよ、〜だねぇ）。ほめ言葉を多用。",
+        "dreamowl" => "フクロウの賢さと落ち着き。穏やかで包み込む語尾（〜だよ、〜だね）。静かな励まし。",
+        "lumya" => "光の精のように明るく軽快。きらめくテンションで前向き（〜だよ！〜だね！）。",
+        "luna" => "月の精のように静かでやさしい。やわらかい語尾（〜だよ、〜だね）。癒やし系の言葉を選ぶ。",
+        "frame" => "炎の精のように熱血。勢いのある語尾（〜だ！〜だぞ！）。情熱的に背中を押す。"
+      }[kind] || "親しみやすい口調で励ます"
+    end
+
     def system_prompt
+      kind = character.character_kind
       <<~PROMPT
-        あなたは「#{character.character_kind.name}」という名前のペットキャラクターです。
-        現在のステージ: #{character.character_kind.stage}（egg/child/adult）
-        レベル: #{character.level}
+        あなたは「#{kind.name}」というペットです。
+        現在の状態: #{kind.stage}（egg/child/adult）、レベル: #{character.level}
+        口調・性格: #{tone_rules_for(kind.asset_key)}
 
-        性格: 明るく、ユーザーを励ますのが好き。短くて可愛いコメントをする。
-
-        【重要なルール】
-        - 15文字以内の短いコメント（句読点含む）
-        - ひらがなと漢字のみを使用
-        - 「〜だね」「〜だよ」「〜だよね」など親しみやすい口調
-        - ユーザーを褒めたり励ましたりする温かい内容
-
-        【良い例】
-        - "やったね、頑張ったね"
-        - "すごいよ、えらいよ"
-        - "その調子だよ"
-        - "いい感じだね"
-
-        【悪い例】
-        - "すごいね、お掃除✨" （絵文字NG）
-        - "完了" （短すぎて励ましがない）
-        - "お疲れ様です" （堅苦しい）
+        重要ルール:
+        - 20文字以内
+        - 口調や性格を守る
       PROMPT
     end
 
     def user_prompt
       case event
-      when :task_completed
+      when :level_up
+        level = character.level
+        <<~PROMPT
+          あなたはレベル#{level}にレベルアップしました！喜びのコメントをしてください。
+          レベルアップ後のレベルを必ず含めてください。
+          意気込みを一言お願いします。
+        PROMPT
+      when :task_completed, :task_logged
         task_title = context[:task_title]
         difficulty = context[:difficulty]
         <<~PROMPT
           ユーザーが「#{task_title}」というタスク（難易度: #{difficulty}）を完了しました。
-          ペットとして、短く励ましのコメントをしてください。
+          励ましや応援のコメントをしてください。
         PROMPT
-      when :fed
+      when :feed
         "ユーザーがえさをくれました。嬉しそうなコメントをしてください。"
       when :login
         "ユーザーがログインしました。歓迎のコメントをしてください。"
-      when :level_up
-        "レベルアップしました！喜びのコメントをしてください。"
       else
         "#{event} イベントが発生しました。コメントしてください。"
       end
