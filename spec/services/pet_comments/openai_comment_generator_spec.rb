@@ -54,8 +54,8 @@ RSpec.describe PetComments::OpenaiCommentGenerator, type: :service do
               hash_including(role: "system"),
               hash_including(role: "user")
             ),
-            max_tokens: 50,
-            temperature: 0.5
+            max_tokens: 100,
+            temperature: 0.9
           }
         )
         generator.call
