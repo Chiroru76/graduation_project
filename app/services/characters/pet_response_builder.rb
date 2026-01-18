@@ -37,6 +37,8 @@ module Characters
         :level_up
       elsif event_context[:task_completed]
         :task_completed
+      elsif event_context[:task_logged]
+        :task_logged
       end
     end
 
