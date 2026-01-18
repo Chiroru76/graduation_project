@@ -146,16 +146,16 @@ RSpec.describe "Characters", type: :request do
     end
 
     context "えさやり時のペットコメント生成 (HTML format)" do
-      let(:fed_comment) { "おいしかったよ" }
+      let(:feed_comment) { "おいしかったよ" }
 
       before do
         user.update!(food_count: 10)
-        allow(PetComments::Generator).to receive(:for).and_return(fed_comment)
+        allow(PetComments::Generator).to receive(:for).and_return(feed_comment)
       end
 
-      it "えさやり時にfedイベントでコメントが生成されること" do
+      it "えさやり時にfeedイベントでコメントが生成されること" do
         expect(PetComments::Generator).to receive(:for).with(
-          :fed,
+          :feed,
           user: user,
           context: {}
         )
@@ -167,21 +167,21 @@ RSpec.describe "Characters", type: :request do
         post feed_characters_path
         follow_redirect!
 
-        expect(flash[:pet_comment]).to eq(fed_comment)
+        expect(flash[:pet_comment]).to eq(feed_comment)
       end
     end
 
     context "えさやり時のペットコメント生成 (Turbo Stream format)" do
-      let(:fed_comment) { "ありがとう" }
+      let(:feed_comment) { "ありがとう" }
 
       before do
         user.update!(food_count: 10)
-        allow(PetComments::Generator).to receive(:for).and_return(fed_comment)
+        allow(PetComments::Generator).to receive(:for).and_return(feed_comment)
       end
 
-      it "えさやり時にfedイベントでコメントが生成されること" do
+      it "えさやり時にfeedイベントでコメントが生成されること" do
         expect(PetComments::Generator).to receive(:for).with(
-          :fed,
+          :feed,
           user: user,
           context: {}
         )
@@ -193,13 +193,13 @@ RSpec.describe "Characters", type: :request do
         post feed_characters_path, headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
         expect(response.body).to include("pet_comment_area")
-        expect(response.body).to include(fed_comment)
+        expect(response.body).to include(feed_comment)
       end
 
       it "flash.nowにペットコメントが設定されること" do
         post feed_characters_path, headers: { "Accept" => "text/vnd.turbo-stream.html" }
 
-        expect(controller.flash.now[:pet_comment]).to eq(fed_comment)
+        expect(controller.flash.now[:pet_comment]).to eq(feed_comment)
       end
     end
 

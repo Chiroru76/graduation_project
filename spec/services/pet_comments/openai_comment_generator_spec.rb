@@ -125,7 +125,7 @@ RSpec.describe PetComments::OpenaiCommentGenerator, type: :service do
     end
 
     context "えさやりイベントの場合" do
-      let(:event) { :fed }
+      let(:event) { :feed }
       let(:context) { {} }
 
       before do
