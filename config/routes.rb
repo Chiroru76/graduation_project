@@ -20,12 +20,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resource :characters, only: [] do
-    post "feed", to: "characters#feed"
-    post "reset", to: "characters#reset"
+  resources :characters, only: [:index, :show] do
+    collection do
+      post :feed
+      post :reset
+    end
   end
-
-  resources :characters, only: [:index, :show]
 
   resource :charts, only: [:show]
 
@@ -36,9 +36,6 @@ Rails.application.routes.draw do
   end
 
   resource :profile, only: [:show]
-
-  get "profile/edit_name",  to: "profiles#edit", defaults: { mode: "name" }, as: :edit_profile_name
-  get "profile/edit_email", to: "profiles#edit", defaults: { mode: "email" }, as: :edit_profile_email
 
   # 新規登録後のたまご入手画面
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg
