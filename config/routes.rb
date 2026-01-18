@@ -37,9 +37,6 @@ Rails.application.routes.draw do
 
   resource :profile, only: [:show]
 
-  get "profile/edit_name",  to: "profiles#edit", defaults: { mode: "name" }, as: :edit_profile_name
-  get "profile/edit_email", to: "profiles#edit", defaults: { mode: "email" }, as: :edit_profile_email
-
   # 新規登録後のたまご入手画面
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg
   get "dashboard", to: "dashboard#show", as: :dashboard_show
