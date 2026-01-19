@@ -1,35 +1,55 @@
-<div id="character_status" class="w-full">
-  <!-- キャラクター名表示 -->
-  <div class="text-lg text-black"><%= character.character_kind.name %></div>
-
-  <!-- レベル表示 -->
-  <div class="text-lm text-right font-bold text-gray-500">Lv. <%= character.level %></div>
-
-  <!-- 経験値ゲージ -->
-  <div class="mb-2">
-    <div class="mb-1">
-      <span class="block text-sm text-gray-500">経験値</span>
-      <span class="block text-[11px] text-gray-400 text-right">
-        次のレベルまであと <%= character.exp_needed %> EXP
-      </span>
-    </div>
-    <div class="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden">
-      <div class="bg-green-500 h-3 rounded-full"
-           style="width:<%= character.exp_progress_percentage %>%"></div>
+<div id="character_status" class="space-y-4">
+  <!-- ヘッダー: 名前 + レベルバッジ -->
+  <div class="flex items-center justify-between gap-3">
+    <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">
+      <%= character.character_kind.name %>
+    </h3>
+    <div class="flex-shrink-0 px-3 py-1 rounded-full bg-gray-100 shadow-md">
+      <div class="text-xs font-bold text-black tracking-wider">
+        Lv. <%= character.level %>
+      </div>
     </div>
   </div>
 
-<!-- キズナゲージ -->
+  <!-- 経験値ゲージ -->
   <div>
-    <div class="flex items-center justify-between mb-1">
-      <span class="text-sm text-gray-500">きずな</span>
-      <span class="text-[11px] text-gray-400">
-        現在 <span class="tabular-nums"><%= character.bond_hp %></span>
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold text-gray-700 tracking-wide">経験値</span>
+      </div>
+      <span class="text-xs font-bold text-gray-600 tabular-nums">
+        あと <%= character.exp_needed %> EXP
       </span>
     </div>
-    <div class="w-full bg-gray-200/80 rounded-full h-3 overflow-hidden">
-      <div class="bg-orange-500 h-3 rounded-full"
-           style="width:<%= character.bond_hp_ratio %>%"></div>
+    <div class="relative h-3 rounded-full border border-gray-300 shadow-inner overflow-hidden bg-gray-100">
+      <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full transition-all duration-700 ease-out"
+           style="width: <%= character.exp_progress_percentage %>%">
+        <!-- ハイライト効果 -->
+        <div class="absolute inset-0 bg-gradient-to-t from-transparent via-white/40 to-transparent"></div>
+        <!-- シャドウ効果 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- しあわせ度ゲージ -->
+  <div>
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-bold text-gray-700 tracking-wide">しあわせ度</span>
+      </div>
+      <span class="text-xs font-bold text-gray-600 tabular-nums">
+        <%= character.bond_hp %>
+      </span>
+    </div>
+    <div class="relative h-3 rounded-full border border-gray-300 shadow-inner overflow-hidden bg-gray-100">
+      <div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-pink-400 rounded-full transition-all duration-700 ease-out"
+           style="width: <%= character.bond_hp_ratio %>%">
+        <!-- ハイライト効果 -->
+        <div class="absolute inset-0 bg-gradient-to-t from-transparent via-white/40 to-transparent"></div>
+        <!-- シャドウ効果 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/20"></div>
+      </div>
     </div>
   </div>
 </div>

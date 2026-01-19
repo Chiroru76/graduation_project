@@ -1,60 +1,194 @@
-<div class="container mx-auto px-4 py-6 space-y-8">
-  <h1 class="text-2xl font-bold mb-4">行動ログの分析</h1>
+<!-- Stats Dashboard Container -->
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-amber-50/30">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
 
+    <!-- Main Grid: Calendar & Completion Chart -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-  <div class="container mx-auto p-6 space-y-6">
-    <h1 class="text-2xl font-bold">直近<%= @days %>日のタスク完了件数</h1>
+      <!-- Calendar Section -->
+      <div class="md:col-span-2">
+        <div class="relative group">
+          <div class="absolute -inset-1 bg-gradient-to-br from-green-200/60 to-green-300/60 rounded-3xl blur-lg opacity-15 group-hover:opacity-25 transition duration-500"></div>
+          <div class="relative bg-white rounded-3xl border border-green-100/50 shadow-lg overflow-hidden">
+            <!-- Header -->
+            <div class="relative bg-gradient-to-br from-green-100 to-green-200 px-6 py-5">
+              <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20"></div>
+              <div class="relative flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 flex items-center justify-center shadow-md">
+                  <i class="fa-solid fa-calendar-check text-green-700 text-xl drop-shadow-sm"></i>
+                </div>
+                <div>
+                  <h2 class="text-green-800 text-lg font-black tracking-tight drop-shadow-sm">活動日カレンダー</h2>
+                </div>
+              </div>
+            </div>
 
-    <div class="flex gap-2">
-      <% [[7, "直近7日"], [30, "直近30日"]].each do |range_val, label| %>
-        <%= link_to label, charts_path(range: range_val),
-            class: "rounded px-3 py-1 #{ @days == range_val ? 'bg-blue-600 text-white' : 'bg-gray-100' }" %>
-      <% end %>
-    </div>
-
-    <div class="bg-white rounded shadow p-4">
-      <%= column_chart [
-            { name: "TODO", data: @todo_completed },
-            { name: "習慣", data: @habit_done }
-          ],
-          xtitle: "日付", ytitle: "完了数" %>
-    </div>
-  </div>
-
-<!-- test1 -->
-<hr>
-<div class="container mx-auto p-6 space-y-6">
-  <h1 class="text-xl font-bold mb-4">日別の実績値</h1>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-    <% @series_by_task.each do |tid, series| %>
-      <% meta = @task_meta[tid] || { title: "不明なタスク", unit: "数量" } %>
-      <% total = @total_by_task[tid] || 0 %>
-      <div class="bg-white rounded-xl shadow p-4">
-        <div class="mb-2 font-semibold truncate">
-          <%= meta[:title] %>
-          <span class="text-xs text-gray-500">（合計: <%= total %> <%= meta[:unit] %>）</span>
+            <!-- Calendar Body -->
+            <div class="p-6 bg-gradient-to-br from-green-50/40 to-gray-50/60">
+              <turbo-frame id="calendar">
+                <%= render partial: "calendar" %>
+              </turbo-frame>
+            </div>
+          </div>
         </div>
-        <%= column_chart series,
-              xtitle: "日付",
-              ytitle: meta[:unit],
-              points: true,
-              curve: false,
-              library: {
-                scales: { y: { beginAtZero: true } },
-                plugins: { legend: { display: false } }
-              } %>
       </div>
-    <% end %>
+
+      <!-- Task Completion Chart -->
+      <div class="lg:col-span-3">
+        <div class="relative group">
+          <div class="absolute -inset-1 bg-gradient-to-br from-indigo-200/60 to-indigo-300/60 rounded-3xl blur-lg opacity-15 group-hover:opacity-25 transition duration-500"></div>
+          <div class="relative bg-white rounded-3xl border border-indigo-100/50 shadow-lg overflow-hidden">
+            <!-- Header -->
+            <div class="relative bg-gradient-to-br from-indigo-100 to-indigo-200 px-6 py-5">
+              <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZG90cyIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuMiIvPjwvY2lyY2xlPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNkb3RzKSIvPjwvc3ZnPg==')] opacity-30"></div>
+              <div class="relative flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-12 h-12 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-trophy text-indigo-700 text-xl drop-shadow-sm"></i>
+                  </div>
+                  <div>
+                    <h2 class="text-indigo-800 text-lg font-black tracking-tight drop-shadow-sm">完了実績</h2>
+                  </div>
+                </div>
+
+                <!-- Period Toggle -->
+                <div class="flex gap-2 bg-white/30 backdrop-blur-sm p-1 rounded-xl border border-white/40">
+                  <% [[7, "7日"], [30, "30日"]].each do |range_val, label| %>
+                    <%= link_to label, charts_path(range: range_val),
+                        class: "px-4 py-1.5 rounded-lg text-xs font-bold tracking-wider transition-all duration-300 #{
+                          @days == range_val ?
+                          'bg-white text-indigo-700 shadow-md' :
+                          'text-indigo-700/70 hover:text-indigo-800 hover:bg-white/50'
+                        }" %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart Area -->
+            <div class="p-6 bg-gradient-to-br from-indigo-50/40 to-gray-50/60">
+              <div class="bg-white rounded-2xl border border-indigo-100/50 p-5 shadow-sm">
+                <%= column_chart [
+                      { name: "TODO", data: @todo_completed, color: "#6366f1" },
+                      { name: "習慣", data: @habit_done, color: "#22c55e" }
+                    ],
+                    xtitle: "日付",
+                    ytitle: "完了数",
+                    library: {
+                      chart: {
+                        fontFamily: 'system-ui, -apple-system, sans-serif',
+                        toolbar: { show: false }
+                      },
+                      dataLabels: { enabled: false },
+                      stroke: { curve: 'smooth', width: 3 }
+                    } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Habit Metrics Section -->
+    <div class="relative group">
+      <div class="absolute -inset-1 bg-gradient-to-br from-yellow-200/60 to-yellow-300/60 rounded-3xl blur-lg opacity-15 group-hover:opacity-25 transition duration-500"></div>
+      <div class="relative bg-white rounded-3xl border border-yellow-100/50 shadow-lg overflow-hidden">
+        <!-- Header -->
+        <div class="relative bg-gradient-to-br from-yellow-100 to-yellow-200 px-6 py-5">
+          <div class="absolute inset-0 opacity-10">
+            <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.1) 10px, rgba(255,255,255,.1) 20px);"></div>
+          </div>
+          <div class="relative flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-white/30 backdrop-blur-sm border border-white/40 flex items-center justify-center shadow-md">
+              <i class="fa-solid fa-chart-line text-yellow-700 text-xl drop-shadow-sm"></i>
+            </div>
+            <div>
+              <h2 class="text-yellow-800 text-lg font-black tracking-tight drop-shadow-sm">習慣の実績値</h2>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="p-6 bg-gradient-to-br from-yellow-50/40 to-gray-50/60">
+          <% if @series_by_task.any? %>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              <% @series_by_task.each do |tid, series| %>
+                <% meta = @task_meta[tid] || { title: "不明なタスク", unit: "数量" } %>
+                <% total = @total_by_task[tid] || 0 %>
+
+                <!-- Metric Card -->
+                <div class="group/card relative">
+                  <div class="absolute -inset-0.5 bg-gradient-to-br from-yellow-200/60 to-yellow-300/60 rounded-2xl blur opacity-0 group-hover/card:opacity-20 transition duration-500"></div>
+                  <div class="relative bg-white rounded-2xl border border-yellow-100/50 overflow-hidden shadow-md hover:shadow-lg transition-all duration-300">
+                    <!-- Card Header with Stat -->
+                    <div class="relative bg-gradient-to-br from-yellow-50 to-yellow-100/50 px-5 py-4 border-b border-yellow-100/50">
+                      <div class="flex items-start justify-between gap-3 mb-3">
+                        <h3 class="font-black text-gray-900 text-base leading-tight flex-1 line-clamp-2">
+                          <%= meta[:title] %>
+                        </h3>
+                      </div>
+
+                      <!-- Large Stat Display -->
+                      <div class="flex items-end gap-2">
+                        <div class="relative">
+                          <div class="absolute inset-0 bg-gradient-to-br from-yellow-300 to-yellow-400 blur-sm opacity-15"></div>
+                          <div class="relative text-5xl font-black bg-gradient-to-br from-yellow-600 to-yellow-700 bg-clip-text text-transparent tabular-nums">
+                            <%= total %>
+                          </div>
+                        </div>
+                        <div class="text-xs font-bold text-gray-500 mb-2">
+                          <%= t("enums.task.target_unit.#{meta[:unit]}", default: meta[:unit]) %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Mini Chart -->
+                    <div class="p-4 bg-white">
+                      <%= column_chart series,
+                            xtitle: "",
+                            ytitle: "",
+                            points: false,
+                            curve: true,
+                            colors: ["#eab308"],
+                            library: {
+                              chart: {
+                                fontFamily: 'system-ui, -apple-system, sans-serif',
+                                toolbar: { show: false },
+                                height: 140
+                              },
+                              dataLabels: { enabled: false },
+                              grid: {
+                                show: true,
+                                borderColor: '#f3f4f6',
+                                strokeDashArray: 3
+                              },
+                              scales: { y: { beginAtZero: true } },
+                              plugins: { legend: { display: false } },
+                              stroke: { curve: 'smooth', width: 3 }
+                            } %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <!-- Empty State -->
+            <div class="text-center py-20">
+              <div class="relative inline-block mb-6">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-300 to-yellow-400 blur-xl opacity-15"></div>
+                <div class="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-50 to-yellow-100 flex items-center justify-center">
+                  <i class="fa-solid fa-chart-simple text-yellow-600 text-3xl"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-gray-700 mb-2">まだデータがありません</h3>
+              <p class="text-gray-500 text-sm max-w-sm mx-auto">
+                数量ログ型の習慣を記録すると、<br>ここに実績グラフが表示されます
+              </p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
   </div>
-</div>
-
-<!-- test2 -->
-<hr>
-<h3>test2</h3>
-
-<!-- test3 -->
-<hr>
-<h3>test3</h3>
-
 </div>

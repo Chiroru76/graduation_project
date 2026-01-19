@@ -37,3 +37,9 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Claude Code設定（個人の開発環境設定）
+/.claude/
+
+# GitHub Copilot個別指示ファイル
+/.github/copilot-instructions.md
