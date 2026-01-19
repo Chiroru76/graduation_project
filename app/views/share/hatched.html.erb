@@ -1,0 +1,35 @@
+<% assign_meta_tags(
+  title: "#{@character.character_kind.name}が誕生しました！",
+  canonical: share_hatched_url(character_id: @character.id),
+  image: image_url(@ogp_image) # 適切な画像URLを返すヘルパー
+) %>
+
+<div class="min-h-[60vh] flex items-center justify-center">
+  <!-- カードコンテナ -->
+  <div class="relative z-10 mx-5 mb-6 from-white/80 to-amber-50/80 border border-white/30 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-10 max-w-md w-full text-center ">
+    <h2 class="text-2xl font-bold mb-4"><%= @character.character_kind.name %> が誕生しました！</h2>
+
+    <div class="mb-6 flex flex-col items-center justify-center space-y-2">
+      <% appearance = CharacterAppearance.find_by(character_kind: @character.character_kind) %>
+      <%= image_tag @appearance.asset_path,
+          alt: @character.character_kind.name,
+                    class: "mx-auto w-72 h-auto" %>
+    </div>
+
+    <!-- CTAセクション -->
+    <div class="mt-8 border-t border-gray-200 pt-6">
+      <% if user_signed_in? %>
+        <p class="text-gray-700 mb-4 text-center">あなたのペットも待っています！</p>
+        <%= link_to "ダッシュボードへ", dashboard_show_path,
+        class: "rounded-lg bg-amber-500 px-6 py-3 text-white block text-center font-semibold hover:bg-amber-600 transition shadow-md" %>
+      <% else %>
+        <p class="text-gray-800 font-bold text-lg mb-2 text-center">あなたもペットを育てよう！</p>
+        <p class="text-gray-600 text-sm mb-4 text-center">
+          タスク達成で育つ、ペット育成型のタスク管理アプリ
+        </p>
+        <%= link_to "詳しく見る →", root_path,
+        class: "text-amber-600 text-sm text-center block hover:underline" %>
+      <% end %>
+    </div>
+  </div>
+</div>

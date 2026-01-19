@@ -1,0 +1,47 @@
+
+<!-- モーダル受け皿（Turbo Frame）。ここに show の部分HTMLが入る -->
+<turbo-frame id="character_modal"></turbo-frame>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+  <% @characters.each do |c| %>
+    <% appearance = CharacterAppearance.find_by(character_kind: c.character_kind, pose: :idle) %>
+
+    <!-- キャラクターカード -->
+    <%= link_to character_path(c), data: { turbo_frame: "character_modal" },
+                class: "group block bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 overflow-hidden transition-all duration-300 hover:-translate-y-1 #{'opacity-60' if c.dead_at.present?}" do %>
+
+      <!-- 画像エリア -->
+      <div class="relative bg-gradient-to-b from-gray-50 to-white p-4 flex items-center justify-center h-32 sm:h-40">
+        <% if appearance %>
+          <%= image_tag appearance.asset_path,
+                        alt: c.character_kind.name,
+                        class: "w-full h-full object-contain drop-shadow-md group-hover:scale-105 transition-transform duration-300" %>
+        <% else %>
+          <div class="w-full h-full flex items-center justify-center text-gray-300 text-4xl font-bold">?</div>
+        <% end %>
+
+        <!-- 通し番号（左上） -->
+        <div class="absolute top-2 left-2 inline-flex items-center gap-1 px-2 py-0.5 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full text-xs font-mono text-gray-600 shadow-sm">
+          <% if c.dead_at.present? %>
+            <span class="text-sm">💀</span>
+          <% end %>
+          <span class="text-[10px]">No.<%= c.id.to_s.rjust(3, '0') %></span>
+        </div>
+
+        <!-- レベル（右上） -->
+        <div class="absolute top-2 right-2 inline-flex items-center gap-1 px-2 py-0.5 bg-gray-900 text-white rounded-full text-xs font-semibold shadow-md">
+          <span class="text-[10px] opacity-70">Lv</span>
+          <span class="text-sm"><%= c.level %></span>
+        </div>
+      </div>
+
+      <!-- 情報エリア -->
+      <div class="px-4 py-3 border-t border-gray-100">
+        <h3 class="font-bold text-gray-900 text-center text-sm sm:text-base truncate mb-1">
+          <%= c.character_kind.name %>
+        </h3>
+
+      </div>
+    <% end %>
+  <% end %>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_30_043755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -49,6 +49,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
     t.index ["user_id"], name: "index_characters_on_user_id"
   end
 
+  create_table "task_events", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "task_id", null: false
+    t.integer "task_kind", null: false
+    t.integer "action", null: false
+    t.integer "delta", default: 0, null: false
+    t.decimal "amount", precision: 10, scale: 2, default: "0.0", null: false
+    t.string "unit", limit: 20
+    t.integer "xp_amount", default: 0, null: false
+    t.bigint "awarded_character_id"
+    t.datetime "occurred_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["awarded_character_id"], name: "index_task_events_on_awarded_character_id"
+    t.index ["task_id"], name: "index_task_events_on_task_id"
+    t.index ["user_id", "occurred_at"], name: "index_task_events_on_user_id_and_occurred_at"
+    t.index ["user_id", "task_kind", "occurred_at"], name: "index_task_events_on_user_id_and_task_kind_and_occurred_at"
+    t.index ["user_id"], name: "index_task_events_on_user_id"
+  end
+
   create_table "tasks", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "title", null: false
@@ -66,7 +86,32 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tag"
+    t.integer "tracking_mode"
+    t.index ["kind", "tracking_mode"], name: "index_tasks_on_kind_and_tracking_mode"
     t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "titles", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "name", null: false
+    t.text "description"
+    t.string "rule_type", null: false
+    t.integer "threshold", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_titles_on_key", unique: true
+  end
+
+  create_table "user_titles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "title_id", null: false
+    t.datetime "unlocked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["title_id"], name: "index_user_titles_on_title_id"
+    t.index ["user_id", "title_id"], name: "index_user_titles_on_user_id_and_title_id", unique: true
+    t.index ["user_id"], name: "index_user_titles_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -80,14 +125,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_10_231509) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "character_id"
+    t.string "provider"
+    t.string "uid"
+    t.string "line_user_id"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
     t.index ["character_id"], name: "index_users_on_character_id"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["line_user_id"], name: "index_users_on_line_user_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
   add_foreign_key "character_appearances", "character_kinds"
   add_foreign_key "characters", "character_kinds"
   add_foreign_key "characters", "users"
+  add_foreign_key "task_events", "characters", column: "awarded_character_id", on_delete: :nullify
+  add_foreign_key "task_events", "tasks", on_delete: :cascade
+  add_foreign_key "task_events", "users", on_delete: :cascade
   add_foreign_key "tasks", "users"
+  add_foreign_key "user_titles", "titles"
+  add_foreign_key "user_titles", "users"
   add_foreign_key "users", "characters"
 end

@@ -15,3 +15,12 @@ application.register("modal", ModalController)
 
 import RepeatRuleController from "./repeat_rule_controller"
 application.register("repeat-rule", RepeatRuleController)
+
+import MenuController from "./menu_controller";
+application.register("menu", MenuController);
+
+import FlashController from "./flash_controller";
+application.register("flash", FlashController);
+
+import PetCommentController from "./pet_comment_controller";
+application.register("pet-comment", PetCommentController);
