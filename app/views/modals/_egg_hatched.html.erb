@@ -18,6 +18,22 @@
       </div>
     </div>
 
+    <div class="mt-6">
+      <% tweet_text = URI.encode_www_form_component("#{character.character_kind.name}が誕生しました！") %>
+      <% share_url = CGI.escape(share_hatched_url(character_id: character.id)) %>
+      <% x_intent = "https://twitter.com/intent/tweet?text=#{tweet_text}&url=#{share_url}&hashtags=MotiPet,ペット育成,タスク管理" %>
+
+      <%= link_to x_intent,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          class: "inline-flex items-center gap-2 bg-black text-white px-5 py-3 rounded-lg font-semibold hover:bg-gray-900 transition" do %>
+        <svg fill="white" viewBox="0 0 24 24" width="20" height="20">
+          <path d="M18.244 2H21.5l-7.51 8.578L23 22h-6.633l-5.468-7.14L4.5 22H1.245l8.081-9.23L1 2h6.67l5.06 6.496L18.243 2z"/>
+        </svg>
+        でシェア
+      <% end %>
+    </div>
+
     <div class="mt-2 text-right">
       <button class="rounded-lg bg-amber-500 px-4 py-2 text-white"
               data-action="modal#close">OK</button>

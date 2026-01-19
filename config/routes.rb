@@ -41,8 +41,8 @@ Rails.application.routes.draw do
   get "welcome/egg", to: "welcome#egg", as: :welcome_egg
   get "dashboard", to: "dashboard#show", as: :dashboard_show
 
-  get "share/hatched/:id", to: "share#hatched", as: :share_hatched
-  get "share/evolved/:id", to: "share#evolved", as: :share_evolved
+  get "share/hatched/:character_id", to: "share#hatched", as: :share_hatched
+  get "share/evolved/:character_id", to: "share#evolved", as: :share_evolved
   get "terms", to: "pages#terms", as: :terms
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
