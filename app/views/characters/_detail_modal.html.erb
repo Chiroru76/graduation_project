@@ -1,63 +1,132 @@
 <turbo-frame id="character_modal">
-  <div class="fixed inset-0 z-50" id="character-detail-modal">
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in" id="character-detail-modal">
     <!-- 背景（クリックで閉じる） -->
-    <div class="absolute inset-0 bg-black/50"
-         onclick="document.getElementById('character_modal').innerHTML='';"></div>
+    <div class="absolute inset-0 bg-black/20 backdrop-blur-sm"
+         onclick="document.getElementById('character_modal').innerHTML='';"
+         aria-hidden="true"></div>
 
     <!-- モーダル本体 -->
-    <div class="absolute inset-0 mx-auto my-8 h-[90%] w-[640px] max-w-[92vw]
-                overflow-auto rounded-2xl bg-white p-6 shadow-2xl">
-      <div class="flex justify-end">
-        <button class="text-2xl"
-                onclick="document.getElementById('character_modal').innerHTML='';">✕</button>
+    <div class="relative w-full max-w-md max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-y-auto transform transition-all duration-300 <%= 'opacity-60' if character.dead_at.present? %>">
+      <!-- 閉じるボタン -->
+      <button class="sticky top-4 float-right z-10 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-900 transition-all duration-200 hover:rotate-90 mr-4"
+              onclick="document.getElementById('character_modal').innerHTML='';"
+              aria-label="閉じる">
+        <span class="text-xl leading-none">×</span>
+      </button>
+
+      <!-- ヘッダー：レベルバッジ -->
+      <div class="pt-4 pb-3 px-6 border-b border-gray-100">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-gray-900 text-white rounded-full text-sm font-semibold">
+          <span class="text-xs opacity-70">LEVEL</span>
+          <span class="text-base"><%= character.level %></span>
+        </div>
       </div>
 
-      <div class="text-center">
-        <% if appearance.present? %>
-          <%= image_tag appearance.asset_path,
-                        alt: character.character_kind.name,
-                        class: "mx-auto mb-4 w-56 h-56 object-contain" %>
-        <% end %>
+      <!-- キャラクター画像エリア -->
+      <div class="px-6 py-4 bg-gradient-to-b from-gray-50 to-white">
+        <div class="relative w-32 h-32 mx-auto">
+          <% if appearance.present? %>
+            <%= image_tag appearance.asset_path,
+                          alt: character.character_kind.name,
+                          class: "w-full h-full object-contain drop-shadow-lg" %>
+          <% else %>
+            <div class="w-full h-full flex items-center justify-center text-gray-300 text-5xl font-bold">?</div>
+          <% end %>
+        </div>
+      </div>
 
-        <div class="text-2xl font-bold"><%= character.character_kind.name %></div>
-        <div class="text-gray-500 font-semibold">Lv. <%= character.level %></div>
+      <!-- キャラクター名 -->
+      <div class="px-6 pb-4 border-b border-gray-100">
+        <h2 class="text-xl font-bold text-gray-900 text-center tracking-tight">
+          <%= character.character_kind.name %>
+        </h2>
+      </div>
 
-        <!-- 経験値ゲージ -->
-        <div class="mt-3">
-          <div class="text-sm text-gray-500">経験値</div>
-          <div class="w-64 mx-auto bg-gray-200/80 rounded-full h-3 overflow-hidden">
-            <div class="h-3 rounded-full bg-green-500"
-                 style="width:<%= character.respond_to?(:exp_progress_percentage) ? character.exp_progress_percentage : 0 %>%"></div>
+      <!-- ステータスセクション -->
+      <div class="px-6 py-4 space-y-4 bg-white">
+        <!-- 経験値 -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-sm">
+            <span class="font-semibold text-gray-700">経験値</span>
+            <span class="font-medium text-gray-500">
+              <%= character.respond_to?(:exp_progress_percentage) ? "#{character.exp_progress_percentage}%" : "0%" %>
+            </span>
+          </div>
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full transition-all duration-700 ease-out shadow-sm"
+                 style="width: <%= character.respond_to?(:exp_progress_percentage) ? character.exp_progress_percentage : 0 %>%"></div>
           </div>
         </div>
 
-        <!-- 明細 -->
-        <div class="mt-6 space-y-2 text-left max-w-md mx-auto">
-          <div class="flex justify-between">
-            <span class="text-gray-600">最後の活動</span>
-            <span><%= character.last_activity_at&.strftime("%-m月%-d日 %H:%M") || "—" %></span>
+        <!-- しあわせ度 -->
+        <% if character.respond_to?(:bond_hp_ratio) %>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between text-sm">
+              <span class="font-semibold text-gray-700">しあわせ度</span>
+              <span class="font-medium text-gray-500"><%= character.bond_hp %></span>
+            </div>
+            <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-pink-400 to-orange-400 rounded-full transition-all duration-700 ease-out shadow-sm"
+                   style="width: <%= character.bond_hp_ratio %>%"></div>
+            </div>
           </div>
-          <div class="flex justify-between">
-            <span class="text-gray-600">誕生日</span>
-            <span><%= character.created_at.strftime("%-m月%-d日 %H:%M") %></span>
+        <% end %>
+      </div>
+
+      <!-- 詳細情報 -->
+      <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between py-1.5">
+            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">生まれた日</span>
+            <span class="text-sm font-medium text-gray-900">
+              <%= character.created_at&.strftime("%Y年%-m月%-d日") || "—" %>
+            </span>
           </div>
-                    <!-- 死亡日時（死んでいる場合のみ） -->
+
+          <div class="h-px bg-gray-200"></div>
+
+          <div class="flex items-center justify-between py-1.5">
+            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">最後に活動した日</span>
+            <span class="text-sm font-medium text-gray-900">
+              <%= character.last_activity_at&.strftime("%Y年%-m月%-d日") || "—" %>
+            </span>
+          </div>
+
           <% if character.dead_at.present? %>
-            <div class="flex justify-between text-red-600 font-semibold">
-              <span>死亡日時</span>
-              <span><%= l(character.dead_at) %></span>
+            <div class="h-px bg-gray-200"></div>
+            <div class="flex items-center justify-between py-1.5 px-3 bg-red-50 rounded-lg -mx-3">
+              <span class="text-xs font-semibold text-red-600 uppercase tracking-wider">💀 旅立った日</span>
+              <span class="text-sm font-medium text-red-700">
+                <%= character.dead_at&.strftime("%Y年%-m月%-d日") %>
+              </span>
             </div>
           <% end %>
         </div>
+      </div>
 
-
-        <div class="mt-6 flex justify-center gap-3">
-          <button class="rounded-lg px-4 py-2 bg-gray-200 hover:bg-gray-300"
-                  onclick="document.getElementById('character_modal').innerHTML='';">
-            閉じる
-          </button>
-        </div>
+      <!-- フッター -->
+      <div class="px-6 py-3 bg-white border-t border-gray-100 flex items-center justify-between">
+        <span class="text-xs font-mono text-gray-400">No. <%= character.id.to_s.rjust(4, '0') %></span>
+        <button class="px-6 py-2 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                onclick="document.getElementById('character_modal').innerHTML='';">
+          閉じる
+        </button>
       </div>
     </div>
   </div>
+
+  <style>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.2s ease-out;
+    }
+  </style>
 </turbo-frame>

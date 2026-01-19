@@ -11,7 +11,7 @@ module App
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
-    config.i18n.available_locales = [ :ja, :en ]
+    config.i18n.available_locales = [:ja, :en]
     config.i18n.default_locale = :ja
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -20,6 +20,20 @@ module App
 
     # sidekiq設定
     config.active_job.queue_adapter = :sidekiq
+    config.app_url = "https://www.motipet.com/"
+
+    # 独自ドメイン設定
+    config.hosts << ".motipet.com"
+    config.hosts << "www.motipet.com"
+    config.hosts << "motipet.com"
+
+    # 独自ドメイン設定
+    config.hosts << ".motipet.com"
+    config.hosts << "www.motipet.com"
+    config.hosts << "motipet.com"
+
+    # テスト環境以外でhost authorizationを有効化
+    config.hosts << ".example.com" unless Rails.env.test?
 
     # Configuration for the application, engines, and railties goes here.
     #

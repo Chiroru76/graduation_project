@@ -1,0 +1,24 @@
+<% if message.present? %>
+  <div
+    data-controller="pet-comment"
+    data-pet-comment-duration-value="3000"
+    class="relative inline-block transition-opacity duration-300"
+  >
+    <!-- 吹き出し本体 -->
+    <div class="relative rounded-2xl px-5 py-3 bg-gradient-to-br from-white to-yellow-50 border-3 border-game-gold shadow-2xl">
+      <!-- 内側のグロー効果 -->
+      <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-yellow-400/10 via-game-gold/10 to-yellow-400/10 animate-pulse-slow pointer-events-none"></div>
+
+      <p class="relative z-10 text-sm sm:text-base text-gray-800 font-bold leading-relaxed">
+        <%= message %>
+      </p>
+    </div>
+
+    <!-- 三角形 (SVG) -->
+    <svg class="absolute -bottom-3 left-10 w-6 h-3 text-white drop-shadow-lg"
+         viewBox="0 0 24 12"
+         fill="currentColor">
+      <path d="M12 12L0 0h24L12 12z"/>
+    </svg>
+  </div>
+<% end %>

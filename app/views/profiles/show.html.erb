@@ -1,0 +1,67 @@
+<!-- app/views/profiles/show.html.erb -->
+<div class="mx-auto max-w-xl px-6 py-10">
+  <!-- Avatar -->
+  <div class="mb-10 flex justify-center items-center">
+    <i class="fa-solid fa-circle-user text-7xl"></i>
+  </div>
+
+  <!-- ユーザーネーム -->
+  <div class="mb-8 flex items-center gap-4">
+    <span class="text-base font-semibold text-gray-700">ユーザーネーム：</span>
+    <span class="text-xl font-bold text-gray-800 truncate"><%= @user.name %></span>
+  </div>
+
+  <!-- メールアドレス -->
+  <div class="mb-8 flex items-center gap-4">
+    <span class="text-base font-semibold text-gray-700">メールアドレス：</span>
+    <span class="text-xl font-bold text-gray-800 truncate"><%= @user.email %></span>
+  </div>
+  <div class="mb-8 flex justify-center">
+    <%= link_to "変更する", edit_user_registration_path,
+          class: "rounded-full bg-amber-300 px-6 py-3 text-base font-extrabold text-gray-900 shadow hover:bg-amber-400 transition" %>
+  </div>
+
+
+  <!-- 獲得した称号一覧 -->
+  <div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">獲得した称号</h2>
+    <% if current_user.user_titles.any? %>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <% current_user.user_titles.each do |user_title| %>
+          <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300">
+            <div class="flex items-start gap-4">
+              <!-- トロフィーアイコン -->
+              <div class="flex-shrink-0">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-yellow-50 flex items-center justify-center text-amber-500 text-xl shadow-sm">
+                  <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <!-- 称号情報 -->
+              <div class="flex-1 min-w-0">
+                <h3 class="text-base font-semibold text-amber-600 mb-1 truncate">
+                  <%= user_title.title.name %>
+                </h3>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  <%= user_title.title.description %>
+                </p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
+        <div class="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 text-2xl mx-auto mb-4">
+          <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+        </div>
+        <p class="text-gray-600">まだ称号を獲得していません</p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 戻る -->
+  <div class="flex justify-center mt-8">
+    <%= link_to "ホームへ戻る", dashboard_show_path,
+          class: "text-sm text-gray-700 hover:text-blue-600 underline" %>
+  </div>

@@ -1,6 +1,6 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-  <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6">
-    <div class="flex items-center justify-between border-b pb-3 mb-4">
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-full sm:max-w-lg p-6 mx-4 sm:mx-0 max-h-[calc(100vh-4rem)] overflow-y-auto">
+    <div class="flex items-center justify-between border-b pb-3 mb-4 sticky top-0 bg-white z-10">
       <h2 class="text-xl font-bold text-gray-800">
         <% if @task.todo? %>
             TODOの作成
