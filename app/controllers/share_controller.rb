@@ -11,8 +11,8 @@ class ShareController < ApplicationController
   private
 
   def load_character
-    @user = User.includes(characters: :character_kind).find(params[:id])
-    @character = @user.active_character
+    @character = Character.includes(:character_kind, :user).find(params[:character_id])
+    @user = @character.user
 
     @appearance = CharacterAppearance.find_by(
       character_kind: @character.character_kind,

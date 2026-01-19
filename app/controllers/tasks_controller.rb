@@ -54,9 +54,10 @@ class TasksController < ApplicationController
     # タスク完了処理 + ペット進化/孵化判定 + コメント生成 + 称号付与を一括実行
     result = Tasks::Completer.new(@task, current_user).call
 
-    # 進化/孵化時は専用シェアページへ
-    return redirect_to share_evolved_path(current_user), notice: "ペットが進化しました！" if result.evolved?
-    return redirect_to share_hatched_path(current_user), notice: "ペットが生まれました！" if result.hatched?
+    # 進化/孵化時は専用シェアページへ（進化時のキャラクターIDを使用）
+    character = current_user.active_character
+    return redirect_to share_evolved_path(character_id: character.id), notice: "ペットが進化しました！" if result.evolved?
+    return redirect_to share_hatched_path(character_id: character.id), notice: "ペットが生まれました！" if result.hatched?
 
     # 通常完了時のレスポンス
     respond_to do |format|
