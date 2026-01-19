@@ -1,0 +1,15 @@
+<%= turbo_stream.replace "flash_messages" do %>
+  <%= render "layouts/flash" %>
+<% end %>
+
+<%= turbo_stream.replace "pet_comment_area" do %>
+  <%= render "shared/pet_comment", message: flash.now[:pet_comment] %>
+<% end %>
+
+<%= turbo_stream.replace "character_status" do %>
+  <%= render "characters/status", character: @character %>
+<% end %>
+
+<%= turbo_stream.replace dom_id(current_user, :food_counter) do %>
+  <%= render "dashboard/food_counter", user: current_user %>
+<% end %>

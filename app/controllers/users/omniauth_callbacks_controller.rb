@@ -1,30 +1,31 @@
-# frozen_string_literal: true
-
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
-  # You should configure your model like this:
-  # devise :omniauthable, omniauth_providers: [:twitter]
+  skip_before_action :verify_authenticity_token, only: [:google_oauth2, :line]
 
-  # You should also create an action method in this controller like this:
-  # def twitter
-  # end
+  def google_oauth2
+    handle_auth("google")
+  end
 
-  # More info at:
-  # https://github.com/heartcombo/devise#omniauth
+  def line
+    handle_auth("line")
+  end
 
-  # GET|POST /resource/auth/twitter
-  # def passthru
-  #   super
-  # end
+  def failure
+    redirect_to root_path
+  end
 
-  # GET|POST /users/auth/twitter/callback
-  # def failure
-  #   super
-  # end
+  private
 
-  # protected
+  def handle_auth(kind)
+    auth = request.env["omniauth.auth"]
 
-  # The path used when OmniAuth fails
-  # def after_omniauth_failure_path_for(scope)
-  #   super(scope)
-  # end
+    @user = User.from_omniauth(auth)
+
+    if @user.persisted?
+      sign_in_and_redirect @user, event: :authentication
+      flash[:notice] = "#{kind}でログインしました"
+    else
+      session["devise.#{kind.downcase}_data"] = auth.except(:extra)
+      redirect_to new_user_registration_url, alert: "#{kind}ログインに失敗しました"
+    end
+  end
 end

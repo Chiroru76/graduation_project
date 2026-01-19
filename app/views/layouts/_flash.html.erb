@@ -1,21 +1,35 @@
-<% flash.each do |key, message| %>
-  <%# フラッシュの種類ごとに色を変える %>
-  <% flash_color =
-    case key.to_s
-    when "notice" then "bg-green-100 border-green-400 text-green-800"
-    when "alert", "error" then "bg-red-100 border-red-400 text-red-800"
-    else "bg-yellow-100 border-yellow-400 text-yellow-800"
-    end
-  %>
-  <div class="my-4 px-6 py-4 border-l-4 rounded shadow-sm <%= flash_color %>">
-    <% if message.is_a?(Array) %>
-      <ul class="list-disc pl-5">
-        <% message.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <%= message %>
-    <% end %>
-  </div>
+<%# ログインページ／ログイン処理では表示しない %>
+<% if controller_name == "sessions" && %w[new create].include?(action_name) %>
+  <%# 表示しない %>
+<% else %>
+  <% flash.each do |key, message| %>
+    <% next if message.blank? %>
+    <% next if key.to_s == "pet_comment" %>
+    <% flash_color = case key.to_s
+       when "notice" then "bg-green-100 border-green-400 text-green-800"
+       when "alert","error" then "bg-red-100 border-red-400 text-red-800"
+       else "bg-yellow-100 border-yellow-400 text-yellow-800"
+       end %>
+
+    <div data-controller="flash" data-flash-duration-value="3000" class="flash-message my-4 px-6 py-4 border-l-4 rounded shadow-sm <%= flash_color %> transition-opacity ">
+      <div class="flex items-start justify-between gap-4">
+        <div class="prose-sm">
+          <% if message.is_a?(Array) %>
+            <ul class="list-disc pl-5">
+              <% message.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          <% else %>
+            <%= message %>
+          <% end %>
+        </div>
+
+        <!-- 閉じるボタン（クリックで即時削除） -->
+        <button data-action="click->flash#close" type="button" aria-label="閉じる" class="ml-4 text-gray-600 hover:text-gray-800">
+          ✕
+        </button>
+      </div>
+    </div>
+  <% end %>
 <% end %>

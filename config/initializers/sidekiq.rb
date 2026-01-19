@@ -8,9 +8,7 @@ Sidekiq.configure_server do |config|
 
   # cronの読み込み
   schedule_path = Rails.root.join("config/schedule.yml")
-  if File.exist?(schedule_path)
-    Sidekiq::Cron::Job.load_from_hash!(YAML.load_file(schedule_path))
-  end
+  Sidekiq::Cron::Job.load_from_hash!(YAML.load_file(schedule_path)) if File.exist?(schedule_path)
 end
 
 Sidekiq.configure_client do |config|

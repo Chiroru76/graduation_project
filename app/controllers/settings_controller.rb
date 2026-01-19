@@ -4,4 +4,6 @@ class SettingsController < ApplicationController
   def show
     @user = current_user
   end
+
+  def line_settings; end
 end
