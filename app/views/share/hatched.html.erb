@@ -1,6 +1,6 @@
 <% assign_meta_tags(
   title: "#{@character.character_kind.name}が誕生しました！",
-  canonical: share_hatched_url(@character),
+  canonical: share_hatched_url(character_id: @character.id),
   image: image_url(@ogp_image) # 適切な画像URLを返すヘルパー
 ) %>
 
@@ -14,26 +14,22 @@
       <%= image_tag @appearance.asset_path,
           alt: @character.character_kind.name,
                     class: "mx-auto w-72 h-auto" %>
-
-      <% tweet_text = URI.encode_www_form_component("#{@character.character_kind.name}が進化しました！") %>
-      <% share_url = CGI.escape(share_hatched_url(@character)) %>
-      <% x_intent = "https://twitter.com/intent/tweet?text=#{tweet_text}&url=#{share_url}&hashtags=MotiPet,ペット育成,タスク管理 " %>
-
-      <div class="mt-6">
-      <%= link_to x_intent,
-          target: "_blank",
-          rel: "noopener noreferrer",
-          class: "inline-flex items-center gap-2 bg-black text-white px-5 py-3 rounded-lg font-semibold hover:bg-gray-900 transition" do %>
-        <svg fill="white" viewBox="0 0 24 24" width="20" height="20">
-          <path d="M18.244 2H21.5l-7.51 8.578L23 22h-6.633l-5.468-7.14L4.5 22H1.245l8.081-9.23L1 2h6.67l5.06 6.496L18.243 2z"/>
-        </svg>
-        でシェア
-      <% end %>
     </div>
 
-    <div class="mmt-6">
-      <%= link_to "OK", dashboard_show_path,
-      class: "rounded-lg bg-amber-500 px-4 py-2 text-white block text-center" %>
+    <!-- CTAセクション -->
+    <div class="mt-8 border-t border-gray-200 pt-6">
+      <% if user_signed_in? %>
+        <p class="text-gray-700 mb-4 text-center">あなたのペットも待っています！</p>
+        <%= link_to "ダッシュボードへ", dashboard_show_path,
+        class: "rounded-lg bg-amber-500 px-6 py-3 text-white block text-center font-semibold hover:bg-amber-600 transition shadow-md" %>
+      <% else %>
+        <p class="text-gray-800 font-bold text-lg mb-2 text-center">あなたもペットを育てよう！</p>
+        <p class="text-gray-600 text-sm mb-4 text-center">
+          タスク達成で育つ、ペット育成型のタスク管理アプリ
+        </p>
+        <%= link_to "詳しく見る →", root_path,
+        class: "text-amber-600 text-sm text-center block hover:underline" %>
+      <% end %>
     </div>
   </div>
 </div>
