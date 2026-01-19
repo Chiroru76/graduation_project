@@ -16,16 +16,21 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
-    <%= display_meta_tags(default_meta_tags) %>
+    <%= show_meta_tags %>
     <script src="https://kit.fontawesome.com/66398c5714.js" crossorigin="anonymous"></script>
   </head>
 
-  <%= render "layouts/header" %>
-  <%= render "layouts/flash" %>
+  <body class="flex flex-col min-h-screen">
+    <%= render "layouts/header" %>
 
-  <body>
-    <main class="container mx-auto mt-0 px-5 flex items-center justify-center">
+    <div id="flash_messages">
+      <%= render "layouts/flash" %>
+    </div>
+
+    <main class="flex-1 container mx-auto px-1 md:px-5">
       <%= yield %>
     </main>
+
+    <%= render 'layouts/footer' %>
   </body>
 </html>

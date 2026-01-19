@@ -11,6 +11,7 @@ class WelcomeController < ApplicationController
     character = current_user.active_character
     @appearance = CharacterAppearance.find_by(
       character_kind: character&.character_kind,
-      pose: :idle)
+      pose: :idle
+    )
   end
 end

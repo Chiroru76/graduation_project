@@ -63,6 +63,16 @@ services:
       - redis_data:/data
     command: ["redis-server", "--appendonly", "yes"]
 
+  chrome:
+    image: seleniarm/standalone-chromium:latest
+    shm_size: 2gb
+    ports:
+      - "4444:4444"
+      - "7900:7900"  # VNCポート（デバッグ用）
+    environment:
+      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_SESSION_TIMEOUT=300
+
 volumes:
   postgres_data:
   redis_data:

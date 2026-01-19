@@ -3,11 +3,11 @@ class CharactersController < ApplicationController
 
   def index
     @characters = current_user.characters
-                              .joins(:character_kind)
-                              .where.not(character_kinds: { stage: "egg" }) # 卵は除く
-                              .select("DISTINCT ON (character_kinds.id) characters.*")
-                              .order("character_kinds.id, characters.created_at DESC")
-                              .includes(:character_kind)
+      .joins(:character_kind)
+      .where.not(character_kinds: { stage: "egg" }) # 卵は除く
+      .select("DISTINCT ON (character_kinds.id) characters.*")
+      .order("character_kinds.id, characters.created_at DESC")
+      .includes(:character_kind)
   end
 
   def show
@@ -21,10 +21,29 @@ class CharactersController < ApplicationController
 
   def feed
     @character = current_user.active_character
-    if @character.feed!(current_user)
-      redirect_to dashboard_show_path, notice: "えさをあげました！"
-    else
-      redirect_to dashboard_show_path, alert: "えさをあげられませんでした"
+
+    if @character.bond_hp >= @character.bond_hp_max
+      flash[:alert] = "ペットの幸せ度は最大です"
+    elsif current_user.food_count < 1
+      flash[:alert] = "えさがありません"
+    elsif @character.feed!(current_user)
+      # えさやり成功時のペットコメント生成
+      pet_comment = PetComments::Generator.for(
+        :feed,
+        user: current_user,
+        context: {}
+      )
+      flash[:pet_comment] = pet_comment if pet_comment.present?
+      flash[:notice] = "えさをあげました！"
+    end
+
+    respond_to do |format|
+      format.html { redirect_to dashboard_show_path }
+      format.turbo_stream do
+        flash.now[:notice] = flash[:notice] if flash[:notice]
+        flash.now[:alert] = flash[:alert] if flash[:alert]
+        flash.now[:pet_comment] = flash[:pet_comment] if flash[:pet_comment]
+      end
     end
   end
 
@@ -33,9 +52,9 @@ class CharactersController < ApplicationController
     egg_kind = CharacterKind.find_by!(asset_key: "egg")
     # 新しいたまごを作成
     ch = current_user.characters.create!(
-        character_kind: egg_kind,
-        state: :alive,
-        last_activity_at: Time.current
+      character_kind: egg_kind,
+      state: :alive,
+      last_activity_at: Time.current
     )
 
     # ユーザーの現在育成中ペットをたまごに変更

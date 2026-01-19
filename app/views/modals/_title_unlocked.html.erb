@@ -1,0 +1,46 @@
+<% titles.each do |title| %>
+  <div
+    data-controller="modal"
+    aria-modal="true"
+    role="dialog"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-900/60 via-amber-900/30 to-gray-900/60 px-4 backdrop-blur-sm"
+  >
+    <div class="relative w-full max-w-md rounded-3xl bg-white/95 p-7 shadow-2xl shadow-amber-500/20 ring-1 ring-gray-900/5">
+      <div class="flex items-start gap-4">
+        <!-- トロフィー -->
+        <div class="flex-shrink-0">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-100 to-yellow-50 flex items-center justify-center text-amber-500 text-2xl shadow-sm">
+            <i class="fa-solid fa-trophy" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <div class="flex-1 min-w-0">
+          <div class="text-sm text-gray-500">称号を獲得しました</div>
+          <div class="mt-1 text-lg font-semibold text-amber-600 truncate"><%= title.name %></div>
+        </div>
+      </div>
+
+      <p class="mt-4 text-sm text-gray-600">
+        <%= title.description %>
+      </p>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <button
+          type="button"
+          data-action="click->modal#close"
+          class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition"
+        >
+          閉じる
+        </button>
+
+        <button
+          type="button"
+          data-action="click->modal#close"
+          class="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600 transition shadow-sm shadow-amber-500/30"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+<% end %>
