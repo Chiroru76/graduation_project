@@ -1,0 +1,122 @@
+<!-- Modal backdrop -->
+<div class="hidden fixed inset-0 bg-gradient-to-br from-gray-900/60 via-emerald-900/40 to-gray-900/60 backdrop-blur-md transition-all duration-500"
+     style="z-index: 9998;"
+     data-modal-target="backdrop"
+     data-action="click->modal#closeOnBackdrop"></div>
+
+<!-- Modal dialog -->
+<div class="hidden fixed inset-0 p-4"
+     style="z-index: 9999;"
+     data-modal-target="dialog"
+     data-action="click->modal#closeOnBackdrop">
+  <div class="flex items-center justify-center min-h-full">
+    <div class="relative w-full max-w-lg bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-emerald-500/20 ring-1 ring-gray-900/5 transform transition-all duration-500 ease-out"
+         onclick="event.stopPropagation();">
+
+      <!-- Decorative gradient border -->
+      <div class="absolute -inset-0.5 bg-white rounded-3xl opacity-20 blur-xl"></div>
+
+      <!-- Content container -->
+      <div class="relative">
+        <!-- Close button -->
+        <button type="button"
+                class="absolute top-6 right-6 w-10 h-10 rounded-full bg-gray-100/80 hover:bg-gray-200 backdrop-blur-sm
+                       flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95
+                       focus:outline-none focus:ring-4 focus:ring-gray-200 group"
+                data-action="click->modal#close">
+          <svg class="w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <div class="p-8 space-y-6">
+          <!-- Header -->
+          <div class="flex items-start gap-4 pb-6 border-b-2 border-gray-100">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/30">
+              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+            </div>
+            <div class="flex-1 pt-1">
+              <h3 class="text-2xl font-bold text-gray-900 tracking-tight">数量を記録</h3>
+              <p class="text-sm text-gray-600 mt-1.5 font-medium"><%= task.title %></p>
+            </div>
+          </div>
+
+          <%= form_with url: log_amount_task_path(task), method: :post,
+                        data: { turbo: true, action: "turbo:submit-end->modal#close" },
+                        class: "space-y-5" do %>
+
+            <!-- Amount input -->
+            <div class="space-y-3">
+              <label class="form-label">
+                <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                </svg>
+                数値
+              </label>
+              <%= number_field_tag :amount, nil,
+                    step: "0.1",
+                    min: "0.1",
+                    placeholder: "0.0",
+                    required: true,
+                    autofocus: true,
+                    class: "form-control form-control-lg form-control-placeholder form-focus-emerald text-center text-lg font-semibold" %>
+            </div>
+
+            <!-- Unit input -->
+            <div class="space-y-3">
+              <label class="form-label">
+                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                </svg>
+                単位
+              </label>
+              <% if task.target_unit.present? %>
+                <%= hidden_field_tag :unit, task.target_unit %>
+                <%= text_field_tag :unit_display, t("enums.task.target_unit.#{task.target_unit}"),
+                      readonly: true,
+                      class: "form-control form-control-lg bg-gray-50 text-gray-700 cursor-default" %>
+              <% else %>
+                <%= select_tag :unit,
+                      options_for_select(
+                        [["選択してください", ""]] +
+                        Task.target_units.keys.map { |key| [t("enums.task.target_unit.#{key}"), key] }
+                      ),
+                      class: "form-control form-control-lg form-focus-sky" %>
+              <% end %>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex gap-3 pt-4">
+              <button type="button"
+                      class="flex-1 px-6 py-4 rounded-2xl font-semibold text-gray-700 text-base
+                              bg-gray-50 border-2 border-gray-200/60
+                              transition-all duration-300 ease-out
+                              hover:bg-gray-100 hover:border-gray-300 hover:shadow-md
+                              active:scale-95
+                              focus:outline-none focus:ring-4 focus:ring-gray-200"
+                      data-action="click->modal#close">
+                キャンセル
+              </button>
+              <button type="submit"
+                      class="group relative flex-1 px-6 py-4 rounded-2xl font-bold text-white text-base
+                              bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600
+                              shadow-lg shadow-emerald-500/30
+                              transition-all duration-300 ease-out
+                              hover:shadow-xl hover:shadow-emerald-500/40 hover:scale-105
+                              active:scale-95
+                              focus:outline-none focus:ring-4 focus:ring-emerald-200
+                              flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                </svg>
+                記録する
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

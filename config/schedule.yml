@@ -8,7 +8,39 @@ character_bond_hp_decay_daily: #ジョブの識別名
   timezone: "Asia/Tokyo"   # JSTで回す
 
 tasks_daily_reset_habit_status: #ジョブの識別名
-  class: "Tasks::DailyResetHabitStatusJob"
+  class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper"
   queue: "default"
+  args:
+    job_class: "Tasks::DailyResetHabitStatusJob"
   cron: "0 0 * * *"
+  timezone: "Asia/Tokyo"
+
+# 毎日 09:00 に期限が明日までのタスクのline通知を送る
+tasks_due_line_notifications:
+  class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper"
+  queue: "default"
+  args:
+    job_class: "LineNotifyJob"
+  # cron: "*/1 * * * *" # １分おき(test)
+  cron: "0 9 * * *"
+  timezone: "Asia/Tokyo"
+
+# 毎日 00:00 にペット死亡のLINE通知を送る
+bond_hp_dead_line_notifications:
+  class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper"
+  queue: "default"
+  args:
+    job_class: "BondHpDeadLineNotifyJob"
+  # cron: "*/1 * * * *" # １分おき(test)
+  cron: "0 0 * * *"
+  timezone: "Asia/Tokyo"
+
+# 毎日 09:00 にきずなHPが10のユーザーへえさやり通知を送る
+bond_hp_low_line_notifications:
+  class: "ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper"
+  queue: "default"
+  args:
+    job_class: "BondHpLineNotifyJob"
+  # cron: "*/1 * * * *" # １分おき(test)
+  cron: "0 9 * * *"
   timezone: "Asia/Tokyo"

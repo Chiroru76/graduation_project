@@ -1,1 +1,51 @@
 @import "tailwindcss";
+
+@layer components {
+  .form-card {
+    @apply bg-white/80 backdrop-blur-sm shadow-lg shadow-emerald-500/5 rounded-3xl p-6 md:p-8 ring-1 ring-gray-900/5 space-y-4;
+  }
+
+  .form-label {
+    @apply flex items-center gap-2 text-sm font-semibold text-gray-800 tracking-wide;
+  }
+
+  .form-label-tight {
+    @apply flex items-center gap-1 text-sm font-semibold text-gray-800 tracking-wide;
+  }
+
+  .form-control {
+    @apply w-full rounded-2xl border-2 border-gray-200/60 bg-white text-gray-900 text-base font-medium transition-all duration-300 ease-out hover:border-gray-300/80 focus:outline-none;
+  }
+
+  .form-control-md {
+    @apply px-4 py-3;
+  }
+
+  .form-control-lg {
+    @apply px-5 py-4;
+  }
+
+  .form-control-placeholder {
+    @apply placeholder:text-gray-400 placeholder:font-normal;
+  }
+
+  .form-focus-emerald {
+    @apply focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100/50;
+  }
+
+  .form-focus-amber {
+    @apply focus:border-amber-400 focus:ring-4 focus:ring-amber-100/50;
+  }
+
+  .form-focus-violet {
+    @apply focus:border-violet-400 focus:ring-4 focus:ring-violet-100/50;
+  }
+
+  .form-focus-sky {
+    @apply focus:border-sky-400 focus:ring-4 focus:ring-sky-100/50;
+  }
+
+  .form-error {
+    @apply border-rose-400 focus:border-rose-500 focus:ring-rose-100;
+  }
+}

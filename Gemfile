@@ -47,8 +47,14 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", "~> 7.1", require: false
 
-  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
-  gem "rubocop-rails-omakase", require: false
+  # Ruby code analyzer and formatter
+  gem "rubocop", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rails", require: false
+
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
 end
 
 group :development do
@@ -62,6 +68,10 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  # テストデータのクリーンアップ
+  gem "database_cleaner"
+  # テストのエラー表示を見やすく
+  gem "spring-commands-rspec"
 end
 
 gem "jsbundling-rails", "~> 1.3"
@@ -77,3 +87,10 @@ gem "sidekiq-cron" # cron形式でSidekiqのジョブを定期実行するため
 gem "chartkick"
 gem "groupdate"
 gem "meta-tags"
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth-line"
+gem "dotenv-rails"
+gem "simple_calendar", "~> 3.1.0"
+gem "line-bot-api"
+gem "ruby-openai"

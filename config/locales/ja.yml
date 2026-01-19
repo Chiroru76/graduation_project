@@ -41,6 +41,10 @@ ja:
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+  meta_tags:
+    defaults:
+      site: "MotiPet"
+      title: "ペット育成型タスク管理アプリ"
   date:
     abbr_day_names:
     - 日
@@ -218,3 +222,8 @@ ja:
       long: "%Y/%m/%d %H:%M"
       short: "%m/%d %H:%M"
     pm: 午後
+  layouts:
+    footer:
+      privacy: "プライバシーポリシー"
+      contact: "お問い合わせ"
+      terms_text: "利用規約"
